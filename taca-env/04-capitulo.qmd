@@ -3,3 +3,125 @@ title: "04-capitulo"
 format: html
 ---
 
+---
+# Conversión de Autómatas Finitos a Expresiones Regulares
+---
+
+## Introducción
+
+Los lenguajes regulares tienen la particularidad de poder ser descritos por dos formalismos principales: los autómatas finitos (AF) y las expresiones regulares (ER). El Teorema de Kleene establece que estos dos formalismos son equivalentes en poder expresivo [1]. Es decir, cualquier lenguaje que pueda ser reconocido por un AF (sea determinista o no determinista) puede ser descrito por una expresión regular, y viceversa.
+
+Este documento detalla dos métodos algorítmicos comunes para convertir un autómata finito dado en su expresión regular equivalente.
+
+---
+
+## 1. Método de Eliminación de Estados
+
+Este es un método constructivo e iterativo que transforma un autómata en un "Autómata Finito Generalizado" (AFG), donde las transiciones están etiquetadas con expresiones regulares en lugar de símbolos únicos. El proceso consiste en eliminar estados intermedios uno por uno, actualizando las etiquetas de las transiciones para preservar los caminos que pasaban por el estado eliminado [2].
+
+### Pasos del Algoritmo
+
+**Paso 1: Preprocesamiento del Autómata**
+El autómata debe ser modificado para cumplir con dos condiciones, facilitando el proceso:
+
+1.  **Crear un nuevo estado inicial ($q_s$):**
+    * Este estado no debe tener transiciones entrantes.
+    * Se añade una transición épsilon ($\epsilon$) desde $q_s$ al estado inicial original del autómata.
+2.  **Crear un nuevo estado final ($q_f$):**
+    * Este estado no debe tener transiciones salientes.
+    * Se añaden transiciones $\epsilon$ desde *todos* los estados finales originales al nuevo estado $q_f$.
+    * Los estados finales originales dejan de ser finales.
+
+Después de este paso, el autómata tiene un único punto de entrada ($q_s$) y un único punto de salida ($q_f$).
+
+**Paso 2: Eliminación Iterativa de Estados**
+Se selecciona un estado intermedio $q_k$ (cualquier estado que no sea $q_s$ ni $q_f$) para ser eliminado.
+
+Para eliminar $q_k$, debemos considerar todos los pares de estados ($q_i$, $q_j$) tales que existía un camino de $q_i$ a $q_j$ que pasaba *a través* de $q_k$. Este camino consiste en:
+1.  Una transición de $q_i$ a $q_k$.
+2.  Un bucle (cero o más veces) en $q_k$.
+3.  Una transición de $q_k$ a $q_j$.
+
+**Paso 3: La Fórmula de Actualización**
+Cuando $q_k$ es eliminado, la expresión regular en la transición directa de $q_i$ a $q_j$ se actualiza. Si $R(i, j)$ es la ER antigua de $q_i$ a $q_j$, y $R'(i, j)$ es la nueva:
+
+$$
+R'(i, j) = R(i, j) \quad | \quad ( R(i, k) \cdot (R(k, k))^* \cdot R(k, j) )
+$$
+
+Donde:
+* **$R(i, j)$:** Es la ER en la arista de $q_i$ a $q_j$ *antes* de eliminar $q_k$. Representa el camino directo. (Si no existe, es $\emptyset$).
+* **$R(i, k)$:** La ER en la arista de $q_i$ a $q_k$.
+* **$R(k, k)$:** La ER en el bucle del estado $q_k$.
+* **$R(k, j)$:** La ER en la arista de $q_k$ a $q_j$.
+* **$|$** denota la operación de **Unión** (alternativa, `+` o `|`).
+* **$\cdot$** denota la **Concatenación**.
+* **$^*$** denota la **Clausura de Kleene** (cero o más repeticiones).
+
+
+
+Esta fórmula esencialmente dice: "El nuevo camino de $q_i$ a $q_j$ es el camino que ya existía *O* el camino que va de $q_i$ a $q_k$, da vueltas en $q_k$ si es necesario, y luego va de $q_k$ a $q_j$".
+
+**Paso 4: Terminación**
+Este proceso de eliminación (Paso 2 y 3) se repite hasta que los únicos estados que quedan son $q_s$ y $q_f$. La expresión regular en la única arista que conecta $q_s$ con $q_f$ es la expresión regular equivalente para todo el autómata.
+
+---
+
+## 2. Lema de Arden (Método Algebraico)
+
+Este método aborda el problema algebraicamente, tratando al autómata como un sistema de ecuaciones lineales donde las variables son los lenguajes (expresiones regulares) aceptados desde cada estado [1], [2].
+
+### El Lema de Arden
+
+El lema establece una solución para ecuaciones de la forma:
+$$
+X = (A \cdot X) \quad | \quad B
+$$
+o
+$$
+X = (X \cdot A) \quad | \quad B
+$$
+
+Donde $A$ y $B$ son expresiones regulares, y $X$ es la variable (ER desconocida).
+
+**Teorema (Lema de Arden):** Si $A$ y $B$ son expresiones regulares y la expresión regular $A$ **no** contiene la cadena vacía ($\epsilon$), entonces la ecuación $X = (A \cdot X) \quad | \quad B$ tiene una única solución:
+$$
+X = A^* \cdot B
+$$
+
+De forma análoga, la solución para $X = (X \cdot A) \quad | \quad B$ es $X = B \cdot A^*$. La condición de que $A$ no contenga $\epsilon$ es crucial para garantizar una solución única [1].
+
+### Pasos de Aplicación
+
+1.  **Asignar variables:** Se asigna una variable $X_i$ a cada estado $q_i$ del autómata. $X_i$ representará la expresión regular de todas las cadenas que son aceptadas por el autómata *partiendo desde el estado $q_i$*.
+
+2.  **Construir el sistema de ecuaciones:** Se crea una ecuación para cada estado $q_i$.
+    * La ecuación para $X_i$ es la **unión** (suma, `|`) de todos los caminos que *salen* de $q_i$.
+    * Si una transición con el símbolo $a$ va de $q_i$ a $q_j$, esto se representa como el término $a \cdot X_j$ en la ecuación para $X_i$.
+    * **Importante:** Si el estado $q_i$ es un estado final, se añade $\epsilon$ a su ecuación. Esto se debe a que, *desde $q_i$*, la cadena vacía es aceptada (se ha alcanzado un estado final).
+
+    *Ejemplo de Ecuaciones:*
+    * Si $q_0$ (inicial) tiene un bucle con 'a' y una transición 'b' a $q_1$:
+        $X_0 = (a \cdot X_0) \quad | \quad (b \cdot X_1)$
+    * Si $q_1$ es final y tiene un bucle con 'c':
+        $X_1 = (c \cdot X_1) \quad | \quad \epsilon$
+
+3.  **Resolver el sistema:** El objetivo es encontrar la solución para $X_s$ (la variable del estado inicial).
+    * Se utiliza sustitución algebraica y el Lema de Arden.
+    * Se empieza despejando las variables "más lejanas" (a menudo las más cercanas a los estados finales).
+    * **Ejemplo (continuación):**
+        1.  Resolver $X_1$: La ecuación $X_1 = (c \cdot X_1) \quad | \quad \epsilon$ tiene la forma $X = AX | B$, donde $A=c$ y $B=\epsilon$.
+        2.  Aplicando el Lema de Arden: $X_1 = c^* \cdot \epsilon = c^*$.
+        3.  Sustituir $X_1$ en $X_0$: $X_0 = (a \cdot X_0) \quad | \quad (b \cdot c^*)$.
+        4.  Resolver $X_0$: La ecuación $X_0 = (a \cdot X_0) \quad | \quad (b \cdot c^*)$ también tiene la forma $X = AX | B$, donde $A=a$ y $B=(b \cdot c^*)$.
+        5.  Aplicando el Lema de Arden: $X_0 = a^* \cdot (b \cdot c^*) = a^*bc^*$.
+
+4.  **Resultado:** La expresión regular final es la solución obtenida para $X_s$, la variable del estado inicial.
+
+---
+
+## Bibliografía
+
+[1] J. E. Hopcroft, R. Motwani, and J. D. Ullman, *Introduction to Automata Theory, Languages, and Computation*, 3rd ed. Boston: Pearson/Addison-Wesley, 2007.
+
+[2] P. Linz, *An Introduction to Formal Languages and Automata*, 6th ed. Burlington, MA: Jones & Bartlett Learning, 2017.
