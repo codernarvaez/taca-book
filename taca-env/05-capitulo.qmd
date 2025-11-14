@@ -94,4 +94,80 @@ Este algoritmo es un método de partición que es más eficiente para grandes au
 3.  **Resultado:** Los bloques de la partición final representan los estados del AFD mínimo. Se construye el autómata mínimo (el autómata cociente) tomando estos bloques como sus estados.
 
 Ambos algoritmos conducen al mismo **AFD Mínimo Único** (salvo por el nombre de los estados).
+## 5.4 Contexto de Clausura de Lenguajes Regulares
+
+Los lenguajes regulares (LR) son la clase más simple de lenguajes formales, situados en el Tipo 3 de la Jerarquía de Chomsky. Una característica definitoria de los LR es su robustez bajo operaciones fundamentales, conocidas como propiedades de clausura.
+
+Los lenguajes regulares son cerrados bajo las siguientes operaciones, lo que significa que aplicar cualquiera de ellas a uno o dos LR siempre resulta en otro LR:
+
+- Unión: L1 ∪ L2
+- Concatenación: L1 · L2
+- Clausura de Kleene: L*
+- Intersección: L1 ∩ L2
+- Complemento: Lᶜ
+- Reversa: LR
+
+Estas propiedades se demuestran mediante construcciones algorítmicas que, dado un autómata que acepta el lenguaje de entrada, generan un nuevo autómata que acepta el lenguaje resultante de la operación.
+
+### 5.4.1 Operaciones de Clausura y la Ventaja Estructural del AFND-ε
+
+Aunque los modelos AFD, AFND y AFND-ε son computacionalmente equivalentes (es decir, reconocen la misma clase de lenguajes), su simplicidad constructiva varía notablemente según la operación que se intente modelar.
+
+El AFND-ε es la estructura más elemental para el diseño inicial de autómatas, ya que impone menos restricciones en su función de transición. Esta flexibilidad permite que las construcciones basadas en expresiones regulares sean inductivas y modulares: los autómatas de expresiones complejas se construyen "pegando" o "envolviendo" autómatas más simples.
+
+La parte I del Teorema de Kleene establece que para toda expresión regular R se puede construir un AFND-ε M tal que L(M) = L(R). Este proceso constructivo revela la superioridad práctica del AFND-ε para operaciones como la concatenación y la clausura, por su sencillez y modularidad.
+
+### 5.4.2 La Concatenación de Lenguajes (R · S)
+
+Dado dos lenguajes regulares R y S, reconocidos por autómatas M1 y M2 respectivamente, la concatenación R · S es el lenguaje formado por todas las palabras que resultan de tomar una palabra de R seguida inmediatamente por una palabra de S.
+
+Implementación en AFND-ε (Modularidad en serie):
+
+1. Se toma el AFND-ε M1 que acepta R y el AFND-ε M2 que acepta S.
+2. Se crea un nuevo autómata que conecta M1 y M2 en serie.
+3. Se añade una transición ε desde el (único) estado final de M1 hasta el estado inicial de M2.
+4. El nuevo autómata utiliza como estado inicial al de M1 y como estado final al de M2.
+
+La transición ε permite pasar del final de la cadena de R al inicio de la cadena de S sin consumir símbolos, lo que facilita una construcción modular y local.
+
+### 5.4.3 La Clausura de Kleene (R*)
+
+La clausura de Kleene R* representa el conjunto de cadenas formadas por cero o más repeticiones de palabras en R.
+
+Implementación en AFND-ε (Estructura de bucle):
+
+Partiendo de un autómata M que reconoce R:
+
+1. Se introduce un nuevo estado inicial q0 y un nuevo estado final qf.
+2. Se añade una transición ε de q0 al estado inicial original de M.
+3. Se añaden transiciones ε desde los estados finales de M hacia el estado inicial original, permitiendo repetir cadenas.
+4. Se añade una transición ε de q0 a qf para aceptar la cadena vacía (ε).
+
+Las transiciones ε facilitan la repetición indefinida y la aceptación de la cadena vacía sin alterar el procesamiento interno del autómata.
+
+## 5.5 Contraste con la Implementación en AFD
+
+El motivo por el cual el AFND-ε es preferido para estas operaciones radica en la ausencia de transiciones ε en los AFD y en la restricción del determinismo.
+
+### Desafío del determinismo en la concatenación
+
+Un AFD exige que para cada símbolo y estado exista exactamente una transición. Esto plantea dos problemas clave al intentar modelar operaciones como la concatenación o la clausura:
+
+1. No existen transiciones silenciosas (ε) que permitan pasar del final de R al inicio de S sin consumir símbolos.
+2. En un AFD no es trivial saber, de forma determinista, en qué momento comenzar a simular el segundo autómata.
+
+Por tanto, para simular R · S o R* en un AFD se requieren redefiniciones complejas de estados y transiciones, lo que rompe la modularidad.
+
+### Explosión de estados
+
+Cuando se construye un AFD equivalente mediante determinización de un AFND:
+
+- Si el AFND tiene n estados, el AFD resultante puede tener hasta 2^n estados.
+
+El AFND-ε permite construcciones lineales o polinomiales en muchas operaciones, mientras que exigir determinismo puede producir un crecimiento exponencial del número de estados.
+
+### Resumen estructural
+
+El AFND-ε actúa como una estructura composicional que traduce expresiones regulares complejas a autómatas mediante reglas locales, simples y modulares. Para la concatenación y la clausura, estas reglas requieren pocos estados y transiciones; por el contrario, la construcción equivalente en AFD es más compleja, rígida y potencialmente exponencial en tamaño.
+
 ```
