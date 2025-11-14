@@ -1,0 +1,38 @@
+name: CI - Quarto Book
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repositorio
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2. Instalar Quarto (accion oficial)
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "latest"
+          tinytex: true   # pon "false" si NO quieres generar PDF
+
+      # 3. (Opcional pero útil) Verificar el proyecto Quarto
+      - name: Quarto check
+        run: |
+          quarto check
+
+      # 4. Renderizar el proyecto a HTML (sitio web/libro web)
+      - name: Render HTML
+        run: |
+          quarto render --to html
+
+      # 5. Renderizar el proyecto a PDF (libro descargable)
+      #    Si no quieres PDF, comenta este bloque completo.
+      - name: Render PDF
+        run: |
+          quarto render --to pdf
