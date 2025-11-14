@@ -2,6 +2,186 @@
 title: "Minimización y reducción"
 ---
 
+## 1.1 Comparativa de Eficiencia: DFA vs. NFA en la Práctica
+
+### Introducción
+
+Los autómatas finitos deterministas (DFA) y no deterministas (NFA) son modelos computacionales equivalentes en términos de poder de reconocimiento, ya que ambos reconocen exactamente el conjunto de lenguajes regulares [@hopcroft2001]. Sin embargo, existe un **trade-off** fundamental entre ellos en términos de eficiencia temporal y espacial que tiene importantes implicaciones prácticas.
+
+### Análisis del Trade-off
+
+#### DFA: Velocidad vs. Espacio
+
+Los autómatas finitos deterministas presentan las siguientes características de eficiencia:
+
+##### Ventajas en Tiempo de Ejecución
+
+- **Complejidad temporal lineal**: El reconocimiento de una cadena de longitud $n$ se realiza en tiempo $O(n)$ [@sipser2013]
+- **Proceso determinista**: En cada paso existe exactamente una transición posible
+- **Sin backtracking**: No requiere exploración de múltiples caminos
+- **Predicibilidad**: El tiempo de ejecución es completamente predecible
+
+```python
+def dfa_recognize(dfa, string):
+    """
+    Reconocimiento en DFA - O(n) en tiempo
+    """
+    current_state = dfa.initial_state
+    
+    for symbol in string:  # Exactamente n iteraciones
+        current_state = dfa.transition(current_state, symbol)
+        if current_state is None:
+            return False
+    
+    return current_state in dfa.accepting_states
+```
+
+##### Desventaja en Espacio
+
+- **Crecimiento exponencial**: Al convertir un NFA con $n$ estados a DFA, el resultado puede tener hasta $2^n$ estados [@hopcroft2001]
+- **Construcción de subconjuntos**: Cada estado del DFA representa un subconjunto de estados del NFA original
+- **Explosión de estados**: Para ciertos lenguajes, el número de estados crece exponencialmente
+
+**Ejemplo**: Un NFA que reconoce cadenas con el símbolo $a$ en la $n$-ésima posición desde el final:
+
+- NFA: $n + 1$ estados
+- DFA equivalente: $2^n$ estados
+
+#### NFA: Espacio vs. Velocidad
+
+Los autómatas finitos no deterministas presentan características complementarias:
+
+##### Ventajas en Espacio
+
+- **Compacidad exponencial**: Un NFA puede ser exponencialmente más pequeño que su DFA equivalente [@kozen1997]
+- **Representación natural**: Muchos patrones se expresan más naturalmente como NFA
+- **Economía de estados**: Menor número de estados y transiciones
+
+```python
+# NFA compacto para detectar 'a' en posición n desde el final
+nfa_states = n + 1  # Lineal en n
+```
+
+##### Desventajas en Tiempo de Ejecución
+
+- **Complejidad temporal superior**: En el peor caso, requiere tiempo $O(n \cdot m^2)$ donde $m$ es el número de estados [@sipser2013]
+- **No determinismo**: Múltiples transiciones posibles para el mismo par (estado, símbolo)
+- **Backtracking**: Necesidad de explorar múltiples caminos de ejecución
+- **Simulación costosa**: Requiere mantener el conjunto de estados activos
+
+```python
+def nfa_recognize(nfa, string):
+    """
+    Reconocimiento en NFA - O(n·m²) en tiempo
+    donde m = número de estados
+    """
+    current_states = epsilon_closure({nfa.initial_state})
+    
+    for symbol in string:
+        next_states = set()
+        for state in current_states:  # Hasta m estados
+            for next_state in nfa.transition(state, symbol):
+                next_states.add(next_state)
+        current_states = epsilon_closure(next_states)  # O(m²)
+    
+    return any(s in nfa.accepting_states for s in current_states)
+```
+
+### Tabla Comparativa
+
+| Criterio | DFA | NFA |
+|----------|-----|-----|
+| **Tiempo de reconocimiento** | $O(n)$ | $O(n \cdot m^2)$ |
+| **Número de estados** | Hasta $2^m$ | $m$ |
+| **Complejidad espacial** | Exponencial | Lineal/Compacta |
+| **Determinismo** | Sí | No |
+| **Facilidad de implementación** | Simple | Requiere simulación |
+| **Uso de memoria en ejecución** | Mínimo | Moderado (conjunto de estados) |
+
+donde $n$ = longitud de la cadena, $m$ = número de estados del NFA.
+
+### Estrategias Prácticas
+
+#### Cuándo Usar DFA
+
+1. **Aplicaciones de alto rendimiento**: Cuando el tiempo de respuesta es crítico
+2. **Reconocimiento repetitivo**: Cuando se procesan muchas cadenas con el mismo autómata
+3. **Espacio disponible**: Cuando el número de estados resultante es manejable
+4. **Ejemplos**:
+   - Analizadores léxicos en compiladores [@aho2006]
+   - Filtrado de paquetes en redes
+   - Búsqueda de patrones en texto
+
+#### Cuándo Usar NFA
+
+1. **Limitaciones de memoria**: Cuando el espacio es una restricción crítica
+2. **Construcción dinámica**: Cuando el autómata se genera en tiempo de ejecución
+3. **Expresividad**: Cuando el patrón es naturalmente no determinista
+4. **Ejemplos**:
+   - Expresiones regulares en editores de texto
+   - Validación de patrones complejos
+   - Sistemas con recursos limitados
+
+### Conversión DFA ↔ NFA
+
+#### De NFA a DFA (Construcción de Subconjuntos)
+
+**Complejidad**: $O(2^m)$ estados en el peor caso [@hopcroft2001]
+
+```
+Entrada: NFA N = (Q, Σ, δ, q₀, F)
+Salida: DFA D = (Q', Σ, δ', q₀', F')
+
+1. Q' = P(Q) (conjunto potencia de Q)
+2. q₀' = ε-closure({q₀})
+3. Para cada conjunto de estados S en Q' y símbolo a en Σ:
+   δ'(S, a) = ε-closure(⋃{δ(q, a) | q ∈ S})
+4. F' = {S ∈ Q' | S ∩ F ≠ ∅}
+```
+
+#### De DFA a NFA
+
+**Complejidad**: Trivial - todo DFA es un NFA
+
+Un DFA puede verse directamente como un NFA sin transiciones ε y con transiciones únicas.
+
+### Optimizaciones en la Práctica
+
+#### Lazy Evaluation (DFA)
+
+- No construir todos los $2^n$ estados por adelantado
+- Generar estados bajo demanda durante el reconocimiento
+- Cachear estados visitados
+
+#### Thompson NFA
+
+- Construcción eficiente desde expresiones regulares [@thompson1968]
+- Permite transiciones ε para mayor compacidad
+- Base de muchas implementaciones de regex
+
+#### Híbridos
+
+Algunas implementaciones modernas combinan ambos enfoques:
+
+1. Usar NFA para la representación interna
+2. Compilar a DFA parcialmente (estados más frecuentes)
+3. Simular NFA para casos raros
+
+### Consideraciones Finales
+
+El trade-off entre DFA y NFA no tiene una solución universal:
+
+- **DFA** sacrifica espacio por velocidad → Ideal cuando el tiempo es crítico y el espacio está disponible
+- **NFA** sacrifica velocidad por espacio → Ideal cuando la memoria es limitada o la construcción es dinámica
+
+La elección depende de:
+- Características del lenguaje a reconocer
+- Restricciones del sistema (tiempo vs. espacio)
+- Frecuencia de uso del autómata
+- Complejidad del patrón
+
+En la práctica, muchos sistemas utilizan enfoques híbridos o adaptativos que combinan las ventajas de ambos modelos [@watson1995].
+
 ## 1.2 Transición Épsilon y ε-clausura
 
 ### Concepto de la Transición Épsilon ($\epsilon$)

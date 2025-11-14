@@ -21,6 +21,9 @@ A continuación se reconocen las contribuciones de quienes participaron en la cr
 -   **Nombre Apellido 1** – Revisión de los capítulos de lenguajes regulares y autómatas finitos; propuesta de ejemplos adicionales orientados a compiladores.
 -   **Nombre Apellido 2** – Aportes en la sección de gramáticas libres de contexto, árboles de derivación y análisis sintáctico.
 -   **Nombre Apellido 3** – Colaboración en la redacción inicial de los capítulos sobre máquinas de Turing y problemas indecidibles.
+-   **Jhostin Tapia - jhostin.tapia@unl.edu.ec** - Comparativa de Eficiencia entre DFA y NFA: análisis del trade-off tiempo-espacio, estrategias prácticas y optimizaciones.
+-   **Darwin Granda - darwin.granda@unl.edu.ec** - Transiciones Épsilon y ε-clausura: definición formal, algoritmos de cálculo y conversión de AFND-ε a AFD.
+-   **Esteban Leon  - esteban.leon@unl.edu.ec** - Ventajas de los ε-NFA en el Diseño de Autómatas: construcción modular, operadores regulares y cadena de conversiones desde expresiones regulares.
 
 Sus observaciones y sugerencias fueron esenciales para asegurar la precisión técnica y la claridad expositiva.
 
