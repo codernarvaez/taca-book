@@ -12,23 +12,6 @@ Teoría de Autómatas y Lenguajes Formales, conectando la **base teórica** con
 **ejemplos y aplicaciones en informática y desarrollo de software**.
 
 ---
-
-## 📂 Estructura del repositorio
-
-```text
-.
-├── taca-env/                 # Proyecto Quarto del libro
-│   ├── _quarto.yml           # Configuración principal del libro
-│   ├── index.qmd             # Portada / página principal
-│   ├── preface.qmd           # Prefacio
-│   ├── introduccion.qmd      # Introducción
-│   ├── participantes.qmd     # Sección de participantes del libro
-│   ├── ...                   # Capítulos (01-*, 02-*, etc.)
-│   └── assets/               # Recursos (PDF, LaTeX, imágenes, etc.)
-└── .github/
-    └── workflows/
-        └── quarto-ci.yml     # Workflow de CI para validar y renderizar el libro
-
 ## 🛠 Tecnologías utilizadas
 
 **Quarto**
@@ -75,4 +58,22 @@ se reflejan automáticamente.
 Para comentarios, sugerencias o reportes de errores:
 
 Abre un Issue en la pestaña Issues del repositorio, o Escribe a: **crisitan.narvaez@unl.edu.ec**
+
+---
+
+## 📂 Estructura del repositorio
+
+```text
+.
+├── taca-env/                 # Proyecto Quarto del libro
+│   ├── _quarto.yml           # Configuración principal del libro
+│   ├── index.qmd             # Portada / página principal
+│   ├── preface.qmd           # Prefacio
+│   ├── introduccion.qmd      # Introducción
+│   ├── participantes.qmd     # Sección de participantes del libro
+│   ├── ...                   # Capítulos (01-*, 02-*, etc.)
+│   └── assets/               # Recursos (PDF, LaTeX, imágenes, etc.)
+└── .github/
+    └── workflows/
+        └── quarto-ci.yml     # Workflow de CI para validar y renderizar el libro
 
