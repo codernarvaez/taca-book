@@ -22,6 +22,7 @@ A continuación se reconocen las contribuciones de quienes participaron en la cr
 -   **Nombre Apellido 2** – Aportes en la sección de gramáticas libres de contexto, árboles de derivación y análisis sintáctico.
 -   **Nombre Apellido 3** – Colaboración en la redacción inicial de los capítulos sobre máquinas de Turing y problemas indecidibles.
 -   **Jostin Jimenez - jostin.jimenez\@unl.edu.ec** - Eliminación de Transiciones ε en Autómatas Finitos
+-   **Darwin Sarango - darwin.a.sarango\@unl.edu.ec** - Aplicación Práctica: Análisis Léxico en Compiladores
 
 Sus observaciones y sugerencias fueron esenciales para asegurar la precisión técnica y la claridad expositiva.
 
