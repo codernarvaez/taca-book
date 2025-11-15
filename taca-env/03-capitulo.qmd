@@ -145,9 +145,3 @@ Esta cadena demuestra que determinismo y no determinismo reconocen exactamente l
 - El **estado trampa** asegura que el DFA cumpla con la definición de totalidad.  
 - La **eliminación de transiciones ε** permite normalizar un automata antes de su determinización.  
 - Los algoritmos presentados en el libro constituyen métodos formales, eficientes y probados.
-
----
-
-# Bibliografía
-- Esparza, J. & Blondin, M. (2025). *Automata Theory: Algorithms for Sets and Relations*. MIT Press.  
-:contentReference[oaicite:6]{index=6}
