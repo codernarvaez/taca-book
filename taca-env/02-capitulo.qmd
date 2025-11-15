@@ -1,22 +1,87 @@
 ---
 title: "Minimización y reducción"
-author: "Esteban Hermel León Aguilar"
-format: 
-  pdf:
-    toc: true
-    number-sections: true
-    colorlinks: true
-  html:
-    toc: true
-    number-sections: true
-    code-fold: true
 ---
 
----
-title: "1.3 Ventajas de los ε-NFA en el Diseño de Autómatas"
----
+## 1.2 Transición Épsilon y ε-clausura
 
-## Introducción
+### Concepto de la Transición Épsilon ($\epsilon$)
+
+En el contexto de los autómatas finitos, una transición normal ocurre cuando el autómata lee un símbolo de entrada (por ejemplo, una `a` o un `1`) y cambia de un estado a otro.
+
+Una transición épsilon o transición vacía ($\epsilon$) es una transición especial que permite al autómata cambiar de un estado a otro sin leer ningún símbolo de la cadena de entrada. Es como un "salto espontáneo" o un movimiento libre. El símbolo $\epsilon$ representa la cadena vacía, es decir, la ausencia de caracteres.
+
+## Utilidad
+
+-   Aunque no aumentan el poder de reconocimiento del autómata, las transiciones $\epsilon$ simplifican el diseño y la construcción de autómatas, especialmente cuando se derivan de expresiones regulares.
+-   Permiten "conectar" diferentes partes del autómata de forma elegante y flexible.
+
+## Definición Formal de la $\epsilon$-Clausura
+
+La $\epsilon$-clausura (o épsilon-cerradura) de un estado (o de un conjunto de estados) es el conjunto de todos los estados a los que se puede llegar desde ese estado inicial viajando únicamente a través de una o varias transiciones $\epsilon$ consecutivas.
+
+-   **Inclusión del estado inicial:** por definición, la $\epsilon$-clausura de un estado $q$ siempre incluye al propio estado $q$.
+
+### Propósito y utilidad
+
+-   La $\epsilon$-clausura es la herramienta clave para manejar y "eliminar" las transiciones $\epsilon$ de un autómata finito no determinista con $\epsilon$-transiciones (AFND-$\epsilon$) al convertirlo en un autómata determinista (AFD) o en un AFND sin $\epsilon$-transiciones.
+-   Al calcular la $\epsilon$-clausura identificamos todos los lugares donde el autómata podría "estar" de forma instantánea y simultánea después de llegar a un estado, antes de procesar el siguiente símbolo.
+
+## Algoritmo para calcular la $\epsilon$-Clausura
+
+El cálculo se hace de forma iterativa, parecido a una búsqueda en grafo pero considerando solo transiciones $\epsilon$.
+
+Pasos para calcular $\mathrm{ECLOSURA}(q)$:
+
+1.  Inicialización: comience con el conjunto que contiene $q$.
+2.  Búsqueda de saltos: añada todos los estados alcanzables desde cualquier estado del conjunto mediante una transición $\epsilon$.
+3.  Iteración: repita el paso 2 hasta que no se añada ningún estado nuevo.
+4.  Parada: el conjunto resultante es la $\epsilon$-clausura.
+
+En pseudocódigo:
+
+``` text
+function eclosure(states, transitions):
+    closure := copy(states)
+    stack := list(states)
+    while stack not empty:
+        s := pop(stack)
+        for each t in transitions where t.from == s and t.symbol == '\\epsilon':
+            if t.to not in closure:
+                add t.to to closure
+                push t.to to stack
+    return closure
+```
+
+## Ejemplo
+
+Supongamos las siguientes transiciones $\epsilon$:
+
+-   $q_1 \xrightarrow{\epsilon} q_2$
+-   $q_2 \xrightarrow{\epsilon} q_3$
+-   $q_4 \xrightarrow{\epsilon} q_1$
+
+Calcular $\mathrm{ECLOSURA}(q_4)$:
+
+0.  Inicial: $\{q_4\}$
+1.  Desde $q_4$ llega a $q_1$ por $\epsilon$ → $\{q_4, q_1\}$
+2.  Desde $q_1$ llega a $q_2$ por $\epsilon$ → $\{q_4, q_1, q_2\}$
+3.  Desde $q_2$ llega a $q_3$ por $\epsilon$ → $\{q_4, q_1, q_2, q_3\}$
+4.  No hay más transiciones nuevas. Resultado: $\mathrm{ECLOSURA}(q_4) = \{q_1, q_2, q_3, q_4\}$.
+
+## Conversión de AFND-$\epsilon$ a AFD (resumen)
+
+Una idea breve del proceso:
+
+-   Cada estado del AFD corresponde a un conjunto de estados del AFND-$\epsilon$.
+-   El estado inicial del AFD es la $\epsilon$-clausura del estado inicial del AFND-$\epsilon$.
+-   Para cada conjunto-estado y cada símbolo de entrada, se calcula el conjunto de estados alcanzables aplicando primero las transiciones del símbolo y después tomando la $\epsilon$-clausura de ese conjunto.
+
+
+
+
+## 1.3 Ventajas de los ε-NFA en el Diseño de Autómatas
+
+### Introducción
 
 El diseño de autómatas para reconocer lenguajes complejos presenta diferentes niveles de dificultad según el tipo de autómata elegido. Los **ε-NFA (autómatas finitos no deterministas con transiciones épsilon)** ofrecen ventajas significativas como estructuras intermedias en el proceso de construcción, facilitando enormemente la representación de lenguajes que involucran operaciones complejas como uniones y clausuras de Kleene.
 
