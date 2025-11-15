@@ -1,6 +1,11 @@
 ---
 title: "Algoritmos de Minimización de AFDs"
-format: html
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
 ### 5.3 Algoritmos de Minimización de AFDs

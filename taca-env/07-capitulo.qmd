@@ -1,6 +1,11 @@
 ---
 title: "07-capitulo"
-format: html
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
 # Aplicación Práctica: Análisis Léxico en Compiladores

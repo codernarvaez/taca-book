@@ -1,6 +1,11 @@
 ---
 title: "Minimización y reducción"
-format: html
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
 ## 1.1 Comparativa de Eficiencia: DFA vs. NFA en la Práctica
