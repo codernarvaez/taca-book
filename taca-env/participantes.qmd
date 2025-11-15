@@ -24,6 +24,8 @@ A continuación se reconocen las contribuciones de quienes participaron en la cr
 -   **Jhostin Tapia - jhostin.tapia@unl.edu.ec** - Comparativa de Eficiencia entre DFA y NFA: análisis del trade-off tiempo-espacio, estrategias prácticas y optimizaciones.
 -   **Darwin Granda - darwin.granda@unl.edu.ec** - Transiciones Épsilon y ε-clausura: definición formal, algoritmos de cálculo y conversión de AFND-ε a AFD.
 -   **Esteban Leon  - esteban.leon@unl.edu.ec** - Ventajas de los ε-NFA en el Diseño de Autómatas: construcción modular, operadores regulares y cadena de conversiones desde expresiones regulares.
+-   **Jostin Jimenez - jostin.jimenez\@unl.edu.ec** - Eliminación de Transiciones ε en Autómatas Finitos
+-   **Darwin Sarango - darwin.a.sarango\@unl.edu.ec** - Aplicación Práctica: Análisis Léxico en Compiladores
 
 Sus observaciones y sugerencias fueron esenciales para asegurar la precisión técnica y la claridad expositiva.
 

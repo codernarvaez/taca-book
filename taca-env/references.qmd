@@ -2,3 +2,6 @@
 
 ::: [1] J. Esparza and M. Blondin, *Automata Theory: An Algorithmic Approach*. Cambridge, MA: The MIT Press, 2023.
 
+
+::: {#refs}
+:::
