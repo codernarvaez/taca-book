@@ -1,4 +1,7 @@
+---
 title: "Equivalencia y Conversión de Modelos" author: "Mateo Chamba" format: html
+format: html
+---
 
 # Capítulo 3
 

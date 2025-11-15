@@ -1,5 +1,6 @@
 ---
 title: "Minimización y reducción"
+format: html
 ---
 
 ## 1.1 Comparativa de Eficiencia: DFA vs. NFA en la Práctica
@@ -261,6 +262,8 @@ Una idea breve del proceso:
 
 ## 1.3 Ventajas de los ε-NFA en el Diseño de Autómatas
 
+Los autómatas finitos no deterministas con transiciones ε (ε-NFA) ofrecen ventajas significativas en el diseño de autómatas, especialmente en términos de simplicidad y modularidad. Estas ventajas se han explorado ampliamente en la literatura, como se detalla en [@hopcroft2001], [@sipser2013], y [@thompson1968].
+
 ### Introducción
 
 El diseño de autómatas para reconocer lenguajes complejos presenta diferentes niveles de dificultad según el tipo de autómata elegido. Los **ε-NFA (autómatas finitos no deterministas con transiciones épsilon)** ofrecen ventajas significativas como estructuras intermedias en el proceso de construcción, facilitando enormemente la representación de lenguajes que involucran operaciones complejas como uniones y clausuras de Kleene.
@@ -277,7 +280,7 @@ Los ε-NFA permiten modelar la estructura de lenguajes complejos de manera senci
 
 #### Unión ($r_1 + r_2$)
 
-La construcción para la unión de dos expresiones regulares se implementa añadiendo nuevos estados iniciales o conectando los autómatas componentes mediante ε-transiciones de manera simple. Esto permite combinar dos autómatas sin modificar sus estructuras internas.
+La construcción para la unión de dos expresiones regulares se implementa añadiendo nuevos estados iniciales o conectando los autómatas componentes mediante ε-transiciones de manera simple. Esto permite combinar dos autómatas sin modificar sus estructuras internas [@hopcroft2001].
 
 **Complejidad**: Operación aditiva O(\|Q₁\| + \|Q₂\|)
 
@@ -311,7 +314,7 @@ El diseño directo de DFA presenta los desafíos más significativos:
 
 #### Restricción al Determinismo
 
-Un DFA solo tiene una ejecución posible para cada palabra, y el siguiente estado está completamente determinado por el estado actual y la letra leída. Esta restricción hace difícil "adivinar" el estado correcto para lenguajes que involucran patrones complejos o repeticiones.
+Un DFA solo tiene una ejecución posible para cada palabra, y el siguiente estado está completamente determinado por el estado actual y la letra leída. Esta restricción hace difícil "adivinar" el estado correcto para lenguajes que involucran patrones complejos o repeticiones [@hopcroft2001].
 
 #### Complejidad en Operaciones Booleanas
 

@@ -1,7 +1,6 @@
+---
 title: "Algoritmos de Minimización de AFDs"
-author: "Marylin Alvarado"
 format: html
-toc: true
 ---
 
 ### 5.3 Algoritmos de Minimización de AFDs
