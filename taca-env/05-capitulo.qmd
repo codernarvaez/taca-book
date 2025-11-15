@@ -1,5 +1,35 @@
----
-title: "05-capitulo"
+title: "Algoritmos de Minimización de AFDs"
+author: "Marylin Alvarado"
 format: html
+toc: true
 ---
 
+### 5.3 Algoritmos de Minimización de AFDs
+
+La minimización de un AFD busca encontrar el **AFD mínimo**, que es un AFD equivalente al original, pero con el menor número posible de estados.
+
+#### Concepto de Estados Equivalentes e Indistinguibles
+
+La minimización se fundamenta en la capacidad de identificar y fusionar estados que tienen el mismo comportamiento de aceptación:
+
+* **Estados Indistinguibles (Equivalentes):** Dos estados $p$ y $q$ de un AFD, $A$, son **indistinguibles** si, para *cualquier* palabra $w$ que se les suministre, o bien ambos terminan en un estado final, o bien ambos terminan en un estado no final. En otras palabras, aceptan exactamente el mismo conjunto de sufijos: $L_A(p) = L_A(q)$.
+* **Estados Distinguibles:** Dos estados $p$ y $q$ son **distinguibles** si existe al menos una palabra $w$ (la **cadena distinguible**) tal que la lectura de $w$ desde $p$ conduce a un estado final y la lectura de $w$ desde $q$ conduce a un estado no final, o viceversa.
+
+#### Algoritmo de Llenado de Tabla (*Table-Filling Algorithm*)
+
+Este es un enfoque sistemático para encontrar todos los pares de estados distinguibles:
+
+1.  **Paso Base:** Marcar como distinguibles todos los pares $(p, q)$ donde $p$ es final y $q$ no es final (porque $\epsilon$ es una cadena distinguible).
+2.  **Paso Inductivo:** Iterar. Un par $(p, q)$ se marca como distinguible si, para algún símbolo de entrada $a$, el par de estados de destino $(\delta(p, a), \delta(q, a))$ ya ha sido previamente marcado como distinguible.
+3.  **Resultado:** Cuando no se pueden hacer más marcas, los pares de estados que quedan sin marcar son los indistinguibles y deben fusionarse en un único estado en el AFD mínimo.
+
+#### Algoritmo de Hopcroft
+
+Este algoritmo es un método de partición que es más eficiente para grandes autómatas, con una complejidad de tiempo de $O(n \log n)$.
+
+1.  **Inicialización:** Se crea una partición inicial $P$ de los estados en dos grupos: $F$ (estados finales) y $Q - F$ (estados no finales).
+2.  **Refinamiento:** Iterar hasta que la partición $P$ no cambie. En cada paso, se refina la partición tomando un bloque $B$ de $P$ y un símbolo $a$, y se divide $B$ en sub-bloques basados en el bloque al que se llega con $a$. Si los estados en $B$ tienen transiciones con $a$ que llegan a diferentes bloques de la partición actual, entonces $B$ debe ser dividido.
+3.  **Resultado:** Los bloques de la partición final representan los estados del AFD mínimo. Se construye el autómata mínimo (el autómata cociente) tomando estos bloques como sus estados.
+
+Ambos algoritmos conducen al mismo **AFD Mínimo Único** (salvo por el nombre de los estados).
+```

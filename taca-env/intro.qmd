@@ -1,9 +1,98 @@
-# Introduction
+# Introducción
 
-This is a book created from markdown and executable code.
+La teoría de autómatas y los lenguajes formales constituyen uno de los pilares teóricos de la informática. A primera vista, el estudio de alfabetos, cadenas, gramáticas y máquinas abstractas puede parecer alejado de la práctica cotidiana del desarrollo de software. Sin embargo, detrás de numerosas herramientas y tecnologías que usamos a diario —compiladores, intérpretes, expresiones regulares, validadores de protocolos, analizadores de logs— aparecen, una y otra vez, las ideas que se presentan en este libro.
 
-See @knuth84 for additional discussion of literate programming.
+Este texto nace como una **recopilación estructurada** de materiales elaborados a lo largo de varios ciclos académicos, combinando apuntes de clase, ejemplos resueltos, ejercicios propuestos y esquemas de demostraciones. No pretende reemplazar a los tratados clásicos de la disciplina, sino ofrecer una ruta de estudio clara, gradual y coherente, pensada especialmente para estudiantes que se acercan por primera vez a estos conceptos o que desean reforzar su comprensión desde una perspectiva más aplicada.
 
-```{r}
-1 + 1
-```
+---
+
+## Objetivos del libro
+
+Este libro persigue tres objetivos centrales:
+
+1. **Introducir los conceptos fundamentales** de la teoría de autómatas, lenguajes formales y computabilidad con un lenguaje accesible, sin perder el rigor matemático necesario.
+2. **Conectar la teoría con la práctica**, mostrando ejemplos de cómo estos modelos se relacionan con problemas reales de la ingeniería de software, el diseño de lenguajes de programación y la verificación de sistemas.
+3. **Desarrollar habilidades de razonamiento formal**, a través de ejercicios y problemas que invitan a demostrar propiedades, construir modelos y analizar límites de computación.
+
+Al finalizar el recorrido, se espera que el lector sea capaz de:
+
+- Modelar comportamientos sencillos mediante autómatas finitos y de pila.
+- Relacionar gramáticas y autómatas con tareas de análisis léxico y sintáctico.
+- Comprender el papel de las máquinas de Turing como modelo general de computación.
+- Identificar problemas decidibles e indecidibles, y reflexionar sobre los límites de lo computable.
+
+---
+
+## Estructura general
+
+El contenido del libro se organiza en bloques temáticos que siguen una progresión natural:
+
+- **Capítulo 1 – Lenguajes y operaciones básicas**  
+  Se introducen los conceptos de alfabeto, cadena y lenguaje, junto con operaciones fundamentales (concatenación, potencia, estrella de Kleene). Este capítulo establece el vocabulario básico que se utilizará en todo el libro.
+
+- **Capítulo 2 – Autómatas finitos y lenguajes regulares**  
+  Se presentan los autómatas finitos deterministas (DFA) y no deterministas (NFA), las expresiones regulares y la noción de lenguaje regular. Se enfatiza su aplicación en el análisis léxico y la búsqueda de patrones.
+
+- **Capítulo 3 – Gramáticas libres de contexto y autómatas de pila**  
+  Se estudian las gramáticas libres de contexto (CFG), las derivaciones, los árboles de análisis y su relación con el diseño de lenguajes de programación. Luego se introducen los autómatas de pila como modelo equivalente.
+
+- **Capítulo 4 – Máquinas de Turing y computabilidad**  
+  Se presenta la máquina de Turing como modelo general de computación, así como problemas clásicos de decidibilidad e indecidibilidad. Se muestra cómo ciertas preguntas no admiten solución algorítmica.
+
+- **Capítulo 5 – Esbozo de complejidad**  
+  Se ofrece una breve introducción a la complejidad temporal y espacial, con una mirada inicial a clases como P y NP, dando contexto a la discusión sobre eficiencia de algoritmos.
+
+Dependiendo del curso y del tiempo disponible, estos capítulos pueden cubrirse de forma secuencial o seleccionarse parcialmente, reforzando algunos temas más que otros.
+
+---
+
+## Requisitos previos
+
+Para aprovechar mejor este libro se recomienda que el lector cuente con:
+
+- Conocimientos básicos de **matemática discreta** (conjuntos, relaciones, funciones, inducción).
+- Familiaridad con la **notación lógica elemental** (implicación, conjunción, cuantificadores sencillos).
+- Experiencia básica en **programación**, que le permita relacionar los modelos teóricos con problemas prácticos.
+
+Aunque cada capítulo incluye recordatorios y ejemplos guiados, estos prerequisitos facilitan la comprensión de las demostraciones y la construcción de modelos.
+
+---
+
+## Cómo usar este libro
+
+Este texto puede utilizarse de diferentes maneras:
+
+- **Como libro de curso**: siguiendo el orden de los capítulos, combinando la lectura con las clases expositivas y las sesiones de resolución de problemas.
+- **Como referencia de apoyo**: para revisar definiciones, propiedades y ejemplos concretos cuando se estudian temas relacionados como compiladores, verificación o métodos formales.
+- **Para estudio autónomo**: avanzando capítulo por capítulo, resolviendo los ejercicios propuestos y contrastando las propias soluciones con las pistas y comentarios incluidos.
+
+Se recomienda al lector:
+
+- Leer las secciones con lápiz o cuaderno a la mano,  
+- Dibujar los autómatas y diagramas por cuenta propia,  
+- Intentar resolver cada ejercicio antes de revisar cualquier solución o pista,  
+- Volver sobre las definiciones cada vez que surja una duda: en teoría de autómatas, los matices importan.
+
+---
+
+## Convenciones y notación
+
+A lo largo del libro utilizaremos algunas convenciones consistentes:
+
+- Los alfabetos se denotarán por letras mayúsculas como `Σ` o `Γ`.
+- Las cadenas se representarán con letras minúsculas (`w`, `x`, `y`, `z`), y su longitud por `|w|`.
+- Los lenguajes (conjuntos de cadenas) se denotarán por letras mayúsculas (`L`, `R`, `A`).
+- Utilizaremos frecuentemente la notación de **estrella de Kleene** `Σ*` para indicar el conjunto de todas las cadenas posibles sobre un alfabeto `Σ`.
+- Los autómatas se describirán tanto mediante diagramas de estados como mediante tuplas formales.
+
+Un breve resumen de la notación utilizada se incluye al final del libro como referencia rápida.
+
+---
+
+## Cierre de la introducción
+
+La teoría de autómatas no solo responde a la pregunta *“¿cómo funcionan ciertas herramientas?”*, sino también a preguntas más profundas como *“¿qué puede hacer un computador?”* y *“¿qué problemas están fuera de su alcance?”*. 
+
+Si este libro logra acompañarte en el tránsito desde la curiosidad inicial hasta una comprensión sólida de estas ideas —y, sobre todo, si te anima a seguir explorando más allá de sus páginas—, habrá cumplido su propósito.
+
+Te invito a comenzar el recorrido por el **Capítulo 1**, donde el lenguaje de la computación se reduce a su esencia: símbolos, cadenas y operaciones que, combinadas, dan forma a todo lo que podemos describir y procesar de manera formal.

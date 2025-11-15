@@ -1,4 +1,3 @@
 # References {.unnumbered}
 
 ::: [1] J. Esparza and M. Blondin, Automata Theory: Algorithms for Sets and Relations. Cambridge, MA, USA: MIT Press, 2025.
-:::

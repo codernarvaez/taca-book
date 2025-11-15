@@ -1,9 +1,51 @@
-# Preface {.unnumbered}
+# Prefacio
 
-This is a Quarto book.
+La teoría de autómatas suele aparecer ante los estudiantes como un rincón abstracto y distante de la informática, lleno de símbolos, diagramas y demostraciones que parecen desconectados de los sistemas “reales”. Sin embargo, detrás de cada compilador, de muchos protocolos de comunicación, de cada expresión regular en un editor de texto y de numerosas herramientas de verificación, existe una base silenciosa construida sobre **autómatas, lenguajes formales y computabilidad**.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+Este libro es el resultado de años de enseñanza y aprendizaje en torno a esa base. No pretende presentar una teoría completamente nueva, sino ofrecer una **recopilación y organización cuidadosa** de conceptos, ejemplos y problemas que han demostrado ser especialmente útiles para ayudar a los estudiantes a pasar de la intuición al razonamiento formal. El objetivo es sencillo: hacer que la teoría de autómatas sea **accesible sin sacrificar el rigor**, y mostrar de manera clara por qué estas ideas siguen siendo relevantes en la computación moderna.
 
-```{r}
-1 + 1
-```
+------------------------------------------------------------------------
+
+## Estructura y recorrido del libro
+
+La estructura del libro refleja un recorrido natural:
+
+-   Comenzamos con **alfabetos, cadenas y lenguajes**.\
+-   Avanzamos hacia los **autómatas finitos, las expresiones regulares y los lenguajes regulares**, donde muchos lectores reconocerán herramientas familiares del análisis léxico y la búsqueda de patrones.\
+-   A continuación introducimos las **gramáticas libres de contexto y los autómatas de pila**, vinculándolos con el análisis sintáctico y el diseño de lenguajes de programación.\
+-   Finalmente, exploramos las **máquinas de Turing, la decidibilidad y una primera mirada a la complejidad**, donde se hacen visibles los límites de lo que puede ser calculado.
+
+A lo largo de los capítulos, el énfasis está en **tender puentes**:
+
+-   entre los diagramas y las descripciones algebraicas,\
+-   entre las demostraciones formales y las aplicaciones prácticas,\
+-   entre los resultados clásicos y sus usos contemporáneos.
+
+Cada tema se acompaña de **ejemplos resueltos**, **preguntas orientadoras** y **ejercicios** que invitan al lector no solo a reproducir resultados, sino también a experimentar, a preguntarse *“¿qué pasa si…?”* y a conectar la teoría con problemas que le resulten significativos.
+
+------------------------------------------------------------------------
+
+## A quién va dirigido
+
+Este libro está dirigido principalmente a **estudiantes de primeros ciclos de posgrado** en informática, ingeniería de software y áreas afines. Puede utilizarse:
+
+-   como texto base en un curso de **lenguajes formales y autómatas**, o
+-   como referencia complementaria en asignaturas de **compiladores**, **métodos formales** y **fundamentos teóricos de la computación**.
+
+El profesorado encontrará también en estas páginas un conjunto curado de explicaciones, ejemplos y ejercicios que pueden adaptarse a distintos enfoques de enseñanza y a diversos planes de estudio.
+
+------------------------------------------------------------------------
+
+## Agradecimientos
+
+Debo un agradecimiento especial a mis estudiantes: sus preguntas, errores, aciertos y persistencia han moldeado cada capítulo. Muchos de los ejemplos y explicaciones que aquí se presentan se fueron refinando en el aula, frente a la pizarra y en horas de tutoría, mientras tratábamos de dar sentido a definiciones abstractas y demostraciones sutiles. Su curiosidad y paciencia han sido la principal fuente de retroalimentación para este trabajo.
+
+------------------------------------------------------------------------
+
+## Invitación al lector
+
+> Si, después de leer este libro, la teoría de autómatas se siente un poco menos lejana y un poco más **viva** —como una caja de herramientas que realmente puedes usar para comprender y diseñar sistemas—, entonces su propósito se habrá cumplido.
+
+Te invito a:
+
+leer con lápiz en mano, dibujar tus propios autómatas, poner a prueba tus conjeturas, y entender cada capítulo no como un punto de llegada, sino como una invitación a explorar preguntas más profundas sobre **qué es la computación** y qué puede, y no puede, llegar a hacer.
