@@ -109,3 +109,64 @@ El AFND-ε permite construcciones lineales o polinomiales en muchas operaciones,
 El AFND-ε actúa como una estructura composicional que traduce expresiones regulares complejas a autómatas mediante reglas locales, simples y modulares. Para la concatenación y la clausura, estas reglas requieren pocos estados y transiciones; por el contrario, la construcción equivalente en AFD es más compleja, rígida y potencialmente exponencial en tamaño.
 
 ```
+## 5.6 Propiedades de Clausura de Lenguajes Regulares
+
+Una de las propiedades más importantes de los Lenguajes Regulares (LR) es su clausura bajo un conjunto de operaciones. Esto significa que si tomamos uno o más lenguajes que sabemos que son regulares, y aplicamos una de estas operaciones (como unión, intersección o concatenación), el lenguaje resultante siempre será también un lenguaje regular.
+
+El Teorema de Kleene establece que un lenguaje es regular si y solo si es aceptado por un Autómata Finito (AF). Por lo tanto, para demostrar que los LRs son cerrados bajo una operación, es suficiente con demostrar que si tenemos los Autómatas Finitos Deterministas (AFDs) para los lenguajes originales, podemos construir un nuevo autómata finito que reconozca el lenguaje resultante.
+
+---
+
+### Clausura bajo Unión e Intersección (Construcción de Producto)
+
+La demostración de clausura para la unión ($L_1 \cup L_2$) y la intersección ($L_1 \cap L_2$) se realiza de manera elegante y simultánea utilizando una técnica llamada Construcción de Producto Cartesiano (o "construcción de parejas").
+
+Supongamos que tenemos dos lenguajes regulares, $L_1$ y $L_2$, aceptados por los AFDs:
+
+* $A_{1}=(Q_{1},\Sigma,\delta_{1},q_{0,1},F_{1})$ para $L_{1}$
+* $A_{2}=(Q_{2},\Sigma,\delta_{2},q_{0,2},F_{2})$ para $L_{2}$
+
+Construimos un nuevo AFD, $A_{p}$, que simula la ejecución de $A_{1}$ y $A_{2}$ en paralelo.
+
+1.  **Estados ($Q_{p}$):** El nuevo conjunto de estados es el producto cartesiano de los estados originales: $Q_{p}=Q_{1}\times Q_{2}$. Cada estado en $A_{p}$ es una pareja $[q_{i},q_{j}]$, donde $q_{i}\in Q_{1}$ y $q_{j}\in Q_{2}$.
+
+2.  **Estado Inicial ($q_{0,p}$):** El estado inicial es la pareja de los estados iniciales originales: $q_{0,p}=[q_{0,1},q_{0,2}]$.
+
+3.  **Función de Transición ($\delta_{p}$):** La nueva función de transición simula ambas transiciones a la vez. Para cualquier símbolo $a\in\Sigma$:
+    $$
+    \delta_{p}([q_{i},q_{j}],a)=[\delta_{1}(q_{i},a),\delta_{2}(q_{j},a)]
+    $$
+
+El único componente que difiere entre la unión y la intersección es la definición de los estados finales ($F_{p}$).
+
+1.  **Unión ($L_{1}\cup L_{2}$)**
+    Para que una palabra sea aceptada en la unión, debe ser aceptada por $A_{1}$ o por $A_{2}$.
+    * **Estados Finales ($F_{\cup}$):** Un estado $[q_{i},q_{j}]$ es final si $q_{i}$ es final en $A_{1}$ o $q_{j}$ es final en $A_{2}$.
+        $$
+        F_{\cup}=\{[q_{i},q_{j}]\in Q_{p} | q_{i}\in F_{1} \text{ o } q_{j}\in F_{2}\}
+        $$
+
+2.  **Intersección ($L_{1}\cap L_{2}$)**
+    Para que una palabra sea aceptada en la intersección, debe ser aceptada por $A_{1}$ y por $A_{2}$.
+    * **Estados Finales ($F_{\cap}$):** Un estado $[q_{i},q_{j}]$ es final solo si $q_{i}$ es final en $A_{1}$ y $q_{j}$ es final en $A_{2}$.
+        $$
+        F_{\cap}=\{[q_{i},q_{j}]\in Q_{p} | q_{i}\in F_{1} \text{ y } q_{j}\in F_{2}\}
+        $$
+
+Dado que podemos construir algorítmicamente un AFD para ambas operaciones, los lenguajes regulares son cerrados bajo la unión y la intersección.
+
+---
+
+### Clausura bajo Concatenación ($L_{1}\cdot L_{2}$)
+
+Demostrar la clausura bajo concatenación ($L_{1}\cdot L_{2}$) usando exclusivamente AFDs no es directo. La "construcción de producto" no funciona porque un AFD no puede "adivinar" en qué punto de la cadena de entrada termina la parte de $L_{1}$ y comienza la parte de $L_{2}$. Esta "adivinanza" es una característica clave del no determinismo.
+
+La demostración formal de la clausura bajo concatenación se basa en la equivalencia de modelos:
+
+1.  **Construcción vía AFN-$\epsilon$:** Es trivial construir un Autómata Finito No Determinista con transiciones épsilon (AFN-$\epsilon$) que acepte $L_{1}\cdot L_{2}$. Simplemente se toman los autómatas $A_{1}$ y $A_{2}$, y se añaden transiciones-$\epsilon$ desde todos los estados finales de $A_{1}$ al estado inicial de $A_{2}$.
+
+2.  **Equivalencia de Modelos:** Existe un algoritmo formal (la "construcción de subconjuntos" o *powerset construction*) que prueba que para cualquier AFN-$\epsilon$, existe un AFD equivalente que acepta exactamente el mismo lenguaje.
+
+3.  **Conclusión:** Dado que podemos construir un AFN-$\epsilon$ para $L_{1}\cdot L_{2}$ y sabemos que debe existir un AFD equivalente, se demuestra que el lenguaje $L_{1}\cdot L_{2}$ es regular.
+
+Por lo tanto, la familia de lenguajes regulares es cerrada bajo concatenación.

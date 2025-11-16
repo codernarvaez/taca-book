@@ -21,6 +21,7 @@ A continuación se reconocen las contribuciones de quienes participaron en la cr
 -   **Nombre Apellido 1** – Revisión de los capítulos de lenguajes regulares y autómatas finitos; propuesta de ejemplos adicionales orientados a compiladores.
 -   **Nombre Apellido 2** – Aportes en la sección de gramáticas libres de contexto, árboles de derivación y análisis sintáctico.
 -   **Nombre Apellido 3** – Colaboración en la redacción inicial de los capítulos sobre máquinas de Turing y problemas indecidibles.
+-   **Andersson Ambuludi - andersson.ambuludi\@unl.edu.ec** - Propiedades de Clausura de Lenguajes Regulares
 
 Sus observaciones y sugerencias fueron esenciales para asegurar la precisión técnica y la claridad expositiva.
 
