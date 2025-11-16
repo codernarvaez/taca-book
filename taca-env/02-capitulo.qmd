@@ -8,6 +8,59 @@ bibliography: references.bib
 nocite: "@*"
 ---
 
+## 1.0 Definición Formal y Poder Computacional del NFA vs DFA
+
+## Introducción
+
+Los autómatas finitos (DFA y NFA) son modelos esenciales en la teoría de lenguajes formales y la computación. Aunque los NFA tienen una función de transición más "flexible" que los DFA, ambos modelos reconocen exactamente los mismos lenguajes: los **lenguajes regulares**.
+
+## Definición Formal
+
+### DFA (Deterministic Finite Automaton)
+
+Un DFA se define con la tupla:
+
+$$M = (Q, \Sigma, \delta, q_0, F)$$
+
+Donde:
+
+* $Q$ = conjunto finito de estados
+* $\Sigma$ = alfabeto de entrada
+* $\delta: Q \times \Sigma \rightarrow Q$ = función de transición que mapea a un solo estado
+* $q_0$ = estado inicial
+* $F \subseteq Q$ = conjunto de estados finales (aceptación)
+
+### NFA (Non-deterministic Finite Automaton)
+
+Un NFA se define como:
+
+$$N = (Q, \Sigma, \delta, q_0, F)$$
+
+Donde:
+
+* $Q, \Sigma, q_0, F$ igual que en el DFA
+* $\delta: Q \times (\Sigma \cup \{\epsilon\}) \rightarrow 2^Q$ = función de transición que mapea a un conjunto de posibles estados (incluso permite transiciones sin consumir entrada, $\epsilon$)
+
+### Comparativa de la función de transición
+
+* **DFA**: Determinista. Cada $\delta(q,a)$ produce exactamente un estado siguiente.
+* **NFA**: No determinista. Cada $\delta(q,a)$ produce cero o más estados posibles. Permite múltiples opciones y transiciones $\epsilon$.
+
+## Poder Computacional: ¿Hasta dónde llegan?
+
+Aunque los NFA parecen más poderosos por su flexibilidad, un resultado clásico demuestra:
+
+* Todo NFA puede convertirse en un DFA equivalente, usando la **construcción de subconjuntos** (*powerset construction*).
+* Ambas máquinas reconocen exactamente los **lenguajes regulares** y ninguno puede reconocer lenguajes fuera de esta clase (por ejemplo, $\{0^n1^n\}$ no es regular).
+
+### ¿Por qué?
+
+1. **Memoria finita**: Ambos modelos tienen memoria limitada al estado actual (no pila, no cinta infinita).
+
+2. **Simulación total**: El DFA puede simular el NFA recorriendo "todos los posibles estados" usando el conjunto de subconjuntos.
+
+3. **No determinismo ≠ más poder**: El no determinismo no aumenta la clase de lenguajes reconocidos, simplemente permite una descripción más simple para algunos lenguajes.
+
 ## 1.1 Comparativa de Eficiencia: DFA vs. NFA en la Práctica
 
 ### Introducción
