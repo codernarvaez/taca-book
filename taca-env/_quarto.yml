@@ -2,13 +2,21 @@ project:
   type: book
 
 book:
-  title: "taca-env"
-  author: "Norah Jones"
-  date: "14/11/2025"
+  title: "Toería de Autómatas y Computabilidad Aplicada"
+  author: "Cristian Narváez"
+  date: "29/09/2025"
   chapters:
     - index.qmd
     - intro.qmd
     - summary.qmd
+    - 01-capitulo.qmd
+    - 02-capitulo.qmd
+    - 03-capitulo.qmd
+    - 04-capitulo.qmd
+    - 05-capitulo.qmd
+    - 06-capitulo.qmd
+    - 07-capitulo.qmd
+    - participantes.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -20,6 +28,7 @@ format:
       - brand
   pdf:
     documentclass: scrreprt
+  epub: default
 
 editor: visual
 

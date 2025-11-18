@@ -1,5 +1,348 @@
 ---
-title: "04-capitulo"
-format: html
+title: "Equivalencia entre Expresiones Regulares y Autómatas Finitos"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
+# Equivalencia entre Expresiones Regulares y Autómatas Finitos
+
+**Autor:** Elias Sebastian Poma Granda
+
+## Introducción
+
+La teoría de autómatas y lenguajes formales establece una relación fundamental entre las expresiones regulares y los autómatas finitos. Esta equivalencia demuestra que ambos formalismos tienen exactamente el mismo poder expresivo: cualquier lenguaje que puede ser descrito por una expresión regular puede ser reconocido por un autómata finito, y viceversa.
+
+El Algoritmo de Construcción de Thompson representa uno de los métodos más elegantes y sistemáticos para convertir una expresión regular en un autómata finito no determinista con transiciones épsilon (ε-NFA). Este algoritmo fue desarrollado por Ken Thompson en 1968 como parte del editor de texto QED, y posteriormente se convirtió en la base del comando grep en sistemas Unix.
+
+## Conceptos Fundamentales
+
+### Expresiones Regulares
+
+Una expresión regular es una notación formal que describe un conjunto de cadenas sobre un alfabeto dado. Las expresiones regulares se construyen recursivamente utilizando tres operaciones básicas:
+
+1. **Concatenación:** Si r y s son expresiones regulares, entonces rs denota el lenguaje formado por todas las cadenas que resultan de concatenar una cadena del lenguaje de r con una cadena del lenguaje de s.
+
+2. **Unión (alternancia):** Si r y s son expresiones regulares, entonces r|s denota el lenguaje que contiene todas las cadenas que pertenecen al lenguaje de r o al lenguaje de s.
+
+3. **Clausura de Kleene:** Si r es una expresión regular, entonces r* denota el lenguaje que contiene la cadena vacía y todas las cadenas que pueden formarse concatenando cero o más cadenas del lenguaje de r.
+
+### Autómatas Finitos No Deterministas con Transiciones Épsilon
+
+Un ε-NFA es una quintupla (Q, Σ, δ, q0, F) donde:
+
+- Q es un conjunto finito de estados
+- Σ es el alfabeto de entrada
+- δ: Q × (Σ ∪ {ε}) → P(Q) es la función de transición
+- q0 ∈ Q es el estado inicial
+- F ⊆ Q es el conjunto de estados finales
+
+La característica distintiva de los ε-NFA es que pueden realizar transiciones espontáneas (transiciones ε) sin consumir símbolos de entrada. Esto proporciona mayor flexibilidad en el diseño del autómata, aunque computacionalmente un ε-NFA no es más poderoso que un NFA o un DFA.
+
+## El Algoritmo de Construcción de Thompson
+
+### Principio General
+
+El Algoritmo de Thompson construye un ε-NFA de manera compositiva, siguiendo la estructura inductiva de la expresión regular. Para cada componente de la expresión regular, el algoritmo crea un fragmento de autómata con exactamente un estado inicial y un estado final. Estos fragmentos se combinan sistemáticamente según las operaciones de la expresión regular.
+
+### Casos Base
+
+**Expresión vacía (ε):**
+
+Para la expresión regular que representa la cadena vacía, se construye un autómata con dos estados conectados por una transición ε:
+
+```
+[q0] --ε--> [qf]
+```
+
+Este autómata acepta únicamente la cadena vacía.
+
+**Símbolo único (a):**
+
+Para una expresión regular que consiste en un único símbolo 'a' del alfabeto, se construye un autómata con dos estados conectados por una transición etiquetada con ese símbolo:
+
+```
+[q0] --a--> [qf]
+```
+
+Este autómata acepta únicamente la cadena "a".
+
+### Casos Inductivos
+
+**Concatenación (rs):**
+
+Supongamos que ya hemos construido los ε-NFA para las expresiones regulares r y s:
+
+- N(r) con estado inicial q0r y estado final qfr
+- N(s) con estado inicial q0s y estado final qfs
+
+Para construir N(rs), se fusionan los dos autómatas conectando el estado final de N(r) con el estado inicial de N(s) mediante una transición ε:
+
+```
+N(r): [q0r] --> ... --> [qfr]
+                         |
+                         ε
+                         |
+                         v
+N(s):                  [q0s] --> ... --> [qfs]
+```
+
+El estado inicial del autómata resultante es q0r y el estado final es qfs.
+
+**Unión (r|s):**
+
+Para construir el autómata de la unión de dos expresiones regulares, se crea un nuevo estado inicial y un nuevo estado final. El nuevo estado inicial tiene transiciones ε hacia los estados iniciales de ambos autómatas N(r) y N(s), y los estados finales de ambos autómatas tienen transiciones ε hacia el nuevo estado final:
+
+```
+              ε
+        ┌────────────> [q0r] --> ... --> [qfr] ────────┐
+        |                                               | ε
+[qnew] ─┤                                               ├──> [qfnew]
+        |                                               | ε
+        └────────────> [q0s] --> ... --> [qfs] ────────┘
+              ε
+```
+
+Esta construcción permite que el autómata elija no determinísticamente entre procesar la entrada según r o según s.
+
+**Clausura de Kleene (r*):**
+
+Para construir el autómata de la clausura de Kleene, se crea un nuevo estado inicial y un nuevo estado final. Se añaden las siguientes transiciones ε:
+
+1. Del nuevo estado inicial al estado inicial de N(r)
+2. Del nuevo estado inicial al nuevo estado final (para aceptar la cadena vacía)
+3. Del estado final de N(r) al nuevo estado final
+4. Del estado final de N(r) de vuelta al estado inicial de N(r) (para permitir repeticiones)
+
+```
+              ε
+        ┌────────────────────────────────────────────┐
+        |                                            |
+        |      ε                          ε          v
+[qnew] ─┼────────> [q0r] --> ... --> [qfr] ───────> [qfnew]
+        |                              |
+        |                              | ε
+        └──────────────────────────────┘
+              ε
+```
+
+Esta construcción permite reconocer cero o más repeticiones del patrón descrito por r.
+
+## Propiedades del Algoritmo
+
+### Corrección
+
+El Algoritmo de Thompson es correcto por construcción. La demostración se realiza por inducción estructural sobre la expresión regular:
+
+**Caso base:** Para las expresiones ε y los símbolos individuales, los autómatas construidos claramente reconocen exactamente las cadenas descritas por esas expresiones.
+
+**Caso inductivo:** Asumiendo que los autómatas para las subexpresiones r y s son correctos, se puede demostrar que las construcciones para rs, r|s y r* también son correctas:
+
+- Para rs: Una cadena pertenece a L(rs) si y solo si puede dividirse en dos partes, una en L(r) y otra en L(s). La construcción por concatenación preserva esta propiedad.
+
+- Para r|s: Una cadena pertenece a L(r|s) si y solo si pertenece a L(r) o a L(s). La construcción con transiciones ε desde el nuevo estado inicial permite elegir no determinísticamente cuál autómata seguir.
+
+- Para r*: Una cadena pertenece a L(r*) si y solo si es la cadena vacía o puede dividirse en una concatenación de cadenas de L(r). La construcción con el bucle ε permite repetir el reconocimiento de patrones de r.
+
+### Complejidad
+
+**Tamaño del autómata:** Si la expresión regular tiene longitud n (contando símbolos, operadores y paréntesis), el ε-NFA resultante tiene O(n) estados y O(n) transiciones. Más específicamente:
+
+- Cada símbolo del alfabeto en la expresión regular contribuye con 2 estados
+- Cada operador contribuye con hasta 2 estados adicionales
+- Por tanto, el número total de estados es a lo sumo 2n
+
+**Tiempo de construcción:** El algoritmo realiza un recorrido de la expresión regular en forma de árbol sintáctico, aplicando las reglas de construcción en cada nodo. Cada operación se realiza en tiempo constante, por lo que la complejidad temporal es O(n).
+
+### Características Estructurales
+
+Los ε-NFA generados por el Algoritmo de Thompson tienen propiedades especiales:
+
+1. **Estado inicial único:** Cada autómata tiene exactamente un estado inicial sin transiciones entrantes.
+
+2. **Estado final único:** Cada autómata tiene exactamente un estado final sin transiciones salientes.
+
+3. **Estructura modular:** Los autómatas se construyen componiendo fragmentos más pequeños, lo que facilita la depuración y el análisis.
+
+4. **Transiciones ε limitadas:** Aunque el autómata resultante puede tener muchas transiciones ε, su número está acotado linealmente por el tamaño de la expresión regular.
+
+## Ejemplo Completo de Aplicación
+
+Consideremos la expresión regular: (a|b)*abb
+
+Esta expresión describe todas las cadenas sobre el alfabeto {a, b} que terminan con la subcadena "abb".
+
+**Paso 1:** Construcción para 'a':
+```
+[0] --a--> [1]
+```
+
+**Paso 2:** Construcción para 'b':
+```
+[2] --b--> [3]
+```
+
+**Paso 3:** Construcción para (a|b):
+```
+        ε           ε
+   ┌────────> [0] --a--> [1] ────────┐
+   |                                  | ε
+[4]┤                                  ├───> [5]
+   |                                  | ε
+   └────────> [2] --b--> [3] ────────┘
+        ε           ε
+```
+
+**Paso 4:** Construcción para (a|b)*:
+```
+              ε
+        ┌───────────────────────────────────────┐
+        |                                       |
+        |      ε                     ε          v
+[6] ────┼────────> [4] ---(a|b)---> [5] ─────> [7]
+        |                            |
+        |                            | ε
+        └────────────────────────────┘
+              ε
+```
+
+**Paso 5:** Construcción para 'a' (segundo):
+```
+[8] --a--> [9]
+```
+
+**Paso 6:** Construcción para 'b' (tercero):
+```
+[10] --b--> [11]
+```
+
+**Paso 7:** Construcción para 'b' (cuarto):
+```
+[12] --b--> [13]
+```
+
+**Paso 8:** Concatenación de (a|b)* con a:
+```
+[6] ---(a|b)*---> [7] --ε--> [8] --a--> [9]
+```
+
+**Paso 9:** Concatenación con b:
+```
+[6] ---(a|b)*---> [7] --ε--> [8] --a--> [9] --ε--> [10] --b--> [11]
+```
+
+**Paso 10:** Concatenación con b final:
+```
+[6] ---(a|b)*---> [7] --ε--> [8] --a--> [9] --ε--> [10] --b--> [11] --ε--> [12] --b--> [13]
+```
+
+El autómata completo resultante tiene 14 estados (numerados del 0 al 13, más los estados internos del fragmento (a|b)*) y reconoce exactamente el lenguaje definido por la expresión regular (a|b)*abb.
+
+## Aplicaciones Prácticas
+
+### Compiladores
+
+El Algoritmo de Thompson es fundamental en la fase de análisis léxico de los compiladores. Los analizadores léxicos (lexers o scanners) utilizan expresiones regulares para definir tokens del lenguaje. El algoritmo permite convertir estas especificaciones en autómatas eficientes para reconocer tokens.
+
+### Herramientas de Búsqueda
+
+El comando grep y otras herramientas de búsqueda de patrones en texto utilizan variantes del Algoritmo de Thompson para compilar expresiones regulares en autómatas que pueden procesar texto de manera eficiente.
+
+### Validación de Entrada
+
+En aplicaciones web y sistemas de validación, las expresiones regulares se utilizan para verificar formatos de datos (correos electrónicos, números de teléfono, etc.). El Algoritmo de Thompson proporciona una forma sistemática de implementar estos validadores.
+
+### Análisis de Protocolos
+
+En el análisis de tráfico de red y detección de intrusiones, las expresiones regulares describen patrones de comportamiento sospechoso. La conversión a autómatas permite un reconocimiento eficiente en tiempo real.
+
+## Ventajas y Limitaciones
+
+### Ventajas
+
+1. **Simplicidad conceptual:** El algoritmo es fácil de entender e implementar, siguiendo directamente la estructura de la expresión regular.
+
+2. **Construcción sistemática:** No requiere heurísticas ni decisiones arbitrarias; el proceso es completamente determinista.
+
+3. **Tamaño lineal:** El autómata resultante tiene un tamaño proporcional a la expresión regular original.
+
+4. **Modularidad:** La construcción compositiva facilita la extensión a operadores adicionales.
+
+5. **Base teórica sólida:** La corrección del algoritmo se puede demostrar rigurosamente mediante inducción estructural.
+
+### Limitaciones
+
+1. **Transiciones épsilon abundantes:** El ε-NFA resultante contiene muchas transiciones ε, lo que puede afectar la eficiencia en la simulación directa.
+
+2. **No determinismo:** El autómata resultante es no determinista, lo que requiere conversión adicional para obtener un DFA si se desea ejecución determinista.
+
+3. **No optimizado:** El algoritmo no produce el autómata más pequeño posible; pueden existir estados o transiciones redundantes.
+
+4. **Solo lenguajes regulares:** El algoritmo está limitado a expresiones regulares; no puede manejar gramáticas más complejas como las libres de contexto.
+
+## Optimizaciones y Extensiones
+
+### Eliminación de Transiciones Épsilon
+
+Después de aplicar el Algoritmo de Thompson, es común eliminar las transiciones ε del autómata resultante. Este proceso consiste en:
+
+1. Calcular la clausura épsilon de cada estado (conjunto de estados alcanzables mediante transiciones ε)
+2. Para cada transición a desde un estado q, añadir transiciones desde todos los estados en la clausura épsilon de q
+3. Ajustar los estados finales considerando las clausuras épsilon
+
+Este proceso produce un NFA sin transiciones ε equivalente al ε-NFA original.
+
+### Determinización
+
+Para obtener un autómata determinista (DFA), se puede aplicar el algoritmo de construcción de subconjuntos (powerset construction) al ε-NFA:
+
+1. El estado inicial del DFA es la clausura épsilon del estado inicial del ε-NFA
+2. Para cada estado del DFA (que representa un conjunto de estados del ε-NFA) y cada símbolo del alfabeto, se calcula el nuevo conjunto de estados alcanzables
+3. Este proceso continúa hasta que no se generen nuevos estados
+
+El DFA resultante puede tener hasta 2^n estados en el peor caso, pero en la práctica suele ser mucho más pequeño.
+
+### Minimización
+
+Una vez obtenido el DFA, se puede aplicar el algoritmo de minimización de Hopcroft para reducir el número de estados al mínimo posible:
+
+1. Particionar los estados en grupos de estados equivalentes
+2. Refinar iterativamente las particiones hasta que no sea posible más refinamiento
+3. Cada partición final representa un estado en el DFA minimizado
+
+### Extensiones a Operadores Adicionales
+
+El Algoritmo de Thompson se puede extender para soportar operadores adicionales comunes en expresiones regulares modernas:
+
+**Clausura positiva (r+):** Equivalente a rr*, se construye similar a r* pero sin la transición ε directa que permite la cadena vacía.
+
+**Opcional (r?):** Equivalente a r|ε, se construye añadiendo una transición ε que rodea el autómata de r.
+
+**Repetición acotada (r{m,n}):** Se construye concatenando m copias de r, seguidas de hasta (n-m) copias opcionales.
+
+## Comparación con Otros Métodos
+
+### Algoritmo de McNaughton-Yamada
+
+Este algoritmo convierte un DFA en una expresión regular. Es el proceso inverso al de Thompson, demostrando la equivalencia en ambas direcciones.
+
+### Construcción Directa de DFA
+
+El algoritmo de Berry-Sethi (o construcción de posiciones) construye directamente un DFA sin pasar por un ε-NFA. Aunque produce autómatas más pequeños, es conceptualmente más complejo.
+
+### Derivadas de Brzozowski
+
+Las derivadas de expresiones regulares proporcionan un método elegante basado en cálculo simbólico para construir autómatas. Este enfoque es más abstracto pero tiene aplicaciones en verificación formal.
+
+## Conclusiones
+
+El Algoritmo de Construcción de Thompson representa un resultado fundamental en la teoría de autómatas y lenguajes formales. Su elegancia radica en la simplicidad de su diseño: siguiendo inductivamente la estructura de una expresión regular, construye sistemáticamente un autómata que reconoce exactamente el mismo lenguaje.
+
+La importancia práctica del algoritmo se extiende mucho más allá de su valor teórico. Desde su introducción en 1968, ha servido como base para innumerables herramientas de procesamiento de texto, compiladores y sistemas de análisis de patrones. La construcción modular que propone facilita tanto la implementación como la extensión a nuevos operadores.
+
+Si bien el ε-NFA resultante no es el autómata más eficiente posible, constituye un paso intermedio valioso en la cadena de transformaciones desde expresiones regulares hasta autómatas deterministas minimizados. Las transiciones épsilon, aunque abundantes, simplifican significativamente el proceso de construcción y demuestran ser fáciles de eliminar mediante técnicas estándar.
+
+La equivalencia entre expresiones regulares y autómatas finitos, demostrada constructivamente por el Algoritmo de Thompson, es uno de los resultados más bellos de la ciencia de la computación teórica. Esta equivalencia no solo unifica dos formalismos aparentemente distintos, sino que también proporciona herramientas prácticas para resolver problemas reales en el procesamiento de información.

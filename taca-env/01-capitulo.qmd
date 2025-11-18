@@ -1,5 +1,67 @@
 ---
-title: "01-capitulo.qmd"
-format: html
+title: "Definición Formal de un DFA"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
+
+### Definición formal de un DFA (Autómata Finito Determinista)
+
+Un DFA se define formalmente como una 5–tupla:
+
+\[
+M = (Q, \Sigma, \delta, q_0, F)
+\]
+
+donde:
+
+* **\(Q\)** → *Conjunto de estados:* Es un conjunto finito de estados.  
+  **Ejemplo:** \(Q = \{q_0, q_1\}\)
+
+* **\(\Sigma\)** → *Alfabeto:* Conjunto de símbolos permitidos.  
+  **Ejemplo:** \(\Sigma = \{0, 1\}\)
+
+* **\(\delta\)** → *Función de transición:* Indica a qué estado se va dependiendo del estado actual.  
+  \[
+  \delta: Q \times \Sigma \rightarrow Q
+  \]  
+  **Ejemplo:** \(\delta(q_0, 1) = q_1\)
+
+* **\(q_0\)** → *Estado inicial:* El estado donde empieza la máquina.  
+  **Ejemplo:** \(q_0 = q_0\)
+
+* **\(F\)** → *Conjunto de estados de aceptación:* Los estados finales o aceptadores.  
+  **Ejemplo:** \(F = \{q_0\}\)
+
+---
+
+### Ejemplo: DFA para “cadenas con número par de 1’s”
+
+El lenguaje consiste en aceptar todas las cadenas de 0’s y 1’s donde la cantidad de unos sea par.
+
+Ejemplos aceptados:
+
+✔ \( \varepsilon \) (cadena vacía) → 0 unos → par  
+✔ 0, 00, 010, 1010  
+
+Ejemplos rechazados:
+
+✘ 1, 01, 001, 111 → número impar de unos
+
+---
+
+### Idea del diseño
+
+Solo necesitamos saber si la cantidad de 1’s vista hasta ahora es **par** o **impar**, por lo que basta con dos estados:
+
+* **\(q_0\)** → hemos visto un número **par** de 1’s  
+* **\(q_1\)** → hemos visto un número **impar** de 1’s
+
+Reglas clave:
+
+* Al leer un **1**, el DFA **cambia de estado** (alterna entre par e impar).  
+* Al leer un **0**, el DFA **permanece en el mismo estado**, ya que no afecta la paridad.
 

@@ -1,5 +1,480 @@
 ---
-title: "02-capitulo"
-format: html
+title: "Minimización y reducción"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
+## 1.0 Definición Formal y Poder Computacional del NFA vs DFA
+
+## Introducción
+
+Los autómatas finitos (DFA y NFA) son modelos esenciales en la teoría de lenguajes formales y la computación. Aunque los NFA tienen una función de transición más "flexible" que los DFA, ambos modelos reconocen exactamente los mismos lenguajes: los **lenguajes regulares**.
+
+## Definición Formal
+
+### DFA (Deterministic Finite Automaton)
+
+Un DFA se define con la tupla:
+
+$$M = (Q, \Sigma, \delta, q_0, F)$$
+
+Donde:
+
+* $Q$ = conjunto finito de estados
+* $\Sigma$ = alfabeto de entrada
+* $\delta: Q \times \Sigma \rightarrow Q$ = función de transición que mapea a un solo estado
+* $q_0$ = estado inicial
+* $F \subseteq Q$ = conjunto de estados finales (aceptación)
+
+### NFA (Non-deterministic Finite Automaton)
+
+Un NFA se define como:
+
+$$N = (Q, \Sigma, \delta, q_0, F)$$
+
+Donde:
+
+* $Q, \Sigma, q_0, F$ igual que en el DFA
+* $\delta: Q \times (\Sigma \cup \{\epsilon\}) \rightarrow 2^Q$ = función de transición que mapea a un conjunto de posibles estados (incluso permite transiciones sin consumir entrada, $\epsilon$)
+
+### Comparativa de la función de transición
+
+* **DFA**: Determinista. Cada $\delta(q,a)$ produce exactamente un estado siguiente.
+* **NFA**: No determinista. Cada $\delta(q,a)$ produce cero o más estados posibles. Permite múltiples opciones y transiciones $\epsilon$.
+
+## Poder Computacional: ¿Hasta dónde llegan?
+
+Aunque los NFA parecen más poderosos por su flexibilidad, un resultado clásico demuestra:
+
+* Todo NFA puede convertirse en un DFA equivalente, usando la **construcción de subconjuntos** (*powerset construction*).
+* Ambas máquinas reconocen exactamente los **lenguajes regulares** y ninguno puede reconocer lenguajes fuera de esta clase (por ejemplo, $\{0^n1^n\}$ no es regular).
+
+### ¿Por qué?
+
+1. **Memoria finita**: Ambos modelos tienen memoria limitada al estado actual (no pila, no cinta infinita).
+
+2. **Simulación total**: El DFA puede simular el NFA recorriendo "todos los posibles estados" usando el conjunto de subconjuntos.
+
+3. **No determinismo ≠ más poder**: El no determinismo no aumenta la clase de lenguajes reconocidos, simplemente permite una descripción más simple para algunos lenguajes.
+
+## 1.1 Comparativa de Eficiencia: DFA vs. NFA en la Práctica
+
+### Introducción
+
+Los autómatas finitos deterministas (DFA) y no deterministas (NFA) son modelos computacionales equivalentes en términos de poder de reconocimiento, ya que ambos reconocen exactamente el conjunto de lenguajes regulares [@hopcroft2001]. Sin embargo, existe un **trade-off** fundamental entre ellos en términos de eficiencia temporal y espacial que tiene importantes implicaciones prácticas.
+
+### Análisis del Trade-off
+
+#### DFA: Velocidad vs. Espacio
+
+Los autómatas finitos deterministas presentan las siguientes características de eficiencia:
+
+##### Ventajas en Tiempo de Ejecución
+
+- **Complejidad temporal lineal**: El reconocimiento de una cadena de longitud $n$ se realiza en tiempo $O(n)$ [@sipser2013]
+- **Proceso determinista**: En cada paso existe exactamente una transición posible
+- **Sin backtracking**: No requiere exploración de múltiples caminos
+- **Predicibilidad**: El tiempo de ejecución es completamente predecible
+
+```python
+def dfa_recognize(dfa, string):
+    """
+    Reconocimiento en DFA - O(n) en tiempo
+    """
+    current_state = dfa.initial_state
+    
+    for symbol in string:  # Exactamente n iteraciones
+        current_state = dfa.transition(current_state, symbol)
+        if current_state is None:
+            return False
+    
+    return current_state in dfa.accepting_states
+```
+
+##### Desventaja en Espacio
+
+- **Crecimiento exponencial**: Al convertir un NFA con $n$ estados a DFA, el resultado puede tener hasta $2^n$ estados [@hopcroft2001]
+- **Construcción de subconjuntos**: Cada estado del DFA representa un subconjunto de estados del NFA original
+- **Explosión de estados**: Para ciertos lenguajes, el número de estados crece exponencialmente
+
+**Ejemplo**: Un NFA que reconoce cadenas con el símbolo $a$ en la $n$-ésima posición desde el final:
+
+- NFA: $n + 1$ estados
+- DFA equivalente: $2^n$ estados
+
+#### NFA: Espacio vs. Velocidad
+
+Los autómatas finitos no deterministas presentan características complementarias:
+
+##### Ventajas en Espacio
+
+- **Compacidad exponencial**: Un NFA puede ser exponencialmente más pequeño que su DFA equivalente [@kozen1997]
+- **Representación natural**: Muchos patrones se expresan más naturalmente como NFA
+- **Economía de estados**: Menor número de estados y transiciones
+
+```python
+# NFA compacto para detectar 'a' en posición n desde el final
+nfa_states = n + 1  # Lineal en n
+```
+
+##### Desventajas en Tiempo de Ejecución
+
+- **Complejidad temporal superior**: En el peor caso, requiere tiempo $O(n \cdot m^2)$ donde $m$ es el número de estados [@sipser2013]
+- **No determinismo**: Múltiples transiciones posibles para el mismo par (estado, símbolo)
+- **Backtracking**: Necesidad de explorar múltiples caminos de ejecución
+- **Simulación costosa**: Requiere mantener el conjunto de estados activos
+
+```python
+def nfa_recognize(nfa, string):
+    """
+    Reconocimiento en NFA - O(n·m²) en tiempo
+    donde m = número de estados
+    """
+    current_states = epsilon_closure({nfa.initial_state})
+    
+    for symbol in string:
+        next_states = set()
+        for state in current_states:  # Hasta m estados
+            for next_state in nfa.transition(state, symbol):
+                next_states.add(next_state)
+        current_states = epsilon_closure(next_states)  # O(m²)
+    
+    return any(s in nfa.accepting_states for s in current_states)
+```
+
+### Tabla Comparativa
+
+| Criterio | DFA | NFA |
+|----------|-----|-----|
+| **Tiempo de reconocimiento** | $O(n)$ | $O(n \cdot m^2)$ |
+| **Número de estados** | Hasta $2^m$ | $m$ |
+| **Complejidad espacial** | Exponencial | Lineal/Compacta |
+| **Determinismo** | Sí | No |
+| **Facilidad de implementación** | Simple | Requiere simulación |
+| **Uso de memoria en ejecución** | Mínimo | Moderado (conjunto de estados) |
+
+donde $n$ = longitud de la cadena, $m$ = número de estados del NFA.
+
+### Estrategias Prácticas
+
+#### Cuándo Usar DFA
+
+1. **Aplicaciones de alto rendimiento**: Cuando el tiempo de respuesta es crítico
+2. **Reconocimiento repetitivo**: Cuando se procesan muchas cadenas con el mismo autómata
+3. **Espacio disponible**: Cuando el número de estados resultante es manejable
+4. **Ejemplos**:
+   - Analizadores léxicos en compiladores [@aho2006]
+   - Filtrado de paquetes en redes
+   - Búsqueda de patrones en texto
+
+#### Cuándo Usar NFA
+
+1. **Limitaciones de memoria**: Cuando el espacio es una restricción crítica
+2. **Construcción dinámica**: Cuando el autómata se genera en tiempo de ejecución
+3. **Expresividad**: Cuando el patrón es naturalmente no determinista
+4. **Ejemplos**:
+   - Expresiones regulares en editores de texto
+   - Validación de patrones complejos
+   - Sistemas con recursos limitados
+
+### Conversión DFA ↔ NFA
+
+#### De NFA a DFA (Construcción de Subconjuntos)
+
+**Complejidad**: $O(2^m)$ estados en el peor caso [@hopcroft2001]
+
+```
+Entrada: NFA N = (Q, Σ, δ, q₀, F)
+Salida: DFA D = (Q', Σ, δ', q₀', F')
+
+1. Q' = P(Q) (conjunto potencia de Q)
+2. q₀' = ε-closure({q₀})
+3. Para cada conjunto de estados S en Q' y símbolo a en Σ:
+   δ'(S, a) = ε-closure(⋃{δ(q, a) | q ∈ S})
+4. F' = {S ∈ Q' | S ∩ F ≠ ∅}
+```
+
+#### De DFA a NFA
+
+**Complejidad**: Trivial - todo DFA es un NFA
+
+Un DFA puede verse directamente como un NFA sin transiciones ε y con transiciones únicas.
+
+### Optimizaciones en la Práctica
+
+#### Lazy Evaluation (DFA)
+
+- No construir todos los $2^n$ estados por adelantado
+- Generar estados bajo demanda durante el reconocimiento
+- Cachear estados visitados
+
+#### Thompson NFA
+
+- Construcción eficiente desde expresiones regulares [@thompson1968]
+- Permite transiciones ε para mayor compacidad
+- Base de muchas implementaciones de regex
+
+#### Híbridos
+
+Algunas implementaciones modernas combinan ambos enfoques:
+
+1. Usar NFA para la representación interna
+2. Compilar a DFA parcialmente (estados más frecuentes)
+3. Simular NFA para casos raros
+
+### Consideraciones Finales
+
+El trade-off entre DFA y NFA no tiene una solución universal:
+
+- **DFA** sacrifica espacio por velocidad → Ideal cuando el tiempo es crítico y el espacio está disponible
+- **NFA** sacrifica velocidad por espacio → Ideal cuando la memoria es limitada o la construcción es dinámica
+
+La elección depende de:
+- Características del lenguaje a reconocer
+- Restricciones del sistema (tiempo vs. espacio)
+- Frecuencia de uso del autómata
+- Complejidad del patrón
+
+En la práctica, muchos sistemas utilizan enfoques híbridos o adaptativos que combinan las ventajas de ambos modelos [@watson1995].
+
+## 1.2 Transición Épsilon y ε-clausura
+
+### Concepto de la Transición Épsilon ($\epsilon$)
+
+En el contexto de los autómatas finitos, una transición normal ocurre cuando el autómata lee un símbolo de entrada (por ejemplo, una `a` o un `1`) y cambia de un estado a otro.
+
+Una transición épsilon o transición vacía ($\epsilon$) es una transición especial que permite al autómata cambiar de un estado a otro sin leer ningún símbolo de la cadena de entrada. Es como un "salto espontáneo" o un movimiento libre. El símbolo $\epsilon$ representa la cadena vacía, es decir, la ausencia de caracteres.
+
+## Utilidad
+
+-   Aunque no aumentan el poder de reconocimiento del autómata, las transiciones $\epsilon$ simplifican el diseño y la construcción de autómatas, especialmente cuando se derivan de expresiones regulares.
+-   Permiten "conectar" diferentes partes del autómata de forma elegante y flexible.
+
+## Definición Formal de la $\epsilon$-Clausura
+
+La $\epsilon$-clausura (o épsilon-cerradura) de un estado (o de un conjunto de estados) es el conjunto de todos los estados a los que se puede llegar desde ese estado inicial viajando únicamente a través de una o varias transiciones $\epsilon$ consecutivas.
+
+-   **Inclusión del estado inicial:** por definición, la $\epsilon$-clausura de un estado $q$ siempre incluye al propio estado $q$.
+
+### Propósito y utilidad
+
+-   La $\epsilon$-clausura es la herramienta clave para manejar y "eliminar" las transiciones $\epsilon$ de un autómata finito no determinista con $\epsilon$-transiciones (AFND-$\epsilon$) al convertirlo en un autómata determinista (AFD) o en un AFND sin $\epsilon$-transiciones.
+-   Al calcular la $\epsilon$-clausura identificamos todos los lugares donde el autómata podría "estar" de forma instantánea y simultánea después de llegar a un estado, antes de procesar el siguiente símbolo.
+
+## Algoritmo para calcular la $\epsilon$-Clausura
+
+El cálculo se hace de forma iterativa, parecido a una búsqueda en grafo pero considerando solo transiciones $\epsilon$.
+
+Pasos para calcular $\mathrm{ECLOSURA}(q)$:
+
+1.  Inicialización: comience con el conjunto que contiene $q$.
+2.  Búsqueda de saltos: añada todos los estados alcanzables desde cualquier estado del conjunto mediante una transición $\epsilon$.
+3.  Iteración: repita el paso 2 hasta que no se añada ningún estado nuevo.
+4.  Parada: el conjunto resultante es la $\epsilon$-clausura.
+
+En pseudocódigo:
+
+``` text
+function eclosure(states, transitions):
+    closure := copy(states)
+    stack := list(states)
+    while stack not empty:
+        s := pop(stack)
+        for each t in transitions where t.from == s and t.symbol == '\\epsilon':
+            if t.to not in closure:
+                add t.to to closure
+                push t.to to stack
+    return closure
+```
+
+## Ejemplo
+
+Supongamos las siguientes transiciones $\epsilon$:
+
+-   $q_1 \xrightarrow{\epsilon} q_2$
+-   $q_2 \xrightarrow{\epsilon} q_3$
+-   $q_4 \xrightarrow{\epsilon} q_1$
+
+Calcular $\mathrm{ECLOSURA}(q_4)$:
+
+0.  Inicial: $\{q_4\}$
+1.  Desde $q_4$ llega a $q_1$ por $\epsilon$ → $\{q_4, q_1\}$
+2.  Desde $q_1$ llega a $q_2$ por $\epsilon$ → $\{q_4, q_1, q_2\}$
+3.  Desde $q_2$ llega a $q_3$ por $\epsilon$ → $\{q_4, q_1, q_2, q_3\}$
+4.  No hay más transiciones nuevas. Resultado: $\mathrm{ECLOSURA}(q_4) = \{q_1, q_2, q_3, q_4\}$.
+
+## Conversión de AFND-$\epsilon$ a AFD (resumen)
+
+Una idea breve del proceso:
+
+-   Cada estado del AFD corresponde a un conjunto de estados del AFND-$\epsilon$.
+-   El estado inicial del AFD es la $\epsilon$-clausura del estado inicial del AFND-$\epsilon$.
+-   Para cada conjunto-estado y cada símbolo de entrada, se calcula el conjunto de estados alcanzables aplicando primero las transiciones del símbolo y después tomando la $\epsilon$-clausura de ese conjunto.
+
+
+
+
+## 1.3 Ventajas de los ε-NFA en el Diseño de Autómatas
+
+Los autómatas finitos no deterministas con transiciones ε (ε-NFA) ofrecen ventajas significativas en el diseño de autómatas, especialmente en términos de simplicidad y modularidad. Estas ventajas se han explorado ampliamente en la literatura, como se detalla en [@hopcroft2001], [@sipser2013], y [@thompson1968].
+
+### Introducción
+
+El diseño de autómatas para reconocer lenguajes complejos presenta diferentes niveles de dificultad según el tipo de autómata elegido. Los **ε-NFA (autómatas finitos no deterministas con transiciones épsilon)** ofrecen ventajas significativas como estructuras intermedias en el proceso de construcción, facilitando enormemente la representación de lenguajes que involucran operaciones complejas como uniones y clausuras de Kleene.
+
+## Ventajas Estructurales de los ε-NFA
+
+### Facilidad de Construcción Modular
+
+Los ε-NFA permiten modelar la estructura de lenguajes complejos de manera sencilla e inductiva, especialmente cuando se construyen a partir de expresiones regulares. El proceso de conversión de una expresión regular a un autómata ofrece reglas directas para los operadores básicos mediante ε-transiciones.
+
+**Ventaja principal**: Las ε-transiciones permiten desacoplar la complejidad de la estructura del lenguaje de la necesidad de consumir un símbolo de entrada.
+
+### Operadores Regulares Fundamentales
+
+#### Unión ($r_1 + r_2$)
+
+La construcción para la unión de dos expresiones regulares se implementa añadiendo nuevos estados iniciales o conectando los autómatas componentes mediante ε-transiciones de manera simple. Esto permite combinar dos autómatas sin modificar sus estructuras internas [@hopcroft2001].
+
+**Complejidad**: Operación aditiva O(\|Q₁\| + \|Q₂\|)
+
+#### Clausura de Kleene ($r^*$)
+
+Para la iteración, la construcción se facilita al permitir que el estado final del autómata componente se conecte de nuevo al estado inicial mediante una ε-transición, logrando la repetición sin consumir ningún símbolo de entrada.
+
+#### Concatenación ($r_1 r_2$)
+
+Conecta directamente el estado final del primer autómata con el estado inicial del segundo mediante una ε-transición.
+
+### Construcción Inductiva Eficiente
+
+El enfoque inductivo, donde se construye un NFA-ε para una expresión compleja combinando los NFA-ε de sus subexpresiones mediante ε-transiciones, resulta en un algoritmo de conversión que es **lineal en el tiempo** respecto a la longitud de la expresión regular.
+
+## Comparación con NFA y DFA
+
+### Diseño Directo de NFA
+
+Aunque encontrar un NFA para un lenguaje dado es a menudo más fácil que encontrar un DFA, el diseño directo de un NFA sin ε-transiciones para lenguajes complejos puede ser menos intuitivo.
+
+**Limitaciones**:
+
+-   La operación de unión es simple (unión disjunta de estados)
+-   Las operaciones de concatenación y clausura requieren modificar las transiciones existentes
+-   Se necesita introducir nuevos estados y transiciones etiquetadas con símbolos del alfabeto Σ
+
+### Diseño Directo de DFA
+
+El diseño directo de DFA presenta los desafíos más significativos:
+
+#### Restricción al Determinismo
+
+Un DFA solo tiene una ejecución posible para cada palabra, y el siguiente estado está completamente determinado por el estado actual y la letra leída. Esta restricción hace difícil "adivinar" el estado correcto para lenguajes que involucran patrones complejos o repeticiones [@hopcroft2001].
+
+#### Complejidad en Operaciones Booleanas
+
+Implementar operaciones como la unión o la intersección directamente sobre DFAs utiliza la **construcción de apareamiento** (producto cartesiano), que genera un nuevo DFA con **O(\|Q₁\|·\|Q₂\|)** estados.
+
+Este crecimiento multiplicativo de estados subraya la complejidad que implica manejar operaciones booleanas en el diseño de DFAs, un desafío que se evita en la fase de diseño inicial de NFA-ε.
+
+## Reglas de Transformación NFA-reg a NFA-ε
+
+La conversión de NFA-reg a NFA-ε utiliza tres reglas fundamentales de transformación que preservan el lenguaje reconocido:
+
+### Regla de Concatenación
+
+Transforma una transición etiquetada con $r_1r_2$ en dos transiciones secuenciales conectadas mediante estados intermedios.
+
+### Regla de Elección (Unión)
+
+Transforma una transición etiquetada con $r_1 + r_2$ en dos caminos alternativos mediante ε-transiciones desde un nuevo estado inicial.
+
+### Regla de Estrella de Kleene
+
+Transforma una transición etiquetada con $r^*$ añadiendo ε-transiciones que permiten:
+
+-   La repetición (bucle de retorno)
+-   La palabra vacía (bypass directo)
+
+## Cadena de Conversiones
+
+Los ε-NFA sirven como un paso intermedio altamente eficiente y directo en la cadena de conversiones:
+
+$$\text{Expresión Regular} \rightarrow \text{NFA-reg} \rightarrow \text{NFA-}\varepsilon \rightarrow \text{NFA} \rightarrow \text{DFA}$$
+
+Esta cadena permite aprovechar las ventajas de cada representación:
+
+1.  **Expresiones regulares**: Notación concisa y declarativa
+2.  **NFA-reg**: Estructura sintáctica directa
+3.  **NFA-ε**: Construcción modular e incremental
+4.  **NFA**: Eliminación de ambigüedad epsilon
+5.  **DFA**: Ejecución determinista y eficiente
+
+## Complejidad Computacional
+
+### Análisis de Tiempo
+
+Dado un NFA-reg con expresiones regulares en sus transiciones, la conversión a NFA-ε mediante reglas de reescritura ejecuta en **tiempo lineal** respecto a la longitud de la expresión regular.
+
+Si definimos $\ell(r)$ inductivamente como:
+
+-   $\ell(\emptyset) = \ell(\varepsilon) = \ell(a) = 0$
+-   $\ell(r_1 \cdot r_2) = \ell(r_1 + r_2) = \ell(r_1) + \ell(r_2) + 1$
+-   $\ell(r^*) = \ell(r) + 1$
+
+Entonces, para un NFA-reg $A$, la conversión requiere $\ell(A)$ aplicaciones de reglas.
+
+### Tamaño del Resultado
+
+El NFA-ε resultante tiene a lo sumo $|Q| + \ell(A)$ estados, donde $|Q|$ es el número de estados del NFA-reg original.
+
+## Analogía Conceptual
+
+El diseño de autómatas puede compararse con la construcción de un edificio:
+
+-   **DFA**: Requiere que cada ladrillo (símbolo) encaje perfectamente en su lugar antes de pasar al siguiente
+-   **NFA-ε**: Permite el uso de andamios (ε-transiciones) que facilitan unir secciones complejas de manera rápida y temporal
+
+Estos "andamios" facilitan la construcción modular e incremental, para luego ser retirados (eliminación de ε-transiciones) una vez que la estructura principal está sólidamente definida.
+
+## Ejemplo Ilustrativo
+
+Consideremos la expresión regular $(a^*b^* + c)^*d$:
+
+### Construcción mediante ε-NFA
+
+1.  Construir autómatas para $a^*$ y $b^*$
+2.  Concatenar mediante ε-transición
+3.  Construir autómata para $c$
+4.  Unir mediante ε-transiciones desde nuevo estado inicial
+5.  Aplicar clausura de Kleene con ε-transiciones
+6.  Concatenar con autómata para $d$
+
+**Resultado**: Construcción directa siguiendo la estructura sintáctica de la expresión.
+
+### Construcción directa de DFA
+
+Requeriría anticipar todos los estados necesarios para rastrear:
+
+-   Número de $a$'s consecutivas en la entrada
+-   Número de $b$'s consecutivas en la entrada
+-   Si se ha visto una $c$
+-   Repeticiones del patrón completo
+-   Si se ha visto la $d$ final
+
+**Resultado**: Proceso significativamente más complejo y propenso a errores.
+
+## Conclusión
+
+La principal ventaja de los NFA-ε en el diseño es que permiten **desacoplar la complejidad de la estructura del lenguaje de la necesidad de consumir un símbolo de entrada**, facilitando la construcción modular e incremental de autómatas.
+
+Esta característica los convierte en la herramienta preferida para:
+
+-   Construir autómatas a partir de expresiones regulares
+-   Implementar operadores regulares de manera compositiva
+-   Servir como representación intermedia antes de optimizaciones
+
+Los ε-NFA no son la representación final más eficiente, pero son esenciales como paso intermedio en la cadena de conversiones que va desde la especificación declarativa (expresión regular) hasta la implementación eficiente (DFA minimizado).
