@@ -418,10 +418,85 @@ Requeriría anticipar todos los estados necesarios para rastrear:
 
 La principal ventaja de los NFA-ε en el diseño es que permiten **desacoplar la complejidad de la estructura del lenguaje de la necesidad de consumir un símbolo de entrada**, facilitando la construcción modular e incremental de autómatas.
 
+
 Esta característica los convierte en la herramienta preferida para:
 
--   Construir autómatas a partir de expresiones regulares
+-   Construir autómatos a partir de expresiones regulares
 -   Implementar operadores regulares de manera compositiva
 -   Servir como representación intermedia antes de optimizaciones
 
 Los ε-NFA no son la representación final más eficiente, pero son esenciales como paso intermedio en la cadena de conversiones que va desde la especificación declarativa (expresión regular) hasta la implementación eficiente (DFA minimizado).
+
+## 2.2 Minimizing DFAs (Minimización de DFAs)
+
+El objetivo es convertir un DFA dado (A) en el DFA minimal único que reconoce el mismo lenguaje. El procedimiento se divide en dos fases principales:
+
+1.  Cálculo de la Partición del Lenguaje (P_ℓ): dividir los estados del DFA en bloques, donde todos los estados dentro de un mismo bloque reconocen el mismo residual.
+2.  Cociente (Quotienting): fusionar los estados de cada bloque de la partición en un único estado, creando el DFA minimal.
+
+
+### 2.2.1 Computing the Language Partition (Cálculo de la Partición del Lenguaje)
+
+La partición del lenguaje (P_ℓ) agrupa dos estados si y solo si reconocen el mismo lenguaje (residual).
+
+-  Algoritmo: se utiliza un algoritmo de refinamiento iterativo de particiones llamado LanPar(A) (Algoritmo 4).
+-  Partición inicial (P_0): consiste en dos bloques: uno con todos los estados finales (F) y otro con todos los estados no finales (Q\F). Esta partición inicial es válida porque los estados finales aceptan la palabra vacía (ε), mientras que los no finales no lo hacen.
+-  Refinamiento: una partición se refina dividiendo un bloque cuando se encuentra un splitter (par (a, B') donde a es un símbolo y B' es un bloque). Un bloque B se divide si contiene estados q1, q2 tales que sus transiciones con a terminan en bloques distintos, es decir, δ(q1,a) pertenece al bloque B' y δ(q2,a) no pertenece a B'.
+-  Estabilidad: el algoritmo se repite hasta que la partición es estable (es decir, ningún bloque puede dividirse más). La partición estable resultante es la partición del lenguaje P_ℓ.
+-  Terminación: el algoritmo termina porque cada iteración aumenta el número de bloques en 1, y una partición tiene como máximo |Q| bloques.
+
+Pseudocódigo (esquema de LanPar):
+
+```text
+function LanPar(A = (Q, Σ, δ, q0, F)):
+    P := {F, Q \ F}          # partición inicial
+    worklist := all splitters (a, B') for a in Σ and B' in P
+    while worklist not empty:
+        (a, B') := pop(worklist)
+        for each block B in P:
+            if B contiene estados que se distinguen por (a, B'):
+                dividir B en B0 y B1
+                reemplazar B por {B0, B1} en P
+                añadir a worklist los splitters necesarios
+    return P
+```
+
+### 2.2.2 Quotienting (Cálculo del Cociente)
+
+El quotienting es la operación de construir un nuevo autómata cuyos estados son los bloques de la partición P.
+
+-  Definición del cociente (A/P): dado un autómata (NFA o DFA) A y una partición P, el cociente A/P es un NFA cuyos estados son los bloques de P. Una transición (B, a, B') existe en A/P si existe una transición (q, a, q') en A tal que q ∈ B y q' ∈ B'.
+-  Propiedad clave: si A es un DFA y la partición P refina a P_ℓ, entonces el lenguaje reconocido por el autómata cociente es el mismo que el original: L(A/P) = L(A).
+-  Resultado de la minimización: si se utiliza la partición del lenguaje P_ℓ (la partición más gruesa donde todos los estados en un bloque reconocen el mismo residual), entonces el autómata cociente A/P_ℓ es un DFA y es el DFA minimal para el lenguaje L. El número de estados de A/P_ℓ es igual al número de residuales de L.
+
+Pequeña nota práctica: al implementar quotienting, conviene asignar identificadores estables a los bloques (por ejemplo, índices o repesentantes) para construir transiciones de forma eficiente y evitar duplicados.
+
+### 2.2.3 Hopcroft’s Algorithm (Algoritmo de Hopcroft)
+
+El algoritmo de Hopcroft es una optimización del algoritmo de refinamiento de particiones (LanPar) diseñada para mejorar el tiempo de ejecución.
+
+-  Eficiencia: el algoritmo de Hopcroft corre en tiempo O(m n log n) para un DFA con n estados sobre un alfabeto de m letras, lo que lo hace muy eficiente.
+-  Mecanismo de optimización: en lugar de probar todos los posibles splitters en cada iteración, Hopcroft mantiene un workset de splitters candidatos.
+-  Regla de adición clave: cuando un bloque B se divide en dos nuevos bloques B0 y B1, el algoritmo añade al workset solo el splitter correspondiente al bloque más pequeño (min{B0, B1}) para cada letra b ∈ Σ. Esta estrategia asegura que el trabajo total realizado a lo largo de la ejecución es limitado, lo que resulta en la complejidad O(m n log n).
+
+Esquema (alto nivel) de Hopcroft:
+
+```text
+function Hopcroft(A = (Q, Σ, δ, q0, F)):
+    P := {F, Q \ F}
+    W := {F} ∪ {Q \ F}   # workset de bloques a procesar
+    while W not empty:
+        A := pop(W)
+        for each c in Σ:
+            X := {qs | δ(q, c) ∈ A}   # preimagen por c
+            for each Y in P que se intersecta con X:
+                dividir Y en Y0 = Y ∩ X y Y1 = Y \ X
+                reemplazar Y por Y0, Y1 en P
+                if Y en W:
+                    reemplazar Y por Y0 y Y1 en W
+                else:
+                    añadir al W el bloque con menor tamaño entre Y0 y Y1
+    return P
+```
+
+
