@@ -1,7 +1,38 @@
 # References {.unnumbered}
 
-::: [1] J. Esparza and M. Blondin, *Automata Theory: An Algorithmic Approach*. Cambridge, MA: The MIT Press, 2023.
 
 
 ::: {#refs}
+[1] D. E. Knuth, “Literate Programming,” The Computer Journal, vol. 27, no. 2, pp. 97–111, 1984. DOI: 10.1093/comjnl/27.2.97.
+
+[2] K. Thompson, “Programming Techniques: Regular Expression Search Algorithm,” Communications of the ACM, vol. 11, no. 6, pp. 419–422, 1968. DOI: 10.1145/363347.363387.
+
+[3] V. M. Glushkov, “The Abstract Theory of Automata,” Russian Mathematical Surveys, vol. 16, no. 5, pp. 1–53, 1961. DOI: 10.1070/RM1961v016n05ABEH004112.
+
+[4] J. A. Brzozowski, “Canonical Regular Expressions and Minimal State Graphs for Definite Events,” Mathematical Theory of Automata, vol. 12, pp. 529–561, 1963.
+
+[5] T. Kameda and P. Weiner, “On the State Minimization of Nondeterministic Finite Automata,” IEEE Transactions on Computers, vol. C-19, no. 7, pp. 617–627, 1970. DOI: 10.1109/TC.1970.5008902.
+
+[6] G. Berry and R. Sethi, “From Regular Expressions to Deterministic Automata,” Theoretical Computer Science, vol. 48, no. 1, pp. 117–126, 1986. DOI: 10.1016/0304-3975(86)90088-5.
+
+[7] B. W. Watson, Taxonomies and Toolkits of Regular Language Algorithms. PhD Thesis, Eindhoven University of Technology, 1995.
+
+[8] H. R. Lewis and C. H. Papadimitriou, Elements of the Theory of Computation. 2nd ed. Prentice-Hall, 1981.
+
+[9] D. C. Kozen, Automata and Computability. Springer-Verlag, 1997.
+
+[10] M. Sipser, Introduction to the Theory of Computation. 3rd ed. Cengage Learning, 2013.
+
+[11] J. E. Hopcroft, R. Motwani, and J. D. Ullman, Introduction to Automata Theory, Languages, and Computation. 2nd ed. Addison-Wesley, 2001.
+
+[12] ———, Introduction to Automata Theory, Languages, and Computation. 3rd ed. Addison-Wesley, 2006.
+
+[13] A. V. Aho, M. S. Lam, R. Sethi, and J. D. Ullman, Compilers: Principles, Techniques, and Tools. 2nd ed. Pearson/Addison-Wesley, 2006.
+
+[14] ———, Compilers: Principles, Techniques, and Tools. Addison-Wesley, 2007.
+
+[15] J. Levine, Flex & Bison. O’Reilly Media, 2009.
+
+[16] J. Esparza and M. Blondin, *Automata Theory: An Algorithmic Approach*. Cambridge, MA: The MIT Press, 2023.
+
 :::

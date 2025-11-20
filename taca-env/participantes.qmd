@@ -18,10 +18,12 @@ Responsable de la planificación global del texto, la redacción de los capítul
 
 A continuación se reconocen las contribuciones de quienes participaron en la creación y refinamiento de diversos capítulos y secciones:
 
--   **Nombre Apellido 1** – Revisión de los capítulos de lenguajes regulares y autómatas finitos; propuesta de ejemplos adicionales orientados a compiladores.
--   **Nombre Apellido 2** – Aportes en la sección de gramáticas libres de contexto, árboles de derivación y análisis sintáctico.
 -   **Christian Robles** – christian.l.robles@unl.edu.ec Colaboración en la redacción inicial de los capítulos sobre máquinas de Turing y problemas indecidibles.
 -   **Andersson Ambuludi - andersson.ambuludi\@unl.edu.ec** - Propiedades de Clausura de Lenguajes Regulares
+-   **Santiago Abrigo - santiago.abrigo@unl.edu.ec** – Revisión de los capítulos de lenguajes regulares y autómatas finitos; propuesta de ejemplos adicionales orientados a compiladores.
+-   **Cristian Ajila - cristian.ajila@unl.edu.ec** – Aportes en la sección de gramáticas libres de contexto, árboles de derivación y análisis sintáctico.
+-   **Marylin Alvarado - marylin.alvarado@unl.edu.ec** – Colaboración en la redacción inicial de los capítulos sobre máquinas de Turing y problemas indecidibles.
+-   **Andersson Ambuludi - andersson.ambuludi@unl.edu.ec** - Propiedades de Clausura de Lenguajes Regulares
 -   **Jhostin Tapia - jhostin.tapia@unl.edu.ec** - Comparativa de Eficiencia entre DFA y NFA: análisis del trade-off tiempo-espacio, estrategias prácticas y optimizaciones.
 -   **Darwin Granda - darwin.granda@unl.edu.ec** - Transiciones Épsilon y ε-clausura: definición formal, algoritmos de cálculo y conversión de AFND-ε a AFD.
 -   **Esteban Leon  - esteban.leon@unl.edu.ec** - Ventajas de los ε-NFA en el Diseño de Autómatas: construcción modular, operadores regulares y cadena de conversiones desde expresiones regulares.
@@ -31,8 +33,6 @@ A continuación se reconocen las contribuciones de quienes participaron en la cr
 
 
 Sus observaciones y sugerencias fueron esenciales para asegurar la precisión técnica y la claridad expositiva.
-
--   **Christian Leonardo Robles Maza** – Autor del Capítulo 6: "Propiedades de Decisión para Lenguajes Regulares"; aportó explicaciones, pseudocódigo y ejemplos ilustrativos usados en el capítulo.
 
 ------------------------------------------------------------------------
 
