@@ -172,3 +172,252 @@ Esta característica los convierte en la herramienta preferida para:
 -   Servir como representación intermedia antes de optimizaciones
 
 Los ε-NFA no son la representación final más eficiente, pero son esenciales como paso intermedio en la cadena de conversiones que va desde la especificación declarativa (expresión regular) hasta la implementación eficiente (DFA minimizado).
+
+
+---
+title: "2.3 Reducción de AFNs"
+format: html
+lang: es
+number-sections: true
+---
+
+# 2.3 Reduciendo AFNs
+
+En los **autómatas finitos deterministas (AFDs)** existe un **único autómata mínimo** para cada lenguaje regular, y además podemos calcularlo de forma eficiente (por ejemplo, con el algoritmo de Hopcroft).
+
+En los **autómatas finitos no deterministas (AFNs)** la situación es muy distinta:
+
+- Para un mismo lenguaje puede haber **varios AFNs mínimos no isomorfos** (con distinta estructura).
+- Un ejemplo clásico es el lenguaje $aa^{*}$, para el cual existen al menos dos AFNs mínimos con formas claramente diferentes.
+- Peor aún: dado un AFN, **encontrar cualquiera de sus versiones mínimas es un problema PSPACE-completo**, es decir, tan difícil como los problemas más duros que se pueden resolver usando solo memoria polinómica.
+
+Por estas razones, **no es realista** buscar un algoritmo “de uso diario” que siempre nos dé un AFN mínimo en tiempo razonable.
+
+La estrategia práctica es más modesta pero muy útil:
+
+> En vez de *minimizar* AFNs, intentamos **reducirlos**: encontrar una versión equivalente con menos estados, cuando se pueda, pero sin garantía de que sea mínima.
+
+La herramienta teórica detrás de esto son las **particiones de estados**.
+
+## Particiones de estados y lenguaje visto desde un estado
+
+Para cada estado $q$ de un autómata, podemos considerar el **lenguaje visto desde ese estado**:
+
+- Es el conjunto de palabras que llevan desde $q$ hasta algún estado de aceptación.
+
+Dos estados que reconocen exactamente el mismo lenguaje se ponen en la **misma clase**. Esto define la llamada **partición del lenguaje** $P_\ell$:
+
+- $P_\ell$ agrupa estados que “ven el mismo futuro”: desde ellos se acepta exactamente el mismo conjunto de palabras.
+
+Un hecho clave es el siguiente:
+
+> Si tomamos cualquier partición $P$ que **refina** $P_\ell$ (es decir, que no mezcla estados con lenguajes distintos), entonces el cociente $A/P$ acepta el mismo lenguaje que el autómata original $A$.
+
+El problema es que **calcular $P_\ell$ para AFNs es difícil**. Por eso buscamos una partición:
+
+- más **gruesa** (menos precisa que $P_\ell$),
+- pero **más fácil de calcular**,
+
+y que aun así nos permita **fusionar** varios estados sin cambiar el lenguaje. Esa partición es la que se construye con el algoritmo **CSR**.
+
+
+# 2.3.1 El algoritmo de reducción (CSR)
+
+La idea de CSR (del inglés *coarsest stable refinement*) es generalizar al caso no determinista la técnica de **“dividir bloques”** que ya se usa para minimizar AFDs.
+
+## 1. Particiones y estabilidad en AFNs
+
+Pensamos en una partición $P$ de los estados como una forma de decir:
+
+> “Estos estados se comportan parecido; quizá podamos sustituirlos por uno solo”.
+
+Para refinar esa partición, miramos **cómo se mueven los estados al leer una letra**:
+
+- Tomamos un bloque $B$ de la particición, otro bloque $B'$ y una letra $a$.
+- En un AFN, cada estado puede tener **varias transiciones con la misma letra**.
+- Para decidir si el par $(a, B')$ **distingue estados dentro de $B$**, miramos si ocurre lo siguiente:
+
+  1. Hay algún estado $q_1 \in B$ que tenga **al menos una transición** con $a$ que llegue a algún estado de $B'$.
+  2. Hay otro estado $q_2 \in B$ que **no tenga ninguna transición** con $a$ hacia $B'$.
+
+Si se da esta situación, decimos que el par $(a, B')$ **parte** (o “splittea”) el bloque $B$.
+
+Entonces se divide $B$ en dos subbloques:
+
+- $B_0$: los estados de $B$ que **no** tienen transición con $a$ hacia $B'$.
+- $B_1$: los estados de $B$ que **sí** tienen alguna transición con $a$ hacia $B'$.
+
+Con esto, definimos:
+
+- Una partición es **inestable** si existe algún bloque que pueda ser partido de esta forma.
+- Una partición es **estable** cuando ya no hay más divisiones posibles: ningún par $(a, B')$ puede partir ningún bloque.
+
+## 2. El algoritmo CSR(A) en palabras
+
+El libro define formalmente el algoritmo CSR$(A)$. Aquí lo reescribimos de manera informal y didáctica.
+
+### Paso 0: caso trivial
+
+Si **todos los estados son finales** o **todos son no finales**, se toma una única clase $\{Q\}$:
+
+- Es decir, todos los estados forman un solo bloque.
+
+Esto es específico de AFNs: cuando todos los estados son finales, **no podemos asumir** (como en AFDs) que todos reconocen $\Sigma^{*}$; pueden reconocer lenguajes distintos. Pero para la construcción de CSR, en este caso se usa la partición trivial.
+
+### Paso 1: partición inicial
+
+Si **no** estamos en el caso trivial anterior, empezamos con dos bloques:
+
+- $F$: el conjunto de estados finales.
+- $Q \setminus F$: el conjunto de estados no finales.
+
+Esta es la partición de arranque.
+
+### Paso 2: refinamiento iterativo
+
+Mientras la partición sea **inestable**:
+
+1. Elegimos un bloque $B$, otro bloque $B'$ y una letra $a$ tales que el par $(a, B')$ **parta** el bloque $B$.
+2. Reemplazamos $B$ por los dos subbloques $B_0$ y $B_1$ definidos antes:
+   - $B_0$: estados de $B$ que no tienen transición con $a$ hacia $B'$.
+   - $B_1$: estados de $B$ que sí tienen alguna transición con $a$ hacia $B'$.
+
+Este proceso de ir partiendo bloques se repite mientras queden bloques que se puedan seguir dividiendo.
+
+### Paso 3: salida
+
+Cuando ya **no se puede partir ningún bloque**, la partición se vuelve estable. Esa partición estable final es justo lo que llamamos **CSR**, la “refinación estable más gruesa” que respeta esa forma de estabilidad.
+
+En resumen:
+
+- Partimos de una partición muy simple (finales vs. no finales).
+- La vamos refinando mientras haya letras y bloques que distingan estados.
+- Al final, obtenemos la partición estable más gruesa posible con esa regla.
+
+Este procedimiento es una **adaptación directa** del algoritmo usado en AFDs, pero con la condición de partición **adaptada al caso no determinista**.
+
+## 3. ¿Por qué sirve para reducir AFNs?
+
+Los autores prueban dos hechos clave:
+
+1. **CSR refina la partición del lenguaje $P_\ell$.**  
+   Intuitivamente, si dos estados acaban en el mismo bloque de CSR, necesariamente reconocen el mismo lenguaje.
+
+2. Por un resultado general demostrado antes, si una partición $P$ refina $P_\ell$, entonces el cociente $A/P$ reconoce **exactamente el mismo lenguaje** que $A$.
+
+De ahí se concluye:
+
+> El AFN cociente $A/\text{CSR}$ es **equivalente** a $A$, es decir, acepta el mismo lenguaje, pero puede tener **menos estados**.
+
+Por tanto, CSR$(A)$ es un **algoritmo de reducción**:
+
+- Agrupa ciertos estados “comportamentalmente equivalentes”.
+- Nos permite obtener un autómata más pequeño **sin alterar el lenguaje**.
+
+## 4. Limitaciones: por qué no es un algoritmo de minimización
+
+En el caso determinista, se demuestra que CSR y $P_\ell$ coinciden; por eso el cociente produce el **AFD mínimo**.
+
+En AFNs, esto deja de ser cierto:
+
+- Hay ejemplos donde CSR **distingue estados que reconocen el mismo lenguaje** solo por detalles de sus transiciones.
+- En la sección 2.3 se muestra un AFN donde los estados 3 y 5 reconocen el mismo lenguaje pero caen en bloques distintos de CSR.
+- Peor todavía: incluso el cociente $A/P_\ell$ puede **no ser un AFN mínimo**.  
+  Hay un ejemplo donde todos los estados reconocen lenguajes diferentes (por tanto $P_\ell$ no los fusiona) y aun así se puede **eliminar un estado** sin cambiar el lenguaje global.
+
+Esto muestra que, a diferencia del caso determinista, la información sobre **“qué lenguaje ve cada estado”** no basta para caracterizar la minimalidad de un AFN. La **nondeterminación** permite estructuras redundantes mucho más sutiles.
+
+En resumen:
+
+- CSR reduce, pero **no garantiza** minimalidad.
+- Incluso $P_\ell$ no captura todas las posibles redundancias en un AFN.
+
+
+# 2.3.2 Minimalidad de AFNs es PSPACE-completa
+
+En esta subsección se analiza formalmente cuán difícil es comprobar si un AFN es mínimo.
+
+El problema que se estudia es:
+
+> Dado un AFN $A$ y un número $k$, decidir si existe **algún AFN equivalente a $A$** con **a lo sumo $k$ estados**.
+
+El resultado principal es:
+
+> Este problema es **PSPACE-completo**, es decir, está entre los más difíciles que pueden resolverse usando memoria polinómica.
+
+## 1. ¿Qué significa PSPACE-completo, de forma intuitiva?
+
+- **PSPACE** es la clase de problemas que pueden resolverse con una cantidad de memoria que crece como un **polinomio** en el tamaño de la entrada (aunque el tiempo pueda ser muy grande).
+- Un problema es **PSPACE-completo** si:
+  1. Está en PSPACE.
+  2. Cualquier otro problema de PSPACE puede **transformarse (reducirse)** a él mediante una traducción eficiente (en tiempo polinómico).
+
+Que la minimalidad de AFNs sea PSPACE-completa significa que:
+
+> No se espera un algoritmo general de minimización que funcione en tiempo polinómico, a menos que ocurra un colapso muy poco probable en la jerarquía de clases de complejidad.
+
+Es decir, desde el punto de vista de la complejidad, **minimizar AFNs es tan difícil como cualquier problema típico “difícil” de PSPACE**.
+
+## 2. Por qué el problema está en PSPACE (idea general)
+
+Los autores esbozan la siguiente idea:
+
+1. Se usa el resultado teórico de que **NPSPACE = PSPACE** (teorema de Savitch).
+2. Imaginemos un **algoritmo no determinista** que, dado $A$ y $k$:
+   - “Adivina” un AFN candidato $B$ con como máximo $k$ estados.
+   - Comprueba que $A$ y $B$ son equivalentes, es decir, que aceptan exactamente el mismo lenguaje.
+3. La comprobación de equivalencia $L(A) = L(B)$ se puede reducir a dos pruebas de inclusión de lenguajes:
+   - Comprobar que $L(A) \subseteq L(B)$.
+   - Comprobar que $L(B) \subseteq L(A)$.
+4. Cada una de estas inclusiones se puede decidir con algoritmos que solo usan **espacio polinómico**, explorando de manera implícita el **producto** de los autómatas.
+
+Como todo este proceso puede implementarse usando únicamente memoria polinómica, el problema de minimalidad para AFNs está en **PSPACE**.
+
+## 3. Por qué es PSPACE-difícil (idea de la reducción)
+
+Para mostrar que el problema es PSPACE-completo falta probar que es, al menos, tan difícil como otro problema ya conocido por ser PSPACE-completo.
+
+El libro recurre al problema de la **universalidad de AFNs**:
+
+> Dado un AFN $A$ sobre un alfabeto $\Sigma$, decidir si $L(A) = \Sigma^{*}$.
+
+En el capítulo 3 se demuestra que este problema es PSPACE-completo.
+
+A partir de ahí, se construye una **reducción**:
+
+- Cada instancia del problema de universalidad (“¿es $A$ universal?”) se transforma en una instancia del problema de minimalidad (“¿existe un AFN equivalente a cierto $A'$ con a lo sumo $k$ estados?”) de forma que:
+
+  - Si el autómata original $A$ es universal, entonces **sí** existe un AFN pequeño equivalente a $A'$.
+  - Si $A$ **no** es universal, entonces **cualquier** AFN equivalente a $A'$ necesita **más de $k$ estados**.
+
+De esta forma:
+
+> Resolver el problema de minimalidad para AFNs permitiría resolver el problema de universalidad para AFNs.
+
+Dado que la universalidad ya se sabe que es PSPACE-completa, esto implica que la minimalidad de AFNs es **al menos tan difícil** (PSPACE-difícil). Junto con el hecho de que está en PSPACE, se concluye que el problema es **PSPACE-completo**.
+
+
+# Conclusión conceptual del bloque 2.3
+
+Podemos comparar la situación de AFDs y AFNs:
+
+- En **AFDs**, minimizar es un proceso:
+  - Limpio y bien entendido.
+  - Eficiente: existen algoritmos en tiempo casi lineal.
+  - Con un resultado canónico: hay un **único AFD mínimo** (hasta isomorfismo).
+
+- En **AFNs**, la situación es mucho más compleja:
+  - No hay mínimo canónico: puede haber **varios AFNs mínimos no isomorfos**.
+  - Incluso cuando **todos los estados** de un AFN aceptan lenguajes distintos, el autómata puede **no ser mínimo**.
+  - Encontrar un AFN mínimo es **PSPACE-completo**, así que no se espera un algoritmo rápido en general.
+
+A pesar de esto, el algoritmo **CSR$(A)$** nos da una herramienta práctica:
+
+- Permite **reducir AFNs de forma segura** (sin cambiar el lenguaje aceptado).
+- Fusiona estados que se comportan de manera muy similar según la noción de estabilidad usada.
+- Es una herramienta intermedia entre:
+  - **No hacer nada** (dejar el AFN tal cual), y
+  - La **minimización completa**, que es teóricamente deseable pero suele ser inviable en el peor caso.
+
+En el contexto de este libro, CSR se presenta como una **técnica razonable y aplicable** para simplificar AFNs, aceptando que, en el mundo no determinista, la verdadera minimización completa es demasiado costosa desde el punto de vista de la complejidad computacional.
+
