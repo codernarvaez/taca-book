@@ -1,5 +1,5 @@
 ---
-title: "Capitulo 1"
+title: "Definición Formal de un DFA"
 format:
         html: default
         pdf: default
@@ -8,7 +8,7 @@ bibliography: references.bib
 nocite: "@*"
 ---
 
-# 1.1 Definición formal de un DFA (Autómata Finito Determinista)
+### Definición formal de un DFA (Autómata Finito Determinista)
 
 Un DFA se define formalmente como una 5–tupla:
 
@@ -53,7 +53,7 @@ Ejemplos rechazados:
 
 ---
 
-# 1.2 Idea del diseño
+### Idea del diseño
 
 Solo necesitamos saber si la cantidad de 1’s vista hasta ahora es **par** o **impar**, por lo que basta con dos estados:
 
@@ -65,298 +65,180 @@ Reglas clave:
 * Al leer un **1**, el DFA **cambia de estado** (alterna entre par e impar).  
 * Al leer un **0**, el DFA **permanece en el mismo estado**, ya que no afecta la paridad.
 
+# 1.3.5 & 1.3.6: NFA con Expresiones Regulares y Forma Normal para Autómatas
 
-## 1.3.1 Autómatas Finitos Deterministas (DFAs)
+## Introducción
 
-### 1. Concepto Intuitivo y Operación
+En el estudio de los lenguajes regulares, podemos describir un lenguaje de dos formas complementarias:
 
-Un autómata finito determinista (DFA) puede imaginarse como una máquina muy simple que procesa una palabra **símbolo por símbolo**, siguiendo reglas estrictas.
-
-- **Inicio:** El autómata comienza en un estado inicial y el cabezal de lectura se coloca en la primera letra de la palabra.
-- **Paso a paso:** Cada vez que lee una letra, usa su *función de transición* para decidir a qué estado debe pasar.  
-  Esta decisión depende **solo** del estado en el que se encuentra y de la letra leída.
-- **Aceptación:** Una palabra es aceptada si, al terminar de leerla, el autómata termina en un estado que pertenece al conjunto de *estados finales*.
-
-En pocas palabras:  
-**Un DFA recorre la palabra letra por letra y cambia de estado según reglas fijas. Si termina en un estado final, acepta; si no, la rechaza.**
+- **Forma Descriptiva**: Mediante **Expresiones Regulares** (dicen *qué* cadenas pertenecen al lenguaje)
+- **Forma Reconocedora**: Mediante **Autómatas Finitos** (muestran *cómo* reconocer si una cadena pertenece al lenguaje)
 
 ---
 
-### 2. Componentes y Transiciones
+## 1.3.5 Equivalencia entre NFA y Expresiones Regulares
 
-La sección describe las ideas clave del funcionamiento determinista:
+### El Teorema de Kleene
 
-- **Determinismo:**  
-  Para cada combinación `(estado, símbolo)`, existe **una única** transición posible.  
-  No hay ambigüedad ni elección entre varias rutas.
+**Teorema**: Un lenguaje es regular si y solo si puede ser descrito por una expresión regular.
 
-- **Carreras (runs):**  
-  Es la secuencia de estados por los que pasa el autómata al leer la palabra completa.  
-  Ejemplo:  
-  \[
-  q_0 \xrightarrow{a} q_1 \xrightarrow{b} q_3 \xrightarrow{b} q_2
-  \]
+> Para cualquier Expresión Regular *R*, existe un NFA *N* tal que *L(N) = L(R)*.
+> 
+> **Inversamente**: Para cualquier NFA *N*, existe una expresión regular *R* tal que *L(R) = L(N)*.
 
-- **Aceptación/Rechazo:**  
-  Una palabra es **aceptada** si la carrera termina en un estado final.  
-  Caso contrario, es rechazada.
+Esto significa que ambas representaciones son **igualmente expresivas**.
 
 ---
 
-### 3. Ejemplo de la Sección 1.3.1
+### Conversión: De Expresión Regular a NFA (Construcción de Thompson)
 
-La sección incluye un DFA concreto:
+El método más conocido es la **Construcción de Thompson**, que construye bloques básicos de autómatas y los combina usando operaciones correspondientes a los operadores de expresiones regulares.
 
-- **Ejemplo 1.8:**  
-  Se muestra el autómata:  
-  \[
-  A = (Q, \Sigma, \delta, q_0, F)
-  \]
-  donde:
-  - \( Q = \{ q_0, q_1, q_2, q_3 \} \)
-  - \( \Sigma = \{ a, b \} \)
-  - \( F = \{ q_0 \} \) (el único estado de aceptación)
+#### Construcciones Básicas
 
-- **Carrera de ejemplo sobre la palabra `aabb`:**
+**1. Cadena vacía (ε):** Un autómata con estado inicial que transita directamente al estado final mediante ε.
 
-  \[
-  q_0 \xrightarrow{a} q_1 \xrightarrow{a} q_0 \xrightarrow{b} q_3 \xrightarrow{b} q_0
-  \]
+**2. Símbolo del alfabeto (a):** Un autómata que lee exactamente el símbolo 'a' y transita del inicial al final.
 
-  Aquí, la palabra **sí se acepta**, porque termina en \( q_0 \), que es estado final.
+**3. Lenguaje vacío (∅):** Un autómata donde el estado inicial no tiene forma de llegar al final.
 
-- **Estado trampa:**  
-  También se menciona un DFA con un estado trampa, que es un estado del que no se puede salir.  
-  Una vez que entras allí, la palabra queda automáticamente rechazada.  
-  Aunque existe, a veces no se dibuja en los diagramas por simplicidad.
+#### Operaciones Compuestas
 
-## 1.3.2 DFAs como estructuras de datos
+**1. Unión (R₁ ∪ R₂):**
+- Crear un nuevo estado inicial con dos transiciones ε: una hacia el autómata de *R₁* y otra hacia el de *R₂*
+- Crear un nuevo estado final
+- Conectar ambos autómatas finales al nuevo estado final mediante ε
+- El autómata puede "elegir" no determinísticamente cuál camino tomar
 
-Los **Autómatas Finitos Deterministas (DFAs)** son modelos matemáticos utilizados para representar sistemas capaces de reconocer patrones en cadenas de símbolos. Aunque provienen de la teoría de lenguajes formales, también se consideran **estructuras de datos**, ya que almacenan información de forma organizada para procesar entradas paso a paso siguiendo reglas definidas.
+**2. Concatenación (R₁R₂):**
+- Conectar los estados de aceptación de *NFA₁* con el estado inicial de *NFA₂* mediante transiciones ε
+- El estado inicial es el de *NFA₁* y el estado final es el de *NFA₂*
+- La transición ε permite "continuar" desde donde terminó *R₁* hacia *R₂*
 
-Desde una perspectiva computacional, un DFA es una **estructura compuesta por elementos finitos y relaciones internas**, diseñada para describir comportamientos secuenciales.
+**3. Cerradura de Kleene (R*):**
+- Crear un nuevo estado inicial y uno final
+- Añadir una transición ε directa del nuevo inicial al nuevo final (para aceptar ε)
+- Conectar el nuevo inicial con el antiguo inicial del autómata de *R*
+- Conectar el antiguo final de *R* con el nuevo final
+- Añadir una transición ε del antiguo final al antiguo inicial (permitiendo repetir)
 
----
-
-## Componentes fundamentales de un DFA
-
-### ✔ 1. Estados  
-Un DFA contiene un conjunto finito de **estados**, cada uno representando una situación del sistema.  
-Como estructura de datos, los estados funcionan como **nodos etiquetados** que permiten recordar:
-
-- qué símbolos se han procesado,
-- en qué condición se encuentra la máquina.
+**Ejemplo:** Para la expresión regular `(a|b)*c`:
+1. Construir autómatas para 'a' y 'b'
+2. Unirlos (operación |)
+3. Aplicar Kleene (*) al resultado
+4. Concatenar con el autómata para 'c'
 
 ---
 
-### ✔ 2. Alfabeto  
-El alfabeto es el conjunto finito de símbolos válidos como entrada.  
-Actúa como un dominio de valores permitido, limitando la complejidad del procesamiento.
+## 1.3.6 Forma Normal para Autómatas
+
+### El Problema
+
+Para convertir un NFA en una Expresión Regular, necesitamos estandarizar el autómata, ya que un NFA típico puede tener:
+- Múltiples estados de aceptación
+- Ciclos complejos
+- Transiciones desde y hacia el estado inicial
+- Estructuras difíciles de "leer" como expresiones regulares
 
 ---
 
-### ✔ 3. Estado inicial  
-Es el punto de partida de la máquina.  
-Desde la perspectiva de estructura de datos, equivale a un **nodo raíz** o a una variable inicializada.
+### GNFA (Autómata Finito No Determinista Generalizado)
+
+Un **GNFA** es un autómata en forma normal que cumple con:
+
+**1. Estado Inicial Único:**
+- Un único estado inicial sin transiciones entrantes
+- Solo tiene transiciones salientes
+- Garantiza que el autómata "comience limpiamente"
+
+**2. Estado Final Único:**
+- Un único estado de aceptación sin transiciones salientes
+- Solo tiene transiciones entrantes
+- Garantiza que la aceptación sea un punto final definido
+
+**3. Transiciones Generalizadas:**
+- Las etiquetas de las transiciones son **Expresiones Regulares completas**
+- Ejemplo: una transición puede estar etiquetada como `(a|b)*c`
+
+**4. Completitud:**
+- Entre cada par de estados puede haber a lo sumo una transición
+- Si no existe transición física, se considera una transición etiquetada con ∅
 
 ---
 
-### ✔ 4. Estados de aceptación  
-Son estados marcados como "válidos".  
-Determinan si la cadena procesada es **aceptada** o **rechazada** al finalizar.
+### Proceso de Normalización
+
+#### Paso 1: Crear Estado Inicial Único
+
+Si el estado inicial tiene transiciones entrantes:
+- Crear un nuevo estado inicial
+- Añadir una transición ε desde el nuevo inicial hacia el antiguo estado inicial
+
+#### Paso 2: Crear Estado Final Único
+
+Si hay múltiples estados de aceptación:
+- Crear un nuevo estado final único
+- Desde cada antiguo estado de aceptación, añadir una transición ε hacia el nuevo estado final
+- Solo el nuevo estado es de aceptación
+
+#### Paso 3: Convertir a Transiciones Generalizadas
+
+Si hay múltiples transiciones entre los mismos dos estados, combinarlas en una sola transición etiquetada con la unión de todas las etiquetas.
+
+**Ejemplo:** Si hay transiciones con 'a' y 'b' entre q₁ y q₂, se combinan en una transición etiquetada con `(a|b)`.
 
 ---
 
-### ✔ 5. Función de transición  
-La función de transición especifica:
+### Algoritmo de Eliminación de Estados
 
-> “Si estoy en el estado X y leo el símbolo Y, voy al estado Z”.
+Una vez que el autómata está en Forma Normal (GNFA), se aplica el **algoritmo de Eliminación de Estados**:
 
-Como estructura de datos puede representarse mediante:
+#### Objetivo
 
-- tablas,
-- grafos dirigidos,
-- diccionarios (clave → valor),
-- listas de adyacencia.
+Eliminar estados intermedios uno por uno, "recableando" las transiciones para preservar el lenguaje, hasta que solo queden el estado inicial y el final.
 
-Es el mecanismo que almacena las reglas de movimiento.
+#### Proceso de Eliminación
 
+Cuando eliminamos un estado *q_rip*, para cada par de estados (*q_i*, *q_j*) donde:
+- Hay una transición de *q_i* a *q_rip* etiquetada con *R₁*
+- Hay una transición de *q_rip* a *q_j* etiquetada con *R₂*
+- Hay un ciclo en *q_rip* etiquetado con *R₃*
+- Ya existe una transición directa de *q_i* a *q_j* etiquetada con *R₄*
 
-# 1.3.2.1 Por qué un DFA es una estructura de datos
+**Nueva transición:** `R_nueva = R₄ | R₁R₃*R₂`
 
-### 🔹 1. Almacenamiento organizado  
-Un DFA guarda:
+**Explicación:**
+- `R₁`: Lo necesario para llegar a *q_rip* desde *q_i*
+- `R₃*`: Puede quedarse en *q_rip* cero o más veces (el ciclo)
+- `R₂`: Lo necesario para salir de *q_rip* hacia *q_j*
+- `R₄`: La ruta directa que ya existía
+- `|`: Unión (cualquiera de las dos opciones funciona)
 
-- estados,
-- símbolos,
-- transiciones,
-- estados finales.
+#### Pasos Completos
 
-Todo su diseño es estructural: define cómo se organiza y consulta la información.
+1. Normalizar el NFA a GNFA
+2. Mientras haya más de 2 estados:
+   - Elegir un estado intermedio (ni inicial ni final)
+   - Calcular las nuevas expresiones regulares para cada combinación de estados
+   - Eliminar el estado intermedio y sus transiciones
+3. La expresión regular en la transición entre el inicial y el final es la **expresión regular equivalente** al NFA original
 
+---
 
-### 🔹 2. Operaciones definidas  
-La operación principal del DFA es:
+## Ejemplo de Conversión
 
-> Procesar una cadena símbolo por símbolo.
+**NFA que acepta cadenas que terminan en 'b':**
+- Estados: {q₀, q₁}
+- Inicial: q₀
+- Finales: {q₁}
+- Transiciones: q₀ --a--> q₀, q₀ --b--> q₀, q₀ --b--> q₁
 
-Equivale a recorrer:
+**Proceso:**
+1. Normalizar: Añadir nuevo estado inicial y final único con transiciones ε
+2. Generalizar transiciones: Combinar transiciones con 'a' y 'b' en q₀ como `(a|b)`
+3. Eliminar q₀: Calcular expresión para ir de q_start a q₁ pasando por q₀
+   - Entrada: ε, Loop: (a|b), Salida: b
+   - Expresión: `ε(a|b)*b = (a|b)*b`
+4. Eliminar q₁: Simplificar
 
-- un grafo,
-- una tabla,
-- un mapa de transiciones.
-
-
-### 🔹 3. Acceso eficiente  
-Cada transición se ejecuta en **O(1)**:  
-para cada par *(estado, símbolo)* hay un único destino.
-
-Esto los hace ideales para:
-
-- analizadores léxicos,
-- validadores,
-- reconocimiento rápido de patrones.
-
-
-### 🔹 4. Múltiples representaciones internas  
-Un DFA puede almacenarse como:
-
-- matriz de transición,
-- tabla hash,
-- lista de adyacencia,
-- json/yaml,
-- clases de programación (Java, Python, etc.).
-
-Esto evidencia que también es una **estructura de datos**.
-
-
-# 1.3.2.2 Interpretación computacional
-
-Desde el punto de vista computacional, un DFA es una **máquina que interpreta datos** mediante una estructura fija.
-
-La máquina:
-
-1. Recibe símbolos.
-2. Recorre su estructura interna (estados y transiciones).
-3. Mantiene solo una memoria finita (el estado actual).
-4. Produce una salida binaria: *Aceptar* o *Rechazar*.
-
-
-## 1.3.3 Autómatas Finitos No Deterministas (AFND)
-
-Hasta ahora hemos trabajado con Autómatas Finitos Deterministas (AFD), donde las reglas son estrictas: para cada estado y cada símbolo existe un único camino a seguir. Sin embargo, los lenguajes más complejos suelen requerir mayor flexibilidad. Aquí es donde aparece el no determinismo.
-
-Los Autómatas Finitos No Deterministas (AFND), también conocidos simplemente como autómatas no deterministas, introducen la posibilidad de elección en el procesamiento de palabras. Esto simplifica notablemente la construcción de autómatas para ciertos lenguajes.
-
-#### Definición
-
-Imagina que estás jugando ajedrez. Un AFD sería como un juego donde, ante cada posición del tablero, solo existe un movimiento legal posible: no hay elección. En cambio, un Autómata Finito No Determinista (AFND) funciona como el ajedrez real: ante una misma situación puedes tener múltiples movimientos posibles, o incluso ninguno.
-
-Un AFND es un autómata finito que, al leer un símbolo de entrada, puede elegir el siguiente estado de entre un conjunto de estados candidatos.
-
-Formalmente, un AFND es una tupla\
-$A = (Q, \Sigma, \delta, Q_0, F)$, donde:
-
--   $Q$, $\Sigma$ y $F$ (estados, alfabeto y estados finales) son los mismos que en un AFD.
--   $Q_0$ es un conjunto no vacío de estados iniciales (a diferencia del AFD, que tiene solo uno).
--   $\delta : Q \times \Sigma \to \mathcal{P}(Q)$ es la relación de transición, que devuelve un conjunto de posibles estados siguientes.
-
-### Ventajas sobre el AFD
-
-El diseño de un AFND suele ser más directo e intuitivo que el de un AFD. En un AFND no estamos obligados a definir qué ocurre con cada símbolo en cada estado. Si un camino no lleva a ninguna parte, simplemente "muere" sin afectar a los demás recorridos. Esto nos permite modelar patrones sin preocuparnos por todas las combinaciones de errores que un AFD obligaría a representar.
-
-#### Diferencias clave con un AFD
-
-La diferencia principal radica en el concepto de recorrido:
-
-| Característica | AFD (Determinista) | AFND (No Determinista) |
-|------------------------|------------------------|------------------------|
-| Siguiente estado | Totalmente determinado por el estado actual y el símbolo leído. | Puede elegir entre varios estados posibles. |
-| Recorridos por palabra | Exactamente uno. | Puede haber cero, uno o muchos. |
-| Estado inicial | Uno solo ($q_0$). | Conjunto no vacío de estados iniciales ($Q_0$). |
-
-#### Cómo funcionan las transiciones no deterministas
-
-Para entenderlo, comparemos ambos modelos:
-
--   En un AFD, si estamos en el estado $q$ y leemos el símbolo $a$, el siguiente estado $q'$ es único:\
-    $q' = \delta(q, a)$.
--   En un AFND, al estar en $q$ y leer $a$, la función $\delta(q, a)$ devuelve un conjunto de estados posibles.\
-    El autómata puede moverse a cualquiera de ellos.\
-    Si $\delta(q, a) = \emptyset$, no existe un camino a seguir desde $q$ con la entrada $a$.
-
-Un recorrido (run) de un AFND sobre una entrada $a_0 a_1 \cdots a_n$ es una secuencia\
-$p_0, p_1, \ldots, p_n$ tal que:
-
--   $p_0 \in Q_0$
--   $p_{i+1} \in \delta(p_i, a_i)$
-
-#### Ventajas y usos
-
-Los AFND no aumentan el poder expresivo respecto a los AFD (reconocen los mismos lenguajes regulares), pero ofrecen ventajas importantes:
-
--   **Facilidad de diseño:** construir un AFND suele ser más sencillo.
--   **Representación natural de operaciones:** la unión de lenguajes se representa fácilmente mediante bifurcación en un AFND.
--   **Aplicaciones algorítmicas:** son la base para algoritmos de búsqueda de patrones, donde se construye un AFND a partir de una expresión regular.
-
-#### Lenguaje reconocido
-
-La aceptación en un AFND es **existencial**:
-
-Una palabra $w$ es aceptada si **al menos uno** de los posibles recorridos termina en un estado final.\
-Es decir, existe un recorrido $p_0, p_1, \ldots, p_n$ tal que $p_n \in F$.
-
-Si hay varios estados iniciales, el lenguaje reconocido es la **unión** de los lenguajes aceptados desde cada estado inicial.
-
-En resumen: $$
-L(A) = \{\, w \in \Sigma^* : w \text{ es aceptada por } A \,\}.
-$$
-
-------------------------------------------------------------------------
-
-## 1.3.4 Autómatas Finitos No Deterministas con $\epsilon$-Transiciones ($\epsilon$-AFND)
-
-Si el AFND nos dio libertad para elegir caminos, el $\epsilon$-AFND añade un “superpoder”: la capacidad de moverse sin consumir ningún símbolo de entrada.
-
-Un AFND con $\epsilon$-transiciones es un autómata que permite movimientos espontáneos, sin leer letras del alfabeto.
-
-#### ¿Qué son las transiciones épsilon?
-
-Las $\epsilon$-transiciones son movimientos internos que el autómata puede realizar sin consumir un símbolo. Estas transiciones están etiquetadas con la palabra vacía $\epsilon$.
-
-#### Cómo funcionan y por qué son importantes
-
-Un AFND estándar solo puede cambiar de estado al leer una letra del alfabeto. Un $\epsilon$-AFND puede cambiar de estado al leer una letra o al ejecutar una $\epsilon$-transición.
-
-Un AFND solo puede cambiar de estado al leer un símbolo del alfabeto.\
-Un $\epsilon$-AFND puede cambiar de estado:
-
--   al leer un símbolo, o ejecutando una transición $\epsilon$.
-
-La relación de transición se extiende: $$
-\delta : Q \times (\Sigma \cup \{\epsilon\}) \to \mathcal{P}(Q).
-$$
-
-Una palabra $a_1 a_2 \cdots a_n$ es aceptada si existe un recorrido que consume exactamente esa palabra, permitiendo cualquier número de transiciones $\epsilon$ antes, entre o después de los símbolos.
-
-Estas transiciones son esenciales en algoritmos de conversión, por ejemplo, al traducir expresiones regulares a autómatas.
-
-#### Diferencias entre AFND y $\epsilon$-AFND
-
-La diferencia está en la relación de transición:
-
--   En el AFND, solo hay transiciones con símbolos de $\Sigma$.\
--   En el $\epsilon$-AFND, también puede haber transiciones etiquetadas con $\epsilon$.
-
-### Analogía constructiva: “El edificio y los andamios”
-
-Construir un AFD es como levantar un edificio colocando ladrillos definitivos desde el inicio.\
-Construir un $\epsilon$-AFND es como usar andamios: las transiciones $\epsilon$ permiten unir partes del autómata de forma modular y flexible.
-
-### Explicación de la $\epsilon$-cerradura (epsilon-closure)
-
-La $\epsilon$-cerradura de un estado $q$ es el conjunto de todos los estados accesibles desde $q$ usando únicamente transiciones $\epsilon$.
-
-Este concepto es crucial para eliminar $\epsilon$-transiciones y convertir un $\epsilon$-AFND en un AFND estándar.
-
-
+**Resultado:** La expresión regular equivalente es `(a|b)*b`
