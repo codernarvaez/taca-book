@@ -7,15 +7,7 @@ toc: true
 bibliography: references.bib
 nocite: "@*"
 ---
----
-title: "2.1 DFAs minimales"
-subtitle: "Lenguajes residuales, autómata canónico y master automaton"
-lang: es
-format:
-  html:
-    toc: true
-    toc-depth: 3
----
+
 
 # 2.1 DFAs minimales (introducción)
 
