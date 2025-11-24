@@ -240,3 +240,123 @@ La máquina:
 2. Recorre su estructura interna (estados y transiciones).
 3. Mantiene solo una memoria finita (el estado actual).
 4. Produce una salida binaria: *Aceptar* o *Rechazar*.
+
+
+## 1.3.3 Autómatas Finitos No Deterministas (AFND)
+
+Hasta ahora hemos trabajado con Autómatas Finitos Deterministas (AFD), donde las reglas son estrictas: para cada estado y cada símbolo existe un único camino a seguir. Sin embargo, los lenguajes más complejos suelen requerir mayor flexibilidad. Aquí es donde aparece el no determinismo.
+
+Los Autómatas Finitos No Deterministas (AFND), también conocidos simplemente como autómatas no deterministas, introducen la posibilidad de elección en el procesamiento de palabras. Esto simplifica notablemente la construcción de autómatas para ciertos lenguajes.
+
+#### Definición
+
+Imagina que estás jugando ajedrez. Un AFD sería como un juego donde, ante cada posición del tablero, solo existe un movimiento legal posible: no hay elección. En cambio, un Autómata Finito No Determinista (AFND) funciona como el ajedrez real: ante una misma situación puedes tener múltiples movimientos posibles, o incluso ninguno.
+
+Un AFND es un autómata finito que, al leer un símbolo de entrada, puede elegir el siguiente estado de entre un conjunto de estados candidatos.
+
+Formalmente, un AFND es una tupla\
+$A = (Q, \Sigma, \delta, Q_0, F)$, donde:
+
+-   $Q$, $\Sigma$ y $F$ (estados, alfabeto y estados finales) son los mismos que en un AFD.
+-   $Q_0$ es un conjunto no vacío de estados iniciales (a diferencia del AFD, que tiene solo uno).
+-   $\delta : Q \times \Sigma \to \mathcal{P}(Q)$ es la relación de transición, que devuelve un conjunto de posibles estados siguientes.
+
+### Ventajas sobre el AFD
+
+El diseño de un AFND suele ser más directo e intuitivo que el de un AFD. En un AFND no estamos obligados a definir qué ocurre con cada símbolo en cada estado. Si un camino no lleva a ninguna parte, simplemente "muere" sin afectar a los demás recorridos. Esto nos permite modelar patrones sin preocuparnos por todas las combinaciones de errores que un AFD obligaría a representar.
+
+#### Diferencias clave con un AFD
+
+La diferencia principal radica en el concepto de recorrido:
+
+| Característica | AFD (Determinista) | AFND (No Determinista) |
+|------------------------|------------------------|------------------------|
+| Siguiente estado | Totalmente determinado por el estado actual y el símbolo leído. | Puede elegir entre varios estados posibles. |
+| Recorridos por palabra | Exactamente uno. | Puede haber cero, uno o muchos. |
+| Estado inicial | Uno solo ($q_0$). | Conjunto no vacío de estados iniciales ($Q_0$). |
+
+#### Cómo funcionan las transiciones no deterministas
+
+Para entenderlo, comparemos ambos modelos:
+
+-   En un AFD, si estamos en el estado $q$ y leemos el símbolo $a$, el siguiente estado $q'$ es único:\
+    $q' = \delta(q, a)$.
+-   En un AFND, al estar en $q$ y leer $a$, la función $\delta(q, a)$ devuelve un conjunto de estados posibles.\
+    El autómata puede moverse a cualquiera de ellos.\
+    Si $\delta(q, a) = \emptyset$, no existe un camino a seguir desde $q$ con la entrada $a$.
+
+Un recorrido (run) de un AFND sobre una entrada $a_0 a_1 \cdots a_n$ es una secuencia\
+$p_0, p_1, \ldots, p_n$ tal que:
+
+-   $p_0 \in Q_0$
+-   $p_{i+1} \in \delta(p_i, a_i)$
+
+#### Ventajas y usos
+
+Los AFND no aumentan el poder expresivo respecto a los AFD (reconocen los mismos lenguajes regulares), pero ofrecen ventajas importantes:
+
+-   **Facilidad de diseño:** construir un AFND suele ser más sencillo.
+-   **Representación natural de operaciones:** la unión de lenguajes se representa fácilmente mediante bifurcación en un AFND.
+-   **Aplicaciones algorítmicas:** son la base para algoritmos de búsqueda de patrones, donde se construye un AFND a partir de una expresión regular.
+
+#### Lenguaje reconocido
+
+La aceptación en un AFND es **existencial**:
+
+Una palabra $w$ es aceptada si **al menos uno** de los posibles recorridos termina en un estado final.\
+Es decir, existe un recorrido $p_0, p_1, \ldots, p_n$ tal que $p_n \in F$.
+
+Si hay varios estados iniciales, el lenguaje reconocido es la **unión** de los lenguajes aceptados desde cada estado inicial.
+
+En resumen: $$
+L(A) = \{\, w \in \Sigma^* : w \text{ es aceptada por } A \,\}.
+$$
+
+------------------------------------------------------------------------
+
+## 1.3.4 Autómatas Finitos No Deterministas con $\epsilon$-Transiciones ($\epsilon$-AFND)
+
+Si el AFND nos dio libertad para elegir caminos, el $\epsilon$-AFND añade un “superpoder”: la capacidad de moverse sin consumir ningún símbolo de entrada.
+
+Un AFND con $\epsilon$-transiciones es un autómata que permite movimientos espontáneos, sin leer letras del alfabeto.
+
+#### ¿Qué son las transiciones épsilon?
+
+Las $\epsilon$-transiciones son movimientos internos que el autómata puede realizar sin consumir un símbolo. Estas transiciones están etiquetadas con la palabra vacía $\epsilon$.
+
+#### Cómo funcionan y por qué son importantes
+
+Un AFND estándar solo puede cambiar de estado al leer una letra del alfabeto. Un $\epsilon$-AFND puede cambiar de estado al leer una letra o al ejecutar una $\epsilon$-transición.
+
+Un AFND solo puede cambiar de estado al leer un símbolo del alfabeto.\
+Un $\epsilon$-AFND puede cambiar de estado:
+
+-   al leer un símbolo, o ejecutando una transición $\epsilon$.
+
+La relación de transición se extiende: $$
+\delta : Q \times (\Sigma \cup \{\epsilon\}) \to \mathcal{P}(Q).
+$$
+
+Una palabra $a_1 a_2 \cdots a_n$ es aceptada si existe un recorrido que consume exactamente esa palabra, permitiendo cualquier número de transiciones $\epsilon$ antes, entre o después de los símbolos.
+
+Estas transiciones son esenciales en algoritmos de conversión, por ejemplo, al traducir expresiones regulares a autómatas.
+
+#### Diferencias entre AFND y $\epsilon$-AFND
+
+La diferencia está en la relación de transición:
+
+-   En el AFND, solo hay transiciones con símbolos de $\Sigma$.\
+-   En el $\epsilon$-AFND, también puede haber transiciones etiquetadas con $\epsilon$.
+
+### Analogía constructiva: “El edificio y los andamios”
+
+Construir un AFD es como levantar un edificio colocando ladrillos definitivos desde el inicio.\
+Construir un $\epsilon$-AFND es como usar andamios: las transiciones $\epsilon$ permiten unir partes del autómata de forma modular y flexible.
+
+### Explicación de la $\epsilon$-cerradura (epsilon-closure)
+
+La $\epsilon$-cerradura de un estado $q$ es el conjunto de todos los estados accesibles desde $q$ usando únicamente transiciones $\epsilon$.
+
+Este concepto es crucial para eliminar $\epsilon$-transiciones y convertir un $\epsilon$-AFND en un AFND estándar.
+
+
