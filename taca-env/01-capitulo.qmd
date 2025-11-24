@@ -1,5 +1,5 @@
 ---
-title: "Definición Formal de un DFA"
+title: "Capitulo 1"
 format:
         html: default
         pdf: default
@@ -8,7 +8,7 @@ bibliography: references.bib
 nocite: "@*"
 ---
 
-### Definición formal de un DFA (Autómata Finito Determinista)
+# 1.1 Definición formal de un DFA (Autómata Finito Determinista)
 
 Un DFA se define formalmente como una 5–tupla:
 
@@ -53,7 +53,7 @@ Ejemplos rechazados:
 
 ---
 
-### Idea del diseño
+# 1.2 Idea del diseño
 
 Solo necesitamos saber si la cantidad de 1’s vista hasta ahora es **par** o **impar**, por lo que basta con dos estados:
 
