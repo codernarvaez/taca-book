@@ -899,4 +899,67 @@ El autómata obtenido es completamente equivalente al AFND-ε original.
 
 ---
 
+## 1.4.3 Conversión de NFA-reg a NFA-$\varepsilon$
+
+El proceso para transformar un **NFA con Expresiones Regulares (NFA-reg)** en un **NFA con Transiciones Epsilon (NFA-$\varepsilon$)** que reconozca el mismo lenguaje se realiza en dos pasos.
+
+---
+
+### Conceptos Clave y Símbolos
+
+Antes de entrar en el proceso, es fundamental entender la notación utilizada:
+
+* **NFA-reg (NFA con Expresiones Regulares):** Un Autómata Finito No Determinista (NFA) donde las transiciones están etiquetadas por **expresiones regulares completas** (ej., $a^*b + c$).
+* **NFA-$\varepsilon$ (NFA con Transiciones Epsilon):** Un NFA estándar donde las transiciones solo están etiquetadas por **símbolos individuales del alfabeto ($\Sigma$) o por la cadena vacía ($\varepsilon$)**.
+* **Transición $\varepsilon$:** Permite al autómata cambiar de estado **sin consumir ningún símbolo** de la cadena de entrada.  Esto es vital para simular las operaciones complejas de las expresiones regulares.
+* **$\varepsilon$ (Cadena Vacía):** La cadena de longitud cero.
+* **$\emptyset$ (Lenguaje Vacío):** El lenguaje que no contiene ninguna cadena.
+* **$\rightsquigarrow$ (Reescritura):** Indica que la expresión de la izquierda es sustituida por la derecha.
+
+---
+
+### 1. Preprocesamiento de Expresiones Regulares
+
+Se simplifican las etiquetas de las transiciones (expresiones regulares $r$) mediante la aplicación exhaustiva de las siguientes reglas de reescritura. Estas reglas se basan en la eliminación del símbolo del lenguaje vacío ($\emptyset$).
+
+* $r \cdot \emptyset \rightsquigarrow \emptyset$ (Cualquier cosa concatenada con $\emptyset$ es $\emptyset$)
+* $\emptyset \cdot r \rightsquigarrow \emptyset$
+* $r + \emptyset \rightsquigarrow r$ (La unión con $\emptyset$ no añade nada)
+* $\emptyset + r \rightsquigarrow r$
+* $\emptyset^* \rightsquigarrow \varepsilon$ (Cero o más repeticiones de la nada es la cadena vacía)
+
+Dado que el lado izquierdo y derecho de cada regla denotan el mismo lenguaje, la expresión regular después del preprocesamiento es equivalente.
+
+Una transición de un NFA-reg etiquetada por $\emptyset$ puede ser **eliminada** sin cambiar el lenguaje del autómata. Después de la eliminación, el NFA-reg restante solo tendrá etiquetas que no contengan el símbolo $\emptyset$.
+
+### 2. Aplicación de Reglas de Transformación
+
+Se aplican exhaustivamente las **reglas de transformación** (Figura 1.16) para descomponer cada expresión regular en sus constituyentes más simples (concatenación, unión, cerradura de Kleene, símbolos $\Sigma$, o $\varepsilon$). 
+
+* **Principio:** Cada regla preserva el lenguaje reconocido, reemplazando una transición con una expresión compleja por un sub-autómata equivalente usando transiciones más simples (símbolos $\Sigma$ o $\varepsilon$). Por ejemplo, la regla para la cerradura de Kleene ($r^*$) introduce dos transiciones $\varepsilon$ para garantizar la equivalencia, incluso si el estado fuente y destino de la transición original tienen otras entradas o salidas.
+
+Como cada regla descompone una expresión en sus componentes (por ejemplo, $r_1 \cdot r_2$ se descompone en $r_1$ y $r_2$), se garantiza que el proceso **finaliza**. El autómata resultante no tendrá transiciones etiquetadas con expresiones regulares compuestas, sino solo con letras de $\Sigma$ o con $\varepsilon$, siendo por definición un **NFA-$\varepsilon$**.
+
+#### Ejemplo 1.20
+
+Consideremos la expresión regular $(a^*b^* + c)^*d$. La Figura 1.17 muestra el resultado de aplicar las reglas de transformación de manera iterativa hasta obtener un NFA-$\varepsilon$.
+
+---
+
+### Complejidad y Eficiencia (Análisis del Costo)
+
+Se define una medida de complejidad $l(r)$ para una expresión regular $r$:
+
+$$
+l(\emptyset) = l(\varepsilon) = l(a) = 0 \\
+l(r_1\cdot r_2) = l(r_1+r_2) = l(r_1)+l(r_2)+1 \\
+l(r^*) = l(r)+1
+$$
+
+La complejidad de un NFA-reg $A$ es la suma de las complejidades de sus etiquetas: $l(A) = \sum_{(q,r,q')\in\delta} l(r)$.
+
+* Cada aplicación de una regla de transformación produce un autómata $A'$ tal que **$l(A') = l(A)-1$**. Esto significa que en cada paso la complejidad se reduce en exactamente una unidad.
+* El proceso termina cuando $l(A') = 0$, que es cuando $A'$ es un NFA-$\varepsilon$ (solo transiciones atómicas).
+* Por lo tanto, se obtiene un NFA-$\varepsilon$ después de $l(A)$ aplicaciones de reglas, con a lo sumo $|Q| + l(A)$ estados.
+* La conversión se ejecuta en **tiempo lineal** ($O(l(A))$), asegurando que el proceso es eficiente.
 
