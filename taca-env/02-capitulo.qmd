@@ -579,3 +579,85 @@ En el ejemplo del texto, los estados 3 y 5 reconocen el mismo lenguaje: `(a+b)*a
 Si dos estados `q1` y `q2` están en el mismo bloque de CSR, entonces para cada símbolo `a` y cada sucesor `q'1` de `q1` por `a`, existe un sucesor `q'2` de `q2` por `a` tal que ambos sucesores reconocen el mismo lenguaje.
 
 ---
+## 2.3.2 Minimalidad de NFA es PSPACE-Completa
+Consiste en determinar si un autómata finito no determinista (NFA) puede ser reducido al menor número posible de estados sin cambiar el lenguaje que reconoce.
+Formalmente, dado un NFA  y un número , el problema consiste en decidir si existe otro NFA equivalente a  que tenga a lo sumo  estados.
+Este problema es PSPACE-completo, lo que implica que:
+•	Requiere una cantidad de memoria que crece de forma polinomial con el tamaño de la entrada.
+•	Es tan difícil como los problemas más complejos que pueden resolverse en espacio polinomial.
+•	No se conoce ningún algoritmo eficiente (en tiempo polinomial) para resolverlo en general.
+•	Es extremadamente difícil desde el punto de vista computacional.
+Por ende, su dificultad radica en que al verificar la existencia de un NFA más pequeño equivalente requiere explorar una cantidad exponencial de posibles configuraciones de estados y transiciones, lo cual es intratable para entradas grandes.
+
+### Características
+•	Mucho más difícil que minimizar un DFA
+•	No es viable construir siempre el NFA mínimo.
+•	No hay un método práctico que garantice obtener el NFA mínimo.
+•	El problema pertenece a PSPACE ya que se puede resolver usando memoria polinomial. Es decir, no necesita memoria infinita pero sí muchísima para casos grandes.
+•	La verificación usa un algoritmo no determinista, donde se adivina un NFA más pequeño aplicando la siguiente formula n ≤ k estados. Luego se verifica si es equivalente al original. Por ende, esta verificación es la parte costosa.
+
+### Comparación
+
+Característica | Minimización de DFA | Minimización de NFA (PSPACE-Completa)
+---|---:|---:
+Dificultad | Fácil y eficiente | Extremadamente difícil
+Complejidad del algoritmo | O(n log n) (polinomial) | PSPACE-completa (no se conoce algoritmo eficiente)
+Determinismo | Determinista | No determinista, múltiples caminos posibles
+Idea general del proceso | Hay un método directo para encontrar el autómata mínimo | No existe un método directo para obtener el NFA mínimo
+Equivalencia entre autómatas | Comparar DFAs es sencillo | Comparar NFAs es complejo y costoso
+Espacio requerido | Polinomial y bajo | Polinomial pero elevado (PSPACE)
+Algoritmo típico | Minimización por particiones | Un algoritmo no determinista que adivina un NFA más pequeño y verifica equivalencia
+Clasificación de complejidad | P (eficiente) | PSPACE-completo (máxima dificultad dentro de problemas resolubles con memoria polinomial)
+Motivo de la dificultad | Estructura rígida y única | Muchas estructuras posibles para el mismo lenguaje
+Resultado práctico | Siempre se puede obtener el DFA mínimo | No es viable obtener siempre el NFA mínimo
+Implicación real | Los DFAs minimizados se usan comúnmente | Se prefiere convertir el NFA a DFA (aunque crezca exponencialmente)
+
+---
+
+# 2.4 Caracterización de Lenguajes Regulares  
+
+Un lenguaje L es regular si y solo si tiene un número finito de residuales.
+El residual de un lenguaje respecto a una palabra w es:
+Lw={u:wu∈L}
+Es decir, es el conjunto de formas de completar a w para seguir en L.
+Es por ello que cada residual describe qué opciones quedan abiertas después de haber leído un prefijo .
+Si el lenguaje es regular, el número de estos “escenarios posibles” es finito, lo que equivale a decir que puede representarse mediante un autómata finito determinista (AFD).
+En otras palabras, los residuales corresponden a los estados alcanzables del autómata.
+
+### Características 
+•	Un lenguaje es regular ⇔ tiene un número finito de residuales.
+•	Condición única sin necesidad de autómatas: Es el único criterio que permite demostrar regularidad sin construir explícitamente un AFD o AFN.
+•	Si un lenguaje posee infinitos residuales, entonces no es regular.
+•	Cada estado de un DFA corresponde exactamente a un residual del lenguaje.
+•	Muchos residuales distintos ⇒ muchos estados ⇒ si son infinitos ⇒ el lenguaje no puede ser regular.
+•	Equivalencia con el Lema de Myhill-Nerode
+•	Esta caracterización es una versión simplificada del teorema de Myhill-Nerode.
+
+### Ejemplo 1 — Lenguaje no regular
+
+Lenguaje: aⁿbⁿ (muchas a seguidas por la misma cantidad de b).
+
+Ejemplos válidos: "", "ab", "aabb", "aaabbb".
+
+Se va leyendo la palabra y se considera prefijos como:
+- "a"  → para completar una palabra de L necesitas 1 b.
+- "aa" → para completar necesitas 2 b.
+- "aaa"→ para completar necesitas 3 b.
+Y así sucesivamente.
+
+Cada prefijo a^k exige una "cantidad pendiente" distinta de b; por tanto existen infinitos residuales (uno por cada k). Como la caracterización por residuales dice que L es regular si y sólo si tiene un número finito de residuales, aquí el número es infinito ⇒ aⁿbⁿ NO es regular.
+
+### Ejemplo 2 — Lenguaje regular: palabras que terminan en "01"
+
+Lenguaje: todas las cadenas binarias que terminan exactamente en "01".
+
+En concreto, se puede tener cualquier mezcla de 0s y 1s al principio, pero la cadena debe acabar en los símbolos "0" seguido de "1".
+
+Al leer prefijos, solo hay unas pocas situaciones posibles respecto a qué falta para completar "01":
+- No se ha visto nada relevante aún (estado inicial): aún puede aparecer "01" en el futuro.
+- El último símbolo leído es "0": entonces basta ver un "1" inmediato para aceptar.
+- El último símbolo leído es "1": todavía se necesita ver la secuencia "01" completa en el futuro.
+
+Solo hay un número pequeño y finito de residuales (estas pocas "situaciones pendientes"), por lo que el lenguaje tiene residuales finitos ⇒ es regular.
+---
+
