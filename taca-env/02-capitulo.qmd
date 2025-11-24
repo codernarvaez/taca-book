@@ -338,3 +338,153 @@ Al terminar, obtenemos la **Partición Estable**. Cada bloque de esta partición
 * Si intercambiaras uno por otro, el autómata seguiría funcionando igual.
 
 Esta partición es la receta perfecta para construir el autómata minimizado: cada bloque se convertirá en un único estado en la nueva versión reducida de la máquina.
+
+## 2.2.2 Quotienting en Autómatas Finitos Deterministas (DFA)
+
+### ¿Qué es Quotienting?
+
+**Quotienting** (o cociente) es una técnica fundamental en teoría de autómatas que nos permite **minimizar** un autómata finito determinista (DFA). El objetivo es crear el DFA más pequeño posible que reconozca exactamente el mismo lenguaje que el original.
+
+### ¿Por qué es importante?
+
+Imagina que tienes un DFA con 100 estados, pero en realidad podrías tener uno equivalente con solo 20 estados. El DFA minimizado:
+- Usa menos memoria
+- Es más eficiente computacionalmente
+- Es más fácil de entender y analizar
+
+### Conceptos Clave
+
+#### Estados Equivalentes
+
+Dos estados son **equivalentes** si, sin importar qué cadena de entrada reciban a partir de ese punto, ambos llevan al autómata a aceptar o rechazar de la misma manera.
+
+**Ejemplo intuitivo:** Imagina dos puertas en un laberinto. Si desde ambas puertas puedes llegar exactamente a los mismos lugares siguiendo los mismos caminos, entonces esas puertas son "equivalentes" y podrías reemplazarlas por una sola.
+
+#### Clases de Equivalencia
+
+Una **clase de equivalencia** es un conjunto de estados que son todos equivalentes entre sí. Cuando hacemos quotienting, cada clase de equivalencia se convierte en un único estado en el DFA minimizado.
+
+### El Proceso de Quotienting
+
+#### Paso 1: Identificar Estados Distinguibles
+
+Dos estados son **distinguibles** si existe una cadena que, empezando desde uno, lleva a aceptar, pero empezando desde el otro, lleva a rechazar.
+
+#### Paso 2: Construir la Tabla de Distinguibilidad
+
+Creamos una tabla donde marcamos qué pares de estados son distinguibles:
+1. **Inicialización:** Marcamos como distinguibles todos los pares (estado final, estado no final)
+2. **Iteración:** Si desde dos estados, con el mismo símbolo, llegamos a estados ya distinguibles, entonces esos dos estados también son distinguibles
+3. **Repetimos** hasta que no haya cambios
+
+#### Paso 3: Agrupar Estados Equivalentes
+
+Los estados que NO son distinguibles forman una clase de equivalencia.
+
+#### Paso 4: Construir el DFA Minimizado
+
+Cada clase de equivalencia se convierte en un estado del nuevo DFA.
+
+---
+
+## Ejemplo Completo
+
+### DFA Original
+
+Consideremos un DFA que acepta cadenas sobre el alfabeto {0, 1} donde el número de 1's es par.
+
+**Estados:** {q0, q1, q2, q3, q4}
+- q0: estado inicial (número par de 1's visto)
+- q1: número impar de 1's visto
+- q2: estado "trampa" redundante (par de 1's)
+- q3: estado redundante (impar de 1's)
+- q4: otro estado redundante (par de 1's)
+
+**Estados finales:** {q0, q2, q4} (todos representan número par de 1's)
+
+**Transiciones:**
+
+| Estado | 0 | 1 |
+|--------|---|---|
+| q0 | q0 | q1 |
+| q1 | q1 | q0 |
+| q2 | q2 | q3 |
+| q3 | q3 | q2 |
+| q4 | q4 | q1 |
+
+#### Tabla de Distinguibilidad
+
+Construimos una tabla triangular para todos los pares de estados:
+
+**Iteración 0:** Marcamos pares (final, no-final)
+
+```
+     q0   q1   q2   q3   q4
+q1   X
+q2   -
+q3   X    -
+q4   -    X    -
+```
+
+Leyenda:
+- `X` = distinguibles (uno es final, otro no)
+- `-` = posiblemente equivalentes (ambos finales o ambos no-finales)
+
+**Iteración 1:** Revisamos transiciones
+
+Para cada par no marcado (p, q):
+- Si δ(p, a) y δ(q, a) están marcados como distinguibles → marcamos (p, q)
+
+Comprobamos:
+- (q0, q2): δ(q0, 0)=q0, δ(q2, 0)=q2 → revisar (q0, q2) [no marcado]
+  - δ(q0, 1)=q1, δ(q2, 1)=q3 → (q1, q3) [no marcado aún]
+- (q0, q4): δ(q0, 1)=q1, δ(q4, 1)=q1 → mismo destino ✓
+  - δ(q0, 0)=q0, δ(q4, 0)=q4 → revisar (q0, q4)
+- (q2, q4): δ(q2, 1)=q3, δ(q4, 1)=q1 → (q3, q1) está marcado X
+
+```
+     q0   q1   q2   q3   q4
+q1   X
+q2   -
+q3   X    -
+q4   -    X    X
+```
+
+**Iteración 2:** Propagamos
+
+Revisando (q0, q2) nuevamente:
+- Sus transiciones con 1 van a (q1, q3), que no están marcados
+- Ninguna evidencia de distinguibilidad aún
+
+Continuamos hasta que no haya cambios. Después de completar:
+
+```
+     q0   q1   q2   q3   q4
+q1   X
+q2   -         (equivalente a q0)
+q3   X    -    (equivalente a q1)
+q4   -    X    -    X   (equivalente a q0)
+```
+
+#### Clases de Equivalencia (Cocientes)
+
+De la tabla obtenemos:
+- **[q0] = {q0, q2, q4}** - estados con número par de 1's
+- **[q1] = {q1, q3}** - estados con número impar de 1's
+
+#### DFA Minimizado
+
+**Estados:** {[q0], [q1]}
+- [q0]: estado inicial y final
+- [q1]: estado no final
+
+**Transiciones:**
+
+| Estado | 0 | 1 |
+|--------|---|---|
+| [q0] | [q0] | [q1] |
+| [q1] | [q1] | [q0] |
+
+**Resultado:** Hemos reducido de 5 estados a solo 2 estados, manteniendo el mismo lenguaje.
+
+---
