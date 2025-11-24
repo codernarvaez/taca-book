@@ -1,5 +1,357 @@
 ---
 title: "07-capitulo"
-format: html
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
+
+# Aplicación Práctica: Análisis Léxico en Compiladores
+
+### Cómo Lex/Flex utilizan expresiones regulares y autómatas finitos para generar analizadores léxicos
+
+El análisis léxico constituye una fase fundamental dentro del proceso de compilación, encargada de transformar una secuencia bruta de caracteres en una secuencia estructurada de **tokens**, que serán utilizados posteriormente por el analizador sintáctico. Los tokens representan elementos significativos del lenguaje, como identificadores, literales numéricos, operadores, palabras clave y delimitadores.
+
+Herramientas como **Lex** (y su versión optimizada **Flex**) automatizan la creación de analizadores léxicos mediante la integración de dos pilares teóricos fundamentales:
+
+1.  **Expresiones regulares (ER)** para definir patrones léxicos.
+
+2.  **Autómatas finitos (AFN y AFD)** para implementar el mecanismo de reconocimiento.
+
+Estas herramientas permiten generar analizadores léxicos eficientes, portables y mantenibles a partir de una especificación compacta y declarativa, sin que el programador tenga que preocuparse por implementar manualmente la transición entre estados o la lectura de la entrada.
+
+# Expresiones regulares como lenguaje de especificación léxica
+
+Las expresiones regulares forman parte de los lenguajes formales y se utilizan para describir conjuntos de cadenas (lenguajes regulares). En el contexto de Lex/Flex, el programador describe cada token mediante una ER. Algunos ejemplos típicos incluyen:
+
+```         
+[0-9]+                     { return NUM; } [a-zA-Z_][a-zA-Z0-9_]*     { return ID; } "if"                       { return IF; } "=="                       { return EQ; } [\t \n]+                   { /* ignorar espacios */ } 
+```
+
+Cada expresión regular define **qué cadenas acepta** el token correspondiente, y el bloque de acción determina **qué hacer** cuando ese token aparece en la entrada.
+
+### Operadores más comunes en las ER de Flex
+
+-   **Concatenación**: `ab` significa que se debe reconocer primero `a` y luego `b`.
+
+-   **Unión**: `a|b` significa “a o b”.
+
+-   **Cerradura**:
+
+    -   `a*` → cero o más repeticiones
+
+    -   `a+` → una o más
+
+    -   `a?` → cero o una
+
+-   **Clases de caracteres**: `[abc]`, `[0-9]`, `[A-Za-z_]`.
+
+-   **Escapes**: `\n`, `\t`, `\.` etc.
+
+-   **Literales**: `"=="`, `"while"`, `":"`, etc.
+
+Las ER permiten describir de manera breve patrones complejos sin programar algoritmos de búsqueda manuales.
+
+# Transformación interna: De ER a autómatas finitos
+
+Aunque el usuario solo escribe expresiones regulares, internamente Lex/Flex construyen una máquina reconocedora basada en **teoría de autómatas**. Este proceso involucra tres etapas:
+
+## Construcción del Autómata Finito No Determinista (AFN)
+
+Para cada expresión regular, Lex/Flex aplica el **algoritmo de Thompson**, que tiene estas características:
+
+-   Cada operación regular tiene una construcción AFN equivalente.
+
+-   Los AFN permiten **transiciones ε**, lo que facilita la combinación de subestructuras sin perder expresividad.
+
+-   Cada expresión produce un pequeño autómata, y luego estos se ensamblan.
+
+Este AFN representa fielmente la expresión regular, pero no es eficiente para evaluarse directamente debido a su naturaleza no determinista.
+
+## Construcción del AFN global
+
+Todos los AFN individuales se combinan en:
+
+-   Un **AFN grande**,
+
+-   Con un **estado inicial único**,
+
+-   Desde donde existen ε-transiciones hacia cada AFN que representa una regla del archivo.
+
+Esto permite que el autómata pueda intentar reconocer cualquier token desde el primer carácter.
+
+## Conversión del AFN a Autómata Finito Determinista (AFD)
+
+El AFN global se convierte en un AFD mediante el **algoritmo de subconjuntos** (o "powerset construction"). Este proceso:
+
+-   Elimina la no determinación.
+
+-   Expande el espacio de estados (cada estado del AFD es un conjunto de estados del AFN).
+
+-   Garantiza un comportamiento determinista para cada carácter.
+
+El AFD generado reconoce exactamente el mismo lenguaje que el AFN, pero es mucho más eficiente de ejecutar.
+
+## Minimización del AFD
+
+Para optimizar aún más, Lex/Flex aplica algoritmos de **minimización** que reducen estados redundantes. Esto produce:
+
+-   Menor memoria usada por las tablas.
+
+-   Transiciones más rápidas.
+
+-   Mejor rendimiento del analizador léxico.
+
+# Generación del scanner: Funcionamiento de `yylex()`
+
+Una vez construido el AFD minimizado, Lex/Flex generan el archivo `lex.yy.c`, que contiene la función principal del analizador léxico: `yylex()`.
+
+### ¿Cómo trabaja `yylex()`?
+
+1.  Lee la entrada carácter por carácter.
+
+2.  Avanza en el autómata según la tabla de transiciones.
+
+3.  Mantiene el último estado final alcanzado.
+
+4.  Implementa el principio de **máximo avance (maximal munch)**:\
+    reconoce el token más largo posible.
+
+5.  Cuando no puede avanzar más, retrocede si es necesario y ejecuta la acción asociada al token reconocido.
+
+Esta función es llamada repetidamente por el analizador sintáctico.
+
+# Manejo de conflictos y prioridades
+
+## Regla del token más largo (maximal munch)
+
+Ejemplo:\
+Entrada: `while1`
+
+Posibles coincidencias:
+
+-   `"while"`
+
+-   `[a-zA-Z_][a-zA-Z0-9_]*`
+
+Flex elige:\
+`ID("while1")`
+
+## Regla de prioridad por orden
+
+Si dos expresiones regulares pueden reconocer el mismo lexema, Flex selecciona:
+
+**la primera regla escrita en el archivo .l**
+
+Esto permite resolver conflictos entre palabras clave e identificadores:
+
+```         
+"while"     { return WHILE; } [a-zA-Z]+   { return ID; } 
+```
+
+# Estructura completa de un archivo Lex/Flex
+
+Un archivo `.l` posee la siguiente estructura:
+
+```         
+%{   /* Código C inicial */   #include "tokens.h" %}  %%  /* Sección de reglas */ [0-9]+              { return NUM; } "if"                { return IF; } [a-zA-Z_][a-zA-Z0-9_]*  { return ID; } [\t \n]+            { /* ignorar espacios */ }  %%  /* Códigos auxiliares */ int yywrap() { return 1; } 
+```
+
+Las tres secciones son:
+
+1.  **Definiciones**
+
+2.  **Reglas léxicas**
+
+3.  **Código auxiliar**
+
+# Casos prácticos y características avanzadas
+
+## Tokens contextuales
+
+Flex permite manejar estados internos (*start conditions*) para reconocer tokens que dependen del contexto.
+
+Ejemplo: reconocimiento de cadenas:
+
+```         
+%x STRING  \"              { BEGIN(STRING); } <STRING>\"      { BEGIN(INITIAL); return STRING_END; } <STRING>.       { /* almacenar carácter */ } 
+```
+
+## Ignorar comentarios
+
+### Comentarios de una línea (`//...`)
+
+```         
+"//".*      { /* ignorar */ } 
+```
+
+### Comentarios multilínea (`/* ... */`)
+
+```         
+"/*"([^*]|\*+[^/])*\*+"/"   { /* ignorar */ } 
+```
+
+## Control de buffer y velocidad
+
+Flex incluye mecanismos como:
+
+-   **Buffers dobles** para lectura sin interrupciones.
+
+-   **Tablas compactas** para transición de estados.
+
+-   **Modo de compatibilidad con Lex** o **modo Flex optimizado**.
+
+# Beneficios prácticos de Lex/Flex
+
+-   Automatiza completamente la creación del analizador léxico.
+
+-   Produce scanners altamente optimizados en C.
+
+-   Reduce los errores humanos en el reconocimiento de patrones.
+
+-   Facilita la integración con parser generators como **Bison**.
+
+-   Permite análisis léxicos robustos para lenguajes complejos.
+
+-   Es la herramienta estándar en cursos universitarios de compiladores.
+
+# Aplicaciones en Verificación de Software y Hardware (Model Checking)
+
+El **model checking** es una técnica de verificación formal que permite comprobar automáticamente si un modelo de sistema satisface determinadas especificaciones, detectando errores sin intervención humana directa.
+Es especialmente útil en sistemas complejos donde probar manualmente todos los casos de ejecución sería imposible.
+
+Los autómatas son adecuados para esta tarea debido a que:
+
+* Representan infinitos comportamientos del sistema.
+* Permiten operaciones automáticas de combinación, comparación y complementación.
+* Existen algoritmos eficientes para manipularlos.
+
+---
+
+# Tipos de Propiedades que se Pueden Verificar
+
+## 1. Propiedades de Seguridad (Safety)
+
+**Significado:**
+“Nada malo debe pasar”.
+El sistema nunca debe alcanzar un estado peligroso o incorrecto.
+
+**Ejemplos:**
+
+* El semáforo nunca muestra rojo y verde al mismo tiempo.
+* Un proceso nunca accede a memoria que no le pertenece.
+* Dos trenes nunca están en la misma sección de vía.
+
+**Cómo se verifica:**
+
+1. Se construye un autómata que detecte los estados prohibidos (“estados malos”).
+2. Se verifica que el sistema nunca puede llegar a dichos estados.
+
+---
+
+## 2. Propiedades de Actividad (Liveness)
+
+**Significado:**
+“Algo bueno eventualmente va a pasar”.
+El sistema no debe quedar bloqueado para siempre.
+
+**Ejemplos:**
+
+* Si presionas el botón del ascensor, eventualmente llegará.
+* Si un proceso pide un recurso, tarde o temprano lo obtiene.
+* El sistema no se queda congelado o esperando indefinidamente.
+
+Estas propiedades requieren analizar ejecuciones infinitas, por lo que se emplean **autómatas de Büchi**.
+
+---
+
+# Uso de Autómatas de Büchi
+
+Los autómatas de Büchi procesan **palabras infinitas** y son esenciales en la verificación de propiedades de actividad (liveness) en sistemas reactivos.
+
+## Ámbitos de aplicación
+
+| Ámbito                    | Aplicación                              | Ejemplo de propiedad crítica                                   |
+| ------------------------- | --------------------------------------- | -------------------------------------------------------------- |
+| Sistemas embebidos        | Control de sensores, microcontroladores | “La temperatura nunca excede el umbral sin activar la alarma.” |
+| Sistemas ciberfísicos     | Interacción con entorno físico          | “El dron nunca pierde conexión en vuelo.”                      |
+| Automatización industrial | Robots, PLCs                            | “La máquina no opera con el escudo abierto.”                   |
+| Transporte autónomo       | Trenes, autos, aviones                  | “Dos vehículos no ocupan el mismo carril.”                     |
+| Sistemas financieros      | Transacciones                           | “Una transacción no debe duplicarse.”                          |
+| Comunicación              | Protocolos, redes                       | “Un paquete no se entrega sin autenticación.”                  |
+| Sistemas distribuidos     | Recursos compartidos                    | “Un recurso no es accedido simultáneamente.”                   |
+| Sistemas médicos          | Bombas, monitores                       | “El desfibrilador no se activa sin ritmo cardíaco.”            |
+| Control aéreo             | Radar, seguimiento                      | “Dos aviones nunca entran en conflicto.”                       |
+| Sistemas administrativos  | Gestión de casos                        | “Un expediente no se modifica sin trazabilidad.”               |
+
+---
+
+# Criterio de Aceptación en Autómatas de Büchi
+
+Una palabra infinita es aceptada si **un estado de aceptación es visitado infinitas veces**.
+
+No basta con llegar una sola vez: debe repetirse permanentemente.
+
+## Ejemplo: “Semáforo seguro”
+
+### Secuencia aceptada (correcta)
+
+```
+rojo → verde → amarillo → rojo → verde → amarillo → ...
+```
+
+El estado `q_verde` ocurre infinitamente ⇒ la propiedad se cumple.
+
+### Secuencia no aceptada (incorrecta)
+
+```
+rojo → amarillo → rojo → amarillo → ...
+```
+
+El verde nunca aparece ⇒ comportamiento inseguro.
+
+---
+
+# Utilidad del Criterio de Büchi
+
+El criterio de Büchi exige que al menos un estado aceptador sea visitado **infinitas veces**.  
+Esto permite verificar propiedades que deben cumplirse de manera permanente a lo largo de una ejecución infinita.  
+Entre ellas se incluyen:
+
+* Respuesta continua del sistema.
+* Liberación recurrente de recursos.
+* Retorno periódico a un estado seguro.
+* Prevención de ciclos de bloqueo permanente.
+
+---
+
+# Proceso de Verificación Automática
+
+El procedimiento estándar de verificación mediante autómatas de Büchi suele desarrollarse a través de las siguientes etapas:
+
+1. **Modelar el sistema como un autómata de Büchi.**  
+   Se representa el comportamiento del sistema mediante un autómata que capture todas sus ejecuciones posibles.
+2. **Traducir la propiedad deseada** (por ejemplo, “nunca hay bloqueo”) **a una fórmula en Lógica Temporal Lineal (LTL).**  
+   Esta fórmula expresa formalmente la condición que se desea verificar sobre el sistema.
+3. **Construir el autómata complementario que acepta las ejecuciones que violan la propiedad.**  
+   A partir de la fórmula LTL, se genera un autómata que describa exactamente los comportamientos no permitidos.
+4. **Calcular el producto entre el autómata del sistema y el autómata de la propiedad.**  
+   El producto sincronizado permite identificar si existe una ejecución conjunta que satisfaga el comportamiento del sistema y, a la vez, viole la propiedad.
+5. **Buscar ejecuciones aceptadas.**  
+   * Si existen: la propiedad **se viola**.
+   * Si no existen: la propiedad **se cumple** para todas las ejecuciones.
+
+---
+
+# Herramientas Basadas en Autómatas de Büchi
+
+1. **SPIN:** Especializada en la verificación de sistemas concurrentes y protocolos de comunicación.
+2. **NuSMV:** Herramienta para verificación de modelos finitos con soporte para LTL y CTL.
+3. **UPPAAL:** Orientada a sistemas temporizados y de tiempo real mediante autómatas temporizados.
+4. **PRISM:** verificación probabilística de sistemas estocásticos.
+
+---
+
 

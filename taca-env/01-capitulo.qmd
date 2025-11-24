@@ -1,9 +1,4 @@
 ---
-title: "01-capitulo.qmd"
-format: html
----
-
----
 title: "Definición Formal de un DFA"
 format:
         html: default
