@@ -2,7 +2,7 @@
 
 **Repositorio:** `codernarvaez/taca-book`
 
-**Fecha del informe:** 2025-11-24 16:16:50
+**Fecha del informe:** 2025-11-24 16:21:52
 
 **URL:** https://github.com/codernarvaez/taca-book
 
@@ -10,7 +10,7 @@
 
 **Creado:** 2025-11-14 12:44:43
 
-**Última actualización:** 2025-11-24 21:03:18
+**Última actualización:** 2025-11-24 21:19:46
 
 **Lenguaje principal:** TeX
 
@@ -110,9 +110,9 @@
 - **URL:** https://api.github.com/repos/codernarvaez/taca-book/commits/8ac8cfae45607b5980d63fe4c84e45eb44beeaf9
 
 ### 17. Rama: `main`
-- **SHA del último commit:** `cfe151a`
-- **SHA completo:** `cfe151a4dc716a17824457ca3e51ac012c5f2f71`
-- **URL:** https://api.github.com/repos/codernarvaez/taca-book/commits/cfe151a4dc716a17824457ca3e51ac012c5f2f71
+- **SHA del último commit:** `4151852`
+- **SHA completo:** `4151852fce329d89aadeb7c70ee7e96e7131153c`
+- **URL:** https://api.github.com/repos/codernarvaez/taca-book/commits/4151852fce329d89aadeb7c70ee7e96e7131153c
 
 
 ---
@@ -12769,6 +12769,20 @@ add CI/CD on main
 
 
 #### Commit #1
+- **SHA:** `4151852` (completo: `4151852fce329d89aadeb7c70ee7e96e7131153c`)
+- **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
+- **Fecha:** 2025-11-24 21:19:39
+- **Committer:** Esteban Leon Aguilar
+- **Mensaje:**
+  ```
+  Update .gitignore, improve formatting in capitulo 2
+
+Added .venv/ and *.py to .gitignore for better environment and Python file exclusion. Improved list formatting in taca-env/02-capitulo.qmd for consistency and readability. Added a new informe markdown file with repository activity details.
+  ```
+- **URL:** https://github.com/codernarvaez/taca-book/commit/4151852fce329d89aadeb7c70ee7e96e7131153c
+
+
+#### Commit #2
 - **SHA:** `cfe151a` (completo: `cfe151a4dc716a17824457ca3e51ac012c5f2f71`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 21:03:09
@@ -12780,7 +12794,7 @@ add CI/CD on main
 - **URL:** https://github.com/codernarvaez/taca-book/commit/cfe151a4dc716a17824457ca3e51ac012c5f2f71
 
 
-#### Commit #2
+#### Commit #3
 - **SHA:** `947d4c8` (completo: `947d4c82e261319d4e6098e60c127d3f730acbdf`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 21:02:51
@@ -12794,7 +12808,7 @@ Se ajustaron los niveles de encabezados para mejorar la jerarquía y claridad de
 - **URL:** https://github.com/codernarvaez/taca-book/commit/947d4c82e261319d4e6098e60c127d3f730acbdf
 
 
-#### Commit #3
+#### Commit #4
 - **SHA:** `fa58031` (completo: `fa58031b7eeb7fbdb5f671a5567d20d3943c99b3`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:55:11
@@ -12806,7 +12820,7 @@ Se ajustaron los niveles de encabezados para mejorar la jerarquía y claridad de
 - **URL:** https://github.com/codernarvaez/taca-book/commit/fa58031b7eeb7fbdb5f671a5567d20d3943c99b3
 
 
-#### Commit #4
+#### Commit #5
 - **SHA:** `29f2681` (completo: `29f2681780405483f4bbfd0648b5605b96ffd3fd`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:54:33
@@ -12820,7 +12834,7 @@ Se reorganizó y mejoró la estructura del documento para mayor claridad, usando
 - **URL:** https://github.com/codernarvaez/taca-book/commit/29f2681780405483f4bbfd0648b5605b96ffd3fd
 
 
-#### Commit #5
+#### Commit #6
 - **SHA:** `c7b8179` (completo: `c7b8179617c75275bb8e3936ca30209a00859e19`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:30:31
@@ -12834,7 +12848,7 @@ Introduces a new section detailing the step-by-step conversion between DFA, regu
 - **URL:** https://github.com/codernarvaez/taca-book/commit/c7b8179617c75275bb8e3936ca30209a00859e19
 
 
-#### Commit #6
+#### Commit #7
 - **SHA:** `a3c9f05` (completo: `a3c9f0589ed87fe91c1e7a52868c0c9eca809a13`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:29:38
@@ -12848,7 +12862,7 @@ Introduces a detailed explanation of the state elimination algorithm for convert
 - **URL:** https://github.com/codernarvaez/taca-book/commit/a3c9f0589ed87fe91c1e7a52868c0c9eca809a13
 
 
-#### Commit #7
+#### Commit #8
 - **SHA:** `fa6acb0` (completo: `fa6acb0459aaa49a52f1f3df03ab41b638235534`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:28:11
@@ -12862,7 +12876,7 @@ Introduces a detailed explanation of the process for converting an NFA with regu
 - **URL:** https://github.com/codernarvaez/taca-book/commit/fa6acb0459aaa49a52f1f3df03ab41b638235534
 
 
-#### Commit #8
+#### Commit #9
 - **SHA:** `a76732a` (completo: `a76732a6525e49af8893db250203e40f95e71f4b`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 20:27:35
@@ -12876,7 +12890,7 @@ Introduces section 1.4.2 detailing the algorithm to convert an NFA with ε-trans
 - **URL:** https://github.com/codernarvaez/taca-book/commit/a76732a6525e49af8893db250203e40f95e71f4b
 
 
-#### Commit #9
+#### Commit #10
 - **SHA:** `5a8baa4` (completo: `5a8baa4640c75c0614ea7d7e9d0c4b0edc397b73`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-24 20:17:38
@@ -12890,7 +12904,7 @@ Introduces section 1.4.2 detailing the algorithm to convert an NFA with ε-trans
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5a8baa4640c75c0614ea7d7e9d0c4b0edc397b73
 
 
-#### Commit #10
+#### Commit #11
 - **SHA:** `6a3a590` (completo: `6a3a5902de7043fe510924531387035307e09a20`)
 - **Autor:** mateochamba <151583531+mateochamba@users.noreply.github.com>
 - **Fecha:** 2025-11-24 20:16:25
@@ -12902,7 +12916,7 @@ Introduces section 1.4.2 detailing the algorithm to convert an NFA with ε-trans
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6a3a5902de7043fe510924531387035307e09a20
 
 
-#### Commit #11
+#### Commit #12
 - **SHA:** `6ac12a3` (completo: `6ac12a3f4ceb3ac1574ab2c25547a5162c58d304`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-24 19:41:32
@@ -12916,7 +12930,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6ac12a3f4ceb3ac1574ab2c25547a5162c58d304
 
 
-#### Commit #12
+#### Commit #13
 - **SHA:** `e685774` (completo: `e68577455f9a4b1cc5746f5cf57661e6d3113f8a`)
 - **Autor:** joseph <joseph.balcazar@unl.edu.ec>
 - **Fecha:** 2025-11-24 19:31:30
@@ -12928,7 +12942,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e68577455f9a4b1cc5746f5cf57661e6d3113f8a
 
 
-#### Commit #13
+#### Commit #14
 - **SHA:** `91fc9c1` (completo: `91fc9c1cdcac0f7d978d3f26ee262a442261ecb6`)
 - **Autor:** Andersson Ambuludi <118091382+AnderssonLeandro09@users.noreply.github.com>
 - **Fecha:** 2025-11-24 18:15:31
@@ -12940,7 +12954,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/91fc9c1cdcac0f7d978d3f26ee262a442261ecb6
 
 
-#### Commit #14
+#### Commit #15
 - **SHA:** `beca3ef` (completo: `beca3ef8a505a1803beee21c9d107e5e57cdc86d`)
 - **Autor:** Requisitos Marylin  Alvarado <marylin.alvarado@unl.edu.ec>
 - **Fecha:** 2025-11-24 18:11:31
@@ -12952,7 +12966,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/beca3ef8a505a1803beee21c9d107e5e57cdc86d
 
 
-#### Commit #15
+#### Commit #16
 - **SHA:** `70f8b98` (completo: `70f8b980ff30e38c497e71108366ffa1b693848e`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 18:05:39
@@ -12964,7 +12978,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/70f8b980ff30e38c497e71108366ffa1b693848e
 
 
-#### Commit #16
+#### Commit #17
 - **SHA:** `f179b2e` (completo: `f179b2e20df1178a538f66fce3ef5b0b1b3a67bd`)
 - **Autor:** Criss <davidajila07@gmail.com>
 - **Fecha:** 2025-11-24 18:02:01
@@ -12976,7 +12990,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/f179b2e20df1178a538f66fce3ef5b0b1b3a67bd
 
 
-#### Commit #17
+#### Commit #18
 - **SHA:** `2e1063d` (completo: `2e1063dc288afcfa9ac5eac0dbcf880115a25360`)
 - **Autor:** Criss <davidajila07@gmail.com>
 - **Fecha:** 2025-11-24 18:01:47
@@ -12988,7 +13002,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/2e1063dc288afcfa9ac5eac0dbcf880115a25360
 
 
-#### Commit #18
+#### Commit #19
 - **SHA:** `ec31824` (completo: `ec318240050bf558be8092336586d23bb19c82ef`)
 - **Autor:** Estefania <estefania.torres@unl.edu.ec>
 - **Fecha:** 2025-11-24 18:01:45
@@ -13000,7 +13014,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/ec318240050bf558be8092336586d23bb19c82ef
 
 
-#### Commit #19
+#### Commit #20
 - **SHA:** `c8aa515` (completo: `c8aa5155d57edb0b805c64354a3ea3ec58cef618`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 17:59:39
@@ -13012,7 +13026,7 @@ agregar capitulo 1.3.5 y 1.3.6
 - **URL:** https://github.com/codernarvaez/taca-book/commit/c8aa5155d57edb0b805c64354a3ea3ec58cef618
 
 
-#### Commit #20
+#### Commit #21
 - **SHA:** `83df1d4` (completo: `83df1d49b4cb9bc74c273e6f91e9fbc917dc4a4f`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-24 17:57:48
@@ -13026,7 +13040,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/83df1d49b4cb9bc74c273e6f91e9fbc917dc4a4f
 
 
-#### Commit #21
+#### Commit #22
 - **SHA:** `9842681` (completo: `98426818fcdd2c0fa67629303dd56929e24eb7c7`)
 - **Autor:** JhostinTapia <jhostin.tapia@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:54:47
@@ -13038,7 +13052,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/98426818fcdd2c0fa67629303dd56929e24eb7c7
 
 
-#### Commit #22
+#### Commit #23
 - **SHA:** `83fe808` (completo: `83fe80860c83c458ca7a1ae755401189e1b59b98`)
 - **Autor:** jhostinJATM <jhos_tap@hotmail.com>
 - **Fecha:** 2025-11-24 17:53:13
@@ -13050,7 +13064,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/83fe80860c83c458ca7a1ae755401189e1b59b98
 
 
-#### Commit #23
+#### Commit #24
 - **SHA:** `b43c26c` (completo: `b43c26c81f743bede2f9acda8c3da51b7936194b`)
 - **Autor:** ThiagoAbrigo <santiabrigo497@gmail.com>
 - **Fecha:** 2025-11-24 17:53:01
@@ -13062,7 +13076,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b43c26c81f743bede2f9acda8c3da51b7936194b
 
 
-#### Commit #24
+#### Commit #25
 - **SHA:** `9e7a113` (completo: `9e7a113ffddeb286beefcfe13fab1d95bf735c6b`)
 - **Autor:** JhostinTapia <jhostin.tapia@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:47:57
@@ -13074,7 +13088,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/9e7a113ffddeb286beefcfe13fab1d95bf735c6b
 
 
-#### Commit #25
+#### Commit #26
 - **SHA:** `f1e0de3` (completo: `f1e0de3048f7aa9824be68d4592f03dcbe7ef57a`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:44:13
@@ -13086,7 +13100,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/f1e0de3048f7aa9824be68d4592f03dcbe7ef57a
 
 
-#### Commit #26
+#### Commit #27
 - **SHA:** `0076c41` (completo: `0076c41f40bae8edbb223a4e54fb814d5cd9d228`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:43:49
@@ -13098,7 +13112,7 @@ Dev cap1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/0076c41f40bae8edbb223a4e54fb814d5cd9d228
 
 
-#### Commit #27
+#### Commit #28
 - **SHA:** `6893718` (completo: `6893718a4f8b9752550a47bcad3f778bc1538397`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-24 17:38:43
@@ -13112,7 +13126,7 @@ Updates chapter titles and adds quotienting section
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6893718a4f8b9752550a47bcad3f778bc1538397
 
 
-#### Commit #28
+#### Commit #29
 - **SHA:** `895da19` (completo: `895da198b0336575bd66bbb4c7cd8d7b415bb315`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:38:32
@@ -13124,7 +13138,7 @@ Updates chapter titles and adds quotienting section
 - **URL:** https://github.com/codernarvaez/taca-book/commit/895da198b0336575bd66bbb4c7cd8d7b415bb315
 
 
-#### Commit #29
+#### Commit #30
 - **SHA:** `26de8ff` (completo: `26de8ff7bdbf89dac7bb2bdfa4d4939a94176130`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:37:29
@@ -13136,7 +13150,7 @@ Updates chapter titles and adds quotienting section
 - **URL:** https://github.com/codernarvaez/taca-book/commit/26de8ff7bdbf89dac7bb2bdfa4d4939a94176130
 
 
-#### Commit #30
+#### Commit #31
 - **SHA:** `e44f204` (completo: `e44f204ca9f6d06153342a3c1a7280b4e9631c21`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:37:09
@@ -13148,7 +13162,7 @@ Updates chapter titles and adds quotienting section
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e44f204ca9f6d06153342a3c1a7280b4e9631c21
 
 
-#### Commit #31
+#### Commit #32
 - **SHA:** `7e58ae1` (completo: `7e58ae1d63fc50c528d30efaff8c7f4d4e26750d`)
 - **Autor:** Bradley-Alexander <bradley.poma@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:34:44
@@ -13167,7 +13181,7 @@ final stable partition used to construct the minimized automaton.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/7e58ae1d63fc50c528d30efaff8c7f4d4e26750d
 
 
-#### Commit #32
+#### Commit #33
 - **SHA:** `02d4b6e` (completo: `02d4b6ec3fdb3666163e941b06a38400415e5da8`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 17:22:30
@@ -13181,7 +13195,7 @@ Deleted duplicate or unnecessary YAML front matter in 02-capitulo.qmd to clean u
 - **URL:** https://github.com/codernarvaez/taca-book/commit/02d4b6ec3fdb3666163e941b06a38400415e5da8
 
 
-#### Commit #33
+#### Commit #34
 - **SHA:** `5de2a02` (completo: `5de2a02b907bc84f06342245d55f04edc1759c9c`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-24 17:20:31
@@ -13195,7 +13209,7 @@ Capitulo dos punto 2.1 - 2.1.1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5de2a02b907bc84f06342245d55f04edc1759c9c
 
 
-#### Commit #34
+#### Commit #35
 - **SHA:** `e599c49` (completo: `e599c4959feefe4aec96f474189a1b87d5f4b8ad`)
 - **Autor:** Elias <elias.poma@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:19:21
@@ -13215,7 +13229,7 @@ This chapter introduces key concepts for understanding DFA minimization, includi
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e599c4959feefe4aec96f474189a1b87d5f4b8ad
 
 
-#### Commit #35
+#### Commit #36
 - **SHA:** `fbeb1d5` (completo: `fbeb1d50ff597dcbf11553e72541dfcf94e2d075`)
 - **Autor:** Elias <elias.poma@unl.edu.ec>
 - **Fecha:** 2025-11-24 17:02:10
@@ -13227,7 +13241,7 @@ This chapter introduces key concepts for understanding DFA minimization, includi
 - **URL:** https://github.com/codernarvaez/taca-book/commit/fbeb1d50ff597dcbf11553e72541dfcf94e2d075
 
 
-#### Commit #36
+#### Commit #37
 - **SHA:** `3d522cf` (completo: `3d522cf9d5b8a657779e7ceac86db00111b49eea`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-24 16:08:50
@@ -13239,7 +13253,7 @@ This chapter introduces key concepts for understanding DFA minimization, includi
 - **URL:** https://github.com/codernarvaez/taca-book/commit/3d522cf9d5b8a657779e7ceac86db00111b49eea
 
 
-#### Commit #37
+#### Commit #38
 - **SHA:** `2f60ec7` (completo: `2f60ec7f47f246b068fa2ec04328911bca33ee1e`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-24 13:16:57
@@ -13253,7 +13267,7 @@ Updated the 'title' field in 01-capitulo.qmd, 02-capitulo.qmd, and 03-capitulo.q
 - **URL:** https://github.com/codernarvaez/taca-book/commit/2f60ec7f47f246b068fa2ec04328911bca33ee1e
 
 
-#### Commit #38
+#### Commit #39
 - **SHA:** `159112b` (completo: `159112b88619cde443c1deecc41d7258c556b31b`)
 - **Autor:** Joseph Sebastian <127240045+jcbastianl@users.noreply.github.com>
 - **Fecha:** 2025-11-21 03:31:52
@@ -13267,7 +13281,7 @@ Added Joseph Balcazar's contribution on DFA and NFA comparison.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/159112b88619cde443c1deecc41d7258c556b31b
 
 
-#### Commit #39
+#### Commit #40
 - **SHA:** `c39c646` (completo: `c39c646d89bc4d2641fc39f4a6665516ec2151a2`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-20 22:52:38
@@ -13281,7 +13295,7 @@ Actualización capitulo 2
 - **URL:** https://github.com/codernarvaez/taca-book/commit/c39c646d89bc4d2641fc39f4a6665516ec2151a2
 
 
-#### Commit #40
+#### Commit #41
 - **SHA:** `8d01b4b` (completo: `8d01b4bd6d9a96876f129345cf3912cfbe8e1c31`)
 - **Autor:** Elia700 <elias.poma@unl.edu.ec>
 - **Fecha:** 2025-11-20 22:48:07
@@ -13293,7 +13307,7 @@ Actualización capitulo 2
 - **URL:** https://github.com/codernarvaez/taca-book/commit/8d01b4bd6d9a96876f129345cf3912cfbe8e1c31
 
 
-#### Commit #41
+#### Commit #42
 - **SHA:** `000ced0` (completo: `000ced0cecb87d09abee61147df7f8f42ad74ae0`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-20 01:15:04
@@ -13307,7 +13321,7 @@ Updates contributor information
 - **URL:** https://github.com/codernarvaez/taca-book/commit/000ced0cecb87d09abee61147df7f8f42ad74ae0
 
 
-#### Commit #42
+#### Commit #43
 - **SHA:** `2e64378` (completo: `2e6437839c28779d923aad260f5eca3784d64dd6`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-20 00:29:44
@@ -13319,7 +13333,7 @@ Updates contributor information
 - **URL:** https://github.com/codernarvaez/taca-book/commit/2e6437839c28779d923aad260f5eca3784d64dd6
 
 
-#### Commit #43
+#### Commit #44
 - **SHA:** `a17a8fa` (completo: `a17a8fa9d89b22ab6fc6f8bcacd7437c389d876e`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-19 20:52:04
@@ -13336,7 +13350,7 @@ contributor.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/a17a8fa9d89b22ab6fc6f8bcacd7437c389d876e
 
 
-#### Commit #44
+#### Commit #45
 - **SHA:** `ef09b7a` (completo: `ef09b7ad38ace1e224b6fc51696e822533ccd81e`)
 - **Autor:** Requisitos Marylin  Alvarado <104533185+Marylin-Alvarado@users.noreply.github.com>
 - **Fecha:** 2025-11-19 12:58:32
@@ -13350,7 +13364,7 @@ Actualizar `taca-env/participantes.qmd`
 - **URL:** https://github.com/codernarvaez/taca-book/commit/ef09b7ad38ace1e224b6fc51696e822533ccd81e
 
 
-#### Commit #45
+#### Commit #46
 - **SHA:** `efff31f` (completo: `efff31f9b4ed3440689d410b140d701bca6a7f25`)
 - **Autor:** Requisitos Marylin  Alvarado <marylin.alvarado@unl.edu.ec>
 - **Fecha:** 2025-11-19 12:47:02
@@ -13362,7 +13376,7 @@ Actualizar `taca-env/participantes.qmd`
 - **URL:** https://github.com/codernarvaez/taca-book/commit/efff31f9b4ed3440689d410b140d701bca6a7f25
 
 
-#### Commit #46
+#### Commit #47
 - **SHA:** `b12fef0` (completo: `b12fef01c85a5110346ae0b06b95991574eda082`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-19 12:17:49
@@ -13374,7 +13388,7 @@ Actualizar `taca-env/participantes.qmd`
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b12fef01c85a5110346ae0b06b95991574eda082
 
 
-#### Commit #47
+#### Commit #48
 - **SHA:** `52d952f` (completo: `52d952f1ed3fbc3efddd6c90204a850a7a2393a7`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-18 13:04:49
@@ -13388,7 +13402,7 @@ Adds CI/CD workflow and initial book content
 - **URL:** https://github.com/codernarvaez/taca-book/commit/52d952f1ed3fbc3efddd6c90204a850a7a2393a7
 
 
-#### Commit #48
+#### Commit #49
 - **SHA:** `daf24b8` (completo: `daf24b8b04a8b5d5e600a2a5a9de1281a516117c`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-18 13:03:37
@@ -13400,7 +13414,7 @@ Adds CI/CD workflow and initial book content
 - **URL:** https://github.com/codernarvaez/taca-book/commit/daf24b8b04a8b5d5e600a2a5a9de1281a516117c
 
 
-#### Commit #49
+#### Commit #50
 - **SHA:** `9b24f36` (completo: `9b24f366eaf8ba349065dbb04bf8b817a50f58db`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-18 12:45:15
@@ -13412,7 +13426,7 @@ Adds CI/CD workflow and initial book content
 - **URL:** https://github.com/codernarvaez/taca-book/commit/9b24f366eaf8ba349065dbb04bf8b817a50f58db
 
 
-#### Commit #50
+#### Commit #51
 - **SHA:** `c766d63` (completo: `c766d63c33b55923965cf305fc758f390e308ba9`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-18 12:41:12
@@ -13424,7 +13438,7 @@ Adds CI/CD workflow and initial book content
 - **URL:** https://github.com/codernarvaez/taca-book/commit/c766d63c33b55923965cf305fc758f390e308ba9
 
 
-#### Commit #51
+#### Commit #52
 - **SHA:** `5910659` (completo: `5910659611c85f8b5a2c362a1ab096febf306bb3`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 23:31:39
@@ -13438,7 +13452,7 @@ Improves chapter 5 formatting
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5910659611c85f8b5a2c362a1ab096febf306bb3
 
 
-#### Commit #52
+#### Commit #53
 - **SHA:** `837a0f3` (completo: `837a0f33ef5587c85706e0f00b436da401cf8e48`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 23:30:33
@@ -13452,7 +13466,7 @@ Chapter 7: Software and Hardware Verification Applications
 - **URL:** https://github.com/codernarvaez/taca-book/commit/837a0f33ef5587c85706e0f00b436da401cf8e48
 
 
-#### Commit #53
+#### Commit #54
 - **SHA:** `9ec759a` (completo: `9ec759a4b1ccc55abd739787042e142cf65fd48b`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 23:30:17
@@ -13466,7 +13480,7 @@ primer avance del capitulo 1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/9ec759a4b1ccc55abd739787042e142cf65fd48b
 
 
-#### Commit #54
+#### Commit #55
 - **SHA:** `fd60d75` (completo: `fd60d755bb4faaefec70cce766a502cec1bed3ae`)
 - **Autor:** ThiagoAbrigo <santiabrigo497@gmail.com>
 - **Fecha:** 2025-11-16 22:15:30
@@ -13478,7 +13492,7 @@ primer avance del capitulo 1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/fd60d755bb4faaefec70cce766a502cec1bed3ae
 
 
-#### Commit #55
+#### Commit #56
 - **SHA:** `8aa1cde` (completo: `8aa1cdee34ce48fcbf5c21fa5e98ac9d37ed7f53`)
 - **Autor:** Andersson Ambuludi <andersson.ambuludi@unl.edu.ec>
 - **Fecha:** 2025-11-16 17:37:53
@@ -13490,7 +13504,7 @@ primer avance del capitulo 1
 - **URL:** https://github.com/codernarvaez/taca-book/commit/8aa1cdee34ce48fcbf5c21fa5e98ac9d37ed7f53
 
 
-#### Commit #56
+#### Commit #57
 - **SHA:** `8d89f93` (completo: `8d89f938ce4f83c517281e85db7ec93bd8faeb3a`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 17:19:16
@@ -13504,7 +13518,7 @@ Adds content for Automata Theory book
 - **URL:** https://github.com/codernarvaez/taca-book/commit/8d89f938ce4f83c517281e85db7ec93bd8faeb3a
 
 
-#### Commit #57
+#### Commit #58
 - **SHA:** `4ce22d2` (completo: `4ce22d24298c23658e6e7df7cff9f328b9eeb800`)
 - **Autor:** Andersson Ambuludi <andersson.ambuludi@unl.edu.ec>
 - **Fecha:** 2025-11-16 17:17:27
@@ -13516,7 +13530,7 @@ Adds content for Automata Theory book
 - **URL:** https://github.com/codernarvaez/taca-book/commit/4ce22d24298c23658e6e7df7cff9f328b9eeb800
 
 
-#### Commit #58
+#### Commit #59
 - **SHA:** `6f3e54b` (completo: `6f3e54b1d3497131082fd387b803483ee69b22a8`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 16:21:33
@@ -13530,7 +13544,7 @@ Agregar seccion de definicion formal y poder computacional de NFA y DFA cap2
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6f3e54b1d3497131082fd387b803483ee69b22a8
 
 
-#### Commit #59
+#### Commit #60
 - **SHA:** `e9f8ac9` (completo: `e9f8ac936603cf482fe9e11251bdb43a5e469810`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-16 16:20:41
@@ -13544,7 +13558,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e9f8ac936603cf482fe9e11251bdb43a5e469810
 
 
-#### Commit #60
+#### Commit #61
 - **SHA:** `03615d3` (completo: `03615d32dda7cec329311f2377205d52633cce78`)
 - **Autor:** Andersson Ambuludi <andersson.ambuludi@unl.edu.ec>
 - **Fecha:** 2025-11-16 13:54:19
@@ -13556,7 +13570,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/03615d32dda7cec329311f2377205d52633cce78
 
 
-#### Commit #61
+#### Commit #62
 - **SHA:** `64bc9b8` (completo: `64bc9b8fe52ba88a953b4566de310cf0b1a56a04`)
 - **Autor:** Estefania <estefania.torres@unl.edu.ec>
 - **Fecha:** 2025-11-16 06:16:05
@@ -13568,7 +13582,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/64bc9b8fe52ba88a953b4566de310cf0b1a56a04
 
 
-#### Commit #62
+#### Commit #63
 - **SHA:** `e4d5e8e` (completo: `e4d5e8ef38763e5e311b68bc8aa453b48fa7e0e9`)
 - **Autor:** Estefania <estefania.torres@unl.edu.ec>
 - **Fecha:** 2025-11-16 05:28:56
@@ -13580,7 +13594,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e4d5e8ef38763e5e311b68bc8aa453b48fa7e0e9
 
 
-#### Commit #63
+#### Commit #64
 - **SHA:** `d7513d7` (completo: `d7513d7ba5341c80092c277fb3a5178a0e8f4e12`)
 - **Autor:** Criss <davidajila07@gmail.com>
 - **Fecha:** 2025-11-15 21:57:43
@@ -13592,7 +13606,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/d7513d7ba5341c80092c277fb3a5178a0e8f4e12
 
 
-#### Commit #64
+#### Commit #65
 - **SHA:** `7cac1b2` (completo: `7cac1b231dd63d8d20290059c3c96b71d6441d54`)
 - **Autor:** Criss <davidajila07@gmail.com>
 - **Fecha:** 2025-11-15 21:54:47
@@ -13604,7 +13618,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/7cac1b231dd63d8d20290059c3c96b71d6441d54
 
 
-#### Commit #65
+#### Commit #66
 - **SHA:** `5e7d487` (completo: `5e7d48734be7aee8c5715d06dc78b2cba44c75de`)
 - **Autor:** joseph <joseph.balcazar@unl.edu.ec>
 - **Fecha:** 2025-11-15 21:38:05
@@ -13616,7 +13630,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5e7d48734be7aee8c5715d06dc78b2cba44c75de
 
 
-#### Commit #66
+#### Commit #67
 - **SHA:** `cfc4e5d` (completo: `cfc4e5df0a4264a86a1765ce39d11cab9d20ecfe`)
 - **Autor:** Criss <davidajila07@gmail.com>
 - **Fecha:** 2025-11-15 21:36:59
@@ -13628,7 +13642,7 @@ Dev/cristian ajila
 - **URL:** https://github.com/codernarvaez/taca-book/commit/cfc4e5df0a4264a86a1765ce39d11cab9d20ecfe
 
 
-#### Commit #67
+#### Commit #68
 - **SHA:** `3a6f401` (completo: `3a6f401fbc6f43024a2f04194b93214ddf3d3cca`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-15 21:05:51
@@ -13642,7 +13656,7 @@ Dev/esteban leon
 - **URL:** https://github.com/codernarvaez/taca-book/commit/3a6f401fbc6f43024a2f04194b93214ddf3d3cca
 
 
-#### Commit #68
+#### Commit #69
 - **SHA:** `94a0685` (completo: `94a068527134307a631361dee046138208d368df`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 21:02:42
@@ -13656,7 +13670,7 @@ Updated the YAML front matter in chapters 01 to 03, 05 to 07 to support both HTM
 - **URL:** https://github.com/codernarvaez/taca-book/commit/94a068527134307a631361dee046138208d368df
 
 
-#### Commit #69
+#### Commit #70
 - **SHA:** `6e5ef41` (completo: `6e5ef41b2165207de1279122fef7e2b049d228a8`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 20:59:58
@@ -13668,7 +13682,7 @@ Updated the YAML front matter in chapters 01 to 03, 05 to 07 to support both HTM
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6e5ef41b2165207de1279122fef7e2b049d228a8
 
 
-#### Commit #70
+#### Commit #71
 - **SHA:** `e9156a2` (completo: `e9156a2ed03da32fdfb615f10ae0f0a5884b41d2`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 20:58:29
@@ -13682,7 +13696,7 @@ Separated the title and author fields onto individual lines in the YAML front ma
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e9156a2ed03da32fdfb615f10ae0f0a5884b41d2
 
 
-#### Commit #71
+#### Commit #72
 - **SHA:** `91f09e9` (completo: `91f09e9048428e66f659d97d76261374d4b5b380`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 20:58:29
@@ -13696,7 +13710,7 @@ Separated the title and author fields onto individual lines in the YAML front ma
 - **URL:** https://github.com/codernarvaez/taca-book/commit/91f09e9048428e66f659d97d76261374d4b5b380
 
 
-#### Commit #72
+#### Commit #73
 - **SHA:** `af02c96` (completo: `af02c96476a34da7b4b37eca9d69467f07f2efcd`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-15 20:52:14
@@ -13710,7 +13724,7 @@ Cap4. Equivalencia entre expresiones regulares y AF y actualización de refe…
 - **URL:** https://github.com/codernarvaez/taca-book/commit/af02c96476a34da7b4b37eca9d69467f07f2efcd
 
 
-#### Commit #73
+#### Commit #74
 - **SHA:** `fe897dd` (completo: `fe897dd93f9742bf5e885e2e48d2b258e9882295`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-15 20:52:00
@@ -13724,7 +13738,7 @@ comprehensive practical comparison between DFA and NFA
 - **URL:** https://github.com/codernarvaez/taca-book/commit/fe897dd93f9742bf5e885e2e48d2b258e9882295
 
 
-#### Commit #74
+#### Commit #75
 - **SHA:** `dd863be` (completo: `dd863be5082f2d045673a847933e20328d538431`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 20:50:33
@@ -13738,7 +13752,7 @@ Added 'format: html' metadata to chapters 2, 3, and 5 for consistency. Expanded 
 - **URL:** https://github.com/codernarvaez/taca-book/commit/dd863be5082f2d045673a847933e20328d538431
 
 
-#### Commit #75
+#### Commit #76
 - **SHA:** `de217b0` (completo: `de217b0b7319b2364e5da33e8bb57634e90d7d4f`)
 - **Autor:** Esteban Leon Aguilar <esteban.h.leon.aguilar@gmail.com>
 - **Fecha:** 2025-11-15 20:41:54
@@ -13750,7 +13764,7 @@ Added 'format: html' metadata to chapters 2, 3, and 5 for consistency. Expanded 
 - **URL:** https://github.com/codernarvaez/taca-book/commit/de217b0b7319b2364e5da33e8bb57634e90d7d4f
 
 
-#### Commit #76
+#### Commit #77
 - **SHA:** `8bfadb0` (completo: `8bfadb0487c41df50b4f4ba25fc7bac81805e782`)
 - **Autor:** Esteban Leon Aguilar <104112679+esteban-ll-aguilar@users.noreply.github.com>
 - **Fecha:** 2025-11-15 01:05:00
@@ -13764,7 +13778,7 @@ Adds initial Quarto book structure and CI workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/8bfadb0487c41df50b4f4ba25fc7bac81805e782
 
 
-#### Commit #77
+#### Commit #78
 - **SHA:** `b32b509` (completo: `b32b509869b31d8e39c46bd45579306c68c03bbf`)
 - **Autor:** Elia700 <elias.poma@unl.edu.ec>
 - **Fecha:** 2025-11-14 22:27:16
@@ -13776,7 +13790,7 @@ Adds initial Quarto book structure and CI workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b32b509869b31d8e39c46bd45579306c68c03bbf
 
 
-#### Commit #78
+#### Commit #79
 - **SHA:** `5dbe656` (completo: `5dbe656d7524657ca1f3d47114910b424a16cccf`)
 - **Autor:** JhostinJATM <jhos_tap@hotmail.com>
 - **Fecha:** 2025-11-14 20:14:21
@@ -13788,7 +13802,7 @@ Adds initial Quarto book structure and CI workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5dbe656d7524657ca1f3d47114910b424a16cccf
 
 
-#### Commit #79
+#### Commit #80
 - **SHA:** `ccd5094` (completo: `ccd5094a7e088349a9517f34da9806d7acd44634`)
 - **Autor:** JhostinJATM <jhos_tap@hotmail.com>
 - **Fecha:** 2025-11-14 20:13:08
@@ -13800,7 +13814,7 @@ Adds initial Quarto book structure and CI workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/ccd5094a7e088349a9517f34da9806d7acd44634
 
 
-#### Commit #80
+#### Commit #81
 - **SHA:** `6a278f9` (completo: `6a278f93bc12c391f446b425e4f0d8a44d062e9e`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-14 18:29:45
@@ -13812,7 +13826,7 @@ Adds initial Quarto book structure and CI workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6a278f93bc12c391f446b425e4f0d8a44d062e9e
 
 
-#### Commit #81
+#### Commit #82
 - **SHA:** `76a7b33` (completo: `76a7b33c1a6ea35eddebb14c672d898ac6d88595`)
 - **Autor:** Christian Leonardo Robles Maza <christian.l.robles@unl.edu.ec>
 - **Fecha:** 2025-11-14 18:28:53
@@ -13826,7 +13840,7 @@ Capitulo 6 terminado  y actualización en autores
 - **URL:** https://github.com/codernarvaez/taca-book/commit/76a7b33c1a6ea35eddebb14c672d898ac6d88595
 
 
-#### Commit #82
+#### Commit #83
 - **SHA:** `0360301` (completo: `03603015e1b50a522e4a956082dc2f2a749ac139`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:28:11
@@ -13838,7 +13852,7 @@ Capitulo 6 terminado  y actualización en autores
 - **URL:** https://github.com/codernarvaez/taca-book/commit/03603015e1b50a522e4a956082dc2f2a749ac139
 
 
-#### Commit #83
+#### Commit #84
 - **SHA:** `b577214` (completo: `b5772147083034eafde0bacb538c4fa7f515c3d1`)
 - **Autor:** Axlmd <jostin.jimenez@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:26:45
@@ -13859,7 +13873,7 @@ a comprehensive understanding.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b5772147083034eafde0bacb538c4fa7f515c3d1
 
 
-#### Commit #84
+#### Commit #85
 - **SHA:** `d9da631` (completo: `d9da631d17bcb936a1809c73594433f22b451d58`)
 - **Autor:** Axlmd <jostin.jimenez@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:25:44
@@ -13871,7 +13885,7 @@ a comprehensive understanding.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/d9da631d17bcb936a1809c73594433f22b451d58
 
 
-#### Commit #85
+#### Commit #86
 - **SHA:** `70cab47` (completo: `70cab477a4775b6f79f2f415c788c5c80505eeaf`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:22:54
@@ -13883,7 +13897,7 @@ a comprehensive understanding.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/70cab477a4775b6f79f2f415c788c5c80505eeaf
 
 
-#### Commit #86
+#### Commit #87
 - **SHA:** `6e58b9e` (completo: `6e58b9e654736299760c00132cdcacdd10403f7a`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:17:44
@@ -13895,7 +13909,7 @@ a comprehensive understanding.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/6e58b9e654736299760c00132cdcacdd10403f7a
 
 
-#### Commit #87
+#### Commit #88
 - **SHA:** `239f345` (completo: `239f3458e4612b04790fa31674d06f20dea74abe`)
 - **Autor:** Requisitos Marylin  Alvarado <104533185+Marylin-Alvarado@users.noreply.github.com>
 - **Fecha:** 2025-11-14 17:16:40
@@ -13909,7 +13923,7 @@ Dev/marylin alvarado
 - **URL:** https://github.com/codernarvaez/taca-book/commit/239f3458e4612b04790fa31674d06f20dea74abe
 
 
-#### Commit #88
+#### Commit #89
 - **SHA:** `e879268` (completo: `e87926866ae22533ae067573585fd3acf2580706`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:16:11
@@ -13921,7 +13935,7 @@ Dev/marylin alvarado
 - **URL:** https://github.com/codernarvaez/taca-book/commit/e87926866ae22533ae067573585fd3acf2580706
 
 
-#### Commit #89
+#### Commit #90
 - **SHA:** `a9feaf7` (completo: `a9feaf7bc65f4a8d47e9686167d679e6d8f85be6`)
 - **Autor:** Requisitos Marylin  Alvarado <104533185+Marylin-Alvarado@users.noreply.github.com>
 - **Fecha:** 2025-11-14 17:16:07
@@ -13933,7 +13947,7 @@ Dev/marylin alvarado
 - **URL:** https://github.com/codernarvaez/taca-book/commit/a9feaf7bc65f4a8d47e9686167d679e6d8f85be6
 
 
-#### Commit #90
+#### Commit #91
 - **SHA:** `1d27d3c` (completo: `1d27d3c5533f46f8d9b85681d1c12527c92e0901`)
 - **Autor:** Darwin Andrés Sarango Soto <darwin.a.sarango@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:15:31
@@ -13945,7 +13959,7 @@ Dev/marylin alvarado
 - **URL:** https://github.com/codernarvaez/taca-book/commit/1d27d3c5533f46f8d9b85681d1c12527c92e0901
 
 
-#### Commit #91
+#### Commit #92
 - **SHA:** `7369994` (completo: `7369994a4f45af108c7cfb10f75beeb94614a620`)
 - **Autor:** Requisitos Marylin  Alvarado <104533185+Marylin-Alvarado@users.noreply.github.com>
 - **Fecha:** 2025-11-14 17:14:29
@@ -13959,7 +13973,7 @@ Updated the title and content of the chapter to focus on minimization algorithms
 - **URL:** https://github.com/codernarvaez/taca-book/commit/7369994a4f45af108c7cfb10f75beeb94614a620
 
 
-#### Commit #92
+#### Commit #93
 - **SHA:** `b3acc22` (completo: `b3acc220ffdc9bc7d39f36e437c467ad71f97481`)
 - **Autor:** Axlmd <jostin.jimenez@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:12:07
@@ -13973,7 +13987,7 @@ Implementacion de un nuevo capítulo que detalla el proceso de eliminación de t
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b3acc220ffdc9bc7d39f36e437c467ad71f97481
 
 
-#### Commit #93
+#### Commit #94
 - **SHA:** `b259b7f` (completo: `b259b7f5de1e2996648391acbf420a06acd4d0f3`)
 - **Autor:** Cristian Ramiro Narváez. <cristian.narvaez@unl.edu.ec>
 - **Fecha:** 2025-11-14 17:00:53
@@ -13987,7 +14001,7 @@ Update artifact upload path for GitHub Pages deployment.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/b259b7f5de1e2996648391acbf420a06acd4d0f3
 
 
-#### Commit #94
+#### Commit #95
 - **SHA:** `88a6661` (completo: `88a66618c802eadd2fbf0b342da7b86a273bb3a6`)
 - **Autor:** Darwin Granda <darwin.granda@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:55:39
@@ -13999,7 +14013,7 @@ Update artifact upload path for GitHub Pages deployment.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/88a66618c802eadd2fbf0b342da7b86a273bb3a6
 
 
-#### Commit #95
+#### Commit #96
 - **SHA:** `f39a639` (completo: `f39a6399128c8319e60b7416378630200ef6aa73`)
 - **Autor:** Cristian Ramiro Narváez. <cristian.narvaez@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:46:47
@@ -14013,7 +14027,7 @@ Comment out PDF rendering step in workflow
 - **URL:** https://github.com/codernarvaez/taca-book/commit/f39a6399128c8319e60b7416378630200ef6aa73
 
 
-#### Commit #96
+#### Commit #97
 - **SHA:** `122bcf4` (completo: `122bcf49ef668dc0b9dba6cc32a4eacc4b7470f1`)
 - **Autor:** Cristian Ramiro Narváez. <cristian.narvaez@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:39:18
@@ -14027,7 +14041,7 @@ Added deployment job for GitHub Pages and updated CI workflow.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/122bcf49ef668dc0b9dba6cc32a4eacc4b7470f1
 
 
-#### Commit #97
+#### Commit #98
 - **SHA:** `c9a6cb7` (completo: `c9a6cb7786c4c0587a28ed2ae57af1da2f159bda`)
 - **Autor:** Andersson Ambuludi <andersson.ambuludi@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:32:49
@@ -14039,7 +14053,7 @@ Added deployment job for GitHub Pages and updated CI workflow.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/c9a6cb7786c4c0587a28ed2ae57af1da2f159bda
 
 
-#### Commit #98
+#### Commit #99
 - **SHA:** `5231793` (completo: `5231793fbf55646311845db3f6fc8172cf78bf1d`)
 - **Autor:** Cristian Ramiro Narváez. <cristian.narvaez@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:31:12
@@ -14051,7 +14065,7 @@ Added deployment job for GitHub Pages and updated CI workflow.
 - **URL:** https://github.com/codernarvaez/taca-book/commit/5231793fbf55646311845db3f6fc8172cf78bf1d
 
 
-#### Commit #99
+#### Commit #100
 - **SHA:** `53c96ba` (completo: `53c96ba2ba87e7331eea395ee24504670c2b7a8e`)
 - **Autor:** Darwin Granda <darwin.granda@unl.edu.ec>
 - **Fecha:** 2025-11-14 16:30:10
@@ -14061,18 +14075,6 @@ Added deployment job for GitHub Pages and updated CI workflow.
   WIP on dev/darwin_granda
   ```
 - **URL:** https://github.com/codernarvaez/taca-book/commit/53c96ba2ba87e7331eea395ee24504670c2b7a8e
-
-
-#### Commit #100
-- **SHA:** `001f1a2` (completo: `001f1a2ebd23244940f41235fefe62027afc49a1`)
-- **Autor:** Gabriel <gabriel.espinoza@unl.edu.ec>
-- **Fecha:** 2025-11-14 16:25:42
-- **Committer:** Gabriel
-- **Mensaje:**
-  ```
-  Añadir sección sobre el contexto y operaciones de clausura de lenguajes regulares en el capítulo 5
-  ```
-- **URL:** https://github.com/codernarvaez/taca-book/commit/001f1a2ebd23244940f41235fefe62027afc49a1
 
 
 ---
@@ -14583,13 +14585,13 @@ The changes include:
 - **Total de commits:** 1052
 - **Total de Pull Requests:** 28
 - **Total de Issues:** 0
-- **Autores únicos:** 23
+- **Autores únicos:** 17
 
 **Lista de autores:**
   - Andersson Ambuludi
   - Bradley-Alexander
   - Christian Leonardo Robles Maza
-  - Cristian Aguila
+  - Cristian Agila
   - Cristian Narvaez
   - Darwin Andrés Sarango Soto
   - Darwin Granda
@@ -14601,12 +14603,9 @@ The changes include:
   - Joseph Sebastian
   - Marylin  Alvarado
   - Thiago Abrigo
-  - jhostin jimenez
-  - joseph
-  - mateochamba
-
-
+  - Jhostin Jimenez
+  - Mateo Chamba
 ---
 
 
-*Informe generado automáticamente el 2025-11-24 16:16:50*
+*Informe generado automáticamente el 2025-11-24 16:21:52*

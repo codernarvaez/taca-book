@@ -577,7 +577,7 @@ En el ejemplo del texto, los estados 3 y 5 reconocen el mismo lenguaje: `(a+b)*a
 
 Si dos estados `q1` y `q2` están en el mismo bloque de CSR, entonces para cada símbolo `a` y cada sucesor `q'1` de `q1` por `a`, existe un sucesor `q'2` de `q2` por `a` tal que ambos sucesores reconocen el mismo lenguaje.
 
----
+------------------------------------------------------------------------
 ### 2.3.2 Minimalidad de NFA es PSPACE-Completa
 Consiste en determinar si un autómata finito no determinista (NFA) puede ser reducido al menor número posible de estados sin cambiar el lenguaje que reconoce.
 Formalmente, dado un NFA  y un número , el problema consiste en decidir si existe otro NFA equivalente a  que tenga a lo sumo  estados.
@@ -610,7 +610,7 @@ Clasificación de complejidad | P (eficiente) | PSPACE-completo (máxima dificul
 Motivo de la dificultad | Estructura rígida y única | Muchas estructuras posibles para el mismo lenguaje
 Resultado práctico | Siempre se puede obtener el DFA mínimo | No es viable obtener siempre el NFA mínimo
 Implicación real | Los DFAs minimizados se usan comúnmente | Se prefiere convertir el NFA a DFA (aunque crezca exponencialmente)
----
+------------------------------------------------------------------------
 
 ## 2.4 Caracterización de Lenguajes Regulares
 
