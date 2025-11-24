@@ -64,3 +64,67 @@ Reglas clave:
 
 * Al leer un **1**, el DFA **cambia de estado** (alterna entre par e impar).  
 * Al leer un **0**, el DFA **permanece en el mismo estado**, ya que no afecta la paridad.
+## 1.3.1 Autómatas Finitos Deterministas (DFAs)
+
+### 1. Concepto Intuitivo y Operación
+
+Un autómata finito determinista (DFA) puede imaginarse como una máquina muy simple que procesa una palabra **símbolo por símbolo**, siguiendo reglas estrictas.
+
+- **Inicio:** El autómata comienza en un estado inicial y el cabezal de lectura se coloca en la primera letra de la palabra.
+- **Paso a paso:** Cada vez que lee una letra, usa su *función de transición* para decidir a qué estado debe pasar.  
+  Esta decisión depende **solo** del estado en el que se encuentra y de la letra leída.
+- **Aceptación:** Una palabra es aceptada si, al terminar de leerla, el autómata termina en un estado que pertenece al conjunto de *estados finales*.
+
+En pocas palabras:  
+**Un DFA recorre la palabra letra por letra y cambia de estado según reglas fijas. Si termina en un estado final, acepta; si no, la rechaza.**
+
+---
+
+### 2. Componentes y Transiciones
+
+La sección describe las ideas clave del funcionamiento determinista:
+
+- **Determinismo:**  
+  Para cada combinación `(estado, símbolo)`, existe **una única** transición posible.  
+  No hay ambigüedad ni elección entre varias rutas.
+
+- **Carreras (runs):**  
+  Es la secuencia de estados por los que pasa el autómata al leer la palabra completa.  
+  Ejemplo:  
+  \[
+  q_0 \xrightarrow{a} q_1 \xrightarrow{b} q_3 \xrightarrow{b} q_2
+  \]
+
+- **Aceptación/Rechazo:**  
+  Una palabra es **aceptada** si la carrera termina en un estado final.  
+  Caso contrario, es rechazada.
+
+---
+
+### 3. Ejemplo de la Sección 1.3.1
+
+La sección incluye un DFA concreto:
+
+- **Ejemplo 1.8:**  
+  Se muestra el autómata:  
+  \[
+  A = (Q, \Sigma, \delta, q_0, F)
+  \]
+  donde:
+  - \( Q = \{ q_0, q_1, q_2, q_3 \} \)
+  - \( \Sigma = \{ a, b \} \)
+  - \( F = \{ q_0 \} \) (el único estado de aceptación)
+
+- **Carrera de ejemplo sobre la palabra `aabb`:**
+
+  \[
+  q_0 \xrightarrow{a} q_1 \xrightarrow{a} q_0 \xrightarrow{b} q_3 \xrightarrow{b} q_0
+  \]
+
+  Aquí, la palabra **sí se acepta**, porque termina en \( q_0 \), que es estado final.
+
+- **Estado trampa:**  
+  También se menciona un DFA con un estado trampa, que es un estado del que no se puede salir.  
+  Una vez que entras allí, la palabra queda automáticamente rechazada.  
+  Aunque existe, a veces no se dibuja en los diagramas por simplicidad.
+
