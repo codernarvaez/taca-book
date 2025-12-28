@@ -1,55 +1,96 @@
-name: CI - Quarto Book
+name: CI + Deploy Quarto Book
 
 on:
   push:
     branches: ["main", "master"]
-  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "quarto-pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-check:
+  # =========================
+  # 1) Job de CI (validación)
+  # =========================
+  ci:
     runs-on: ubuntu-latest
 
-    # Todo lo que se ejecute en run: se hará dentro de taca-env
     defaults:
       run:
         working-directory: taca-env
 
     steps:
-      # 1. Descargar el repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Instalar R (necesario para Rscript, knitr, tinytex, etc.)
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: 'release'   # o un número concreto si quieres fijar versión
-      
-      # 3. Instalar paquetes de R necesarios para Quarto
+          r-version: 'release'
+
       - name: Install R packages for Quarto
-      # este paso se ejecuta dentro de taca-env, pero no pasa nada
         run: |
           Rscript -e 'install.packages(c("knitr", "rmarkdown"), repos = "https://cloud.r-project.org")'
-      
-      # 4. Instalar Quarto
+
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tinytex: true   # true si quieres PDF; pon false si solo HTML
 
-      # 5. Verificar el proyecto Quarto
       - name: Quarto check
         run: |
           quarto check
 
-      # 6. Renderizar HTML (libro / web)
       - name: Render HTML
         run: |
-          quarto render --to html
+          quarto render --to html   # genera taca-env/_site/
 
-      # 7. Renderizar PDF (libro)
-      - name: Render PDF
+      #- name: Render PDF
+      #  run: |
+      #    quarto render --to pdf
+
+  # ====================================
+  # 2) Job de Deploy a GitHub Pages
+  #    (solo en push a main/master)
+  # ====================================
+  deploy:
+    needs: ci
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+
+      - name: Install R packages for Quarto
         run: |
-          quarto render --to pdf
+          Rscript -e 'install.packages(c("knitr", "rmarkdown"), repos = "https://cloud.r-project.org")'
+
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render Quarto project (HTML only)
+        run: |
+          cd taca-env
+          quarto render --to html   # vuelve a generar _site en el runner limpio
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: taca-env/_book
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
