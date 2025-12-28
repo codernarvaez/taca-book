@@ -1,4 +1,5 @@
 ---
+title: "Capitulo 3"
 
 title: "Fundamentos de Teoría de Autómatas y Lenguajes Formales"
 
@@ -399,4 +400,5 @@ def simulador_termina_en_uno(cadena):
 print(f"10101: {simulador_termina_en_uno('10101')}") # True
 
 print(f"10100: {simulador_termina_en_uno('10100')}") # False
+
 

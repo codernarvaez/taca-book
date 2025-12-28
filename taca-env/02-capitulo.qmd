@@ -1,5 +1,644 @@
 ---
-title: "02-capitulo"
-format: html
+title: "Capitulo 2"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
+## 2.1 DFAs minimales (introducción)
+
+### Motivación
+
+-   Un **DFA** (autómata finito determinista) puede reconocer un lenguaje usando más estados de los necesarios.
+-   Un **DFA minimal** es aquel que:
+    -   reconoce el mismo lenguaje que cualquier otro DFA equivalente, y\
+    -   tiene el **menor número posible de estados**.
+-   Todo lenguaje regular tiene un DFA minimal, y este es **único salvo renombrar estados**\
+    (es decir, todos los DFAs minimales para un mismo lenguaje son isomorfos).
+
+------------------------------------------------------------------------
+
+### Lenguajes residuales
+
+Sea (L \subseteq \Sigma\^{*}) un lenguaje y (w* \in \Sigma\^{}) una palabra.
+
+-   El **residual de (L) respecto a (w)** (también llamado *cociente izquierdo*) es: \[ L_w = {, u \in \Sigma\^{\*} \mid wu \in L ,}. \]
+
+**Intuición:**\
+(L_w) contiene todos los sufijos que, pegados detrás de (w), dan una palabra de (L).
+
+**Propiedad clave:**
+
+-   Para todo (u), se cumple: \[ wu \in L \quad \text{ssi} \quad u \in L_w. \]
+-   El residual (L_w) es el **único** lenguaje que cumple esa propiedad para la palabra (w).
+
+------------------------------------------------------------------------
+
+#### Ejemplo 1: lenguaje finito
+
+Sea (\Sigma = {a,b}) y (L = {a,ab,ba,aab}).
+
+Algunos residuales:
+
+-   (L\_{\varepsilon} = L = {a,ab,ba,aab}).
+-   (L\_{a} = {\varepsilon, b, ab})\
+    (son los sufijos que, pegados tras una (a), dan palabras de (L)).
+-   (L\_{b} = {a}).
+-   (L\_{aa} = {b}).
+-   (L\_{ab} = {\varepsilon}).
+-   (L\_{ba} = {\varepsilon}).
+-   (L\_{bb} = \varnothing).
+
+A partir de cierta longitud, casi todos los residuales son (\varnothing), salvo el correspondiente a (aab), cuyo residual es ({\varepsilon}).
+
+En total, este lenguaje tiene **seis residuales distintos**: \[ L, {\varepsilon, b, ab}, {a}, {b}, {\varepsilon}, \varnothing. \]
+
+------------------------------------------------------------------------
+
+#### Ejemplo 2: lenguaje con una sola clase residual
+
+Para el lenguaje (L = (a+b)\^{\*}) (todas las palabras sobre ({a,b})):
+
+-   Para cualquier (w), el residual (L_w) vuelve a ser todo ((a+b)\^{\*}).
+-   Solo hay **un residual** distinto.
+
+------------------------------------------------------------------------
+
+#### Ejemplo 3: paridad de letras
+
+Sea (L) el conjunto de palabras con **número par de (a)** y **número par de (b)**.
+
+-   Hay cuatro residuales, según la paridad de cada letra:
+    -   (EE): par en (a) y par en (b).
+    -   (EO): par en (a) e impar en (b).
+    -   (OE): impar en (a) y par en (b).
+    -   (OO): impar en (a) e impar en (b).
+
+Cada residual corresponde a una combinación de paridades; al leer una (a) o una (b), se cambia de residual según se altere la paridad de esa letra.\
+Esos cuatro residuales forman el DFA minimal de este lenguaje.
+
+------------------------------------------------------------------------
+
+#### Ejemplo 4: lenguajes con infinitos residuales
+
+Hay lenguajes (no regulares) cuyo número de residuales es **infinito**, por ejemplo:
+
+-   (L_1 = { a\^{n} b\^{n} : n \ge 0 }).
+-   (L_2 = { ww : w \in {0,1}\^{\*} }).
+
+En ambos casos se puede construir una familia infinita de palabras (w_0, w_1, \dots) tal que sus residuales (L\_{w_i}) son todos distintos.
+
+Esta es una de las ideas detrás del **teorema de Myhill–Nerode**:\
+los lenguajes con infinitos residuales no son regulares.
+
+------------------------------------------------------------------------
+
+### Estados de un DFA y residuales
+
+Sea (A = (Q, \Sigma, \delta, q_0, F)) un autómata **determinista** (no necesariamente finito en esta sección).
+
+-   Para cada estado (q \in Q), definimos el **lenguaje reconocido desde (q)**: \[ L(q) = {, w \in \Sigma\^{\*} \mid A \text{ acepta } w \text{ empezando en } q ,}. \]
+-   Si hay una transición (q \xrightarrow{a} q'), entonces: \[ L(q') = { u \mid au \in L(q) } = L(q)\_a. \]
+
+Suponiendo que (A) reconoce el lenguaje (L = L(q_0)), se cumple:
+
+::: callout-note
+#### Lema importante
+
+-   
+
+    (a) Para toda palabra (w), si (q_w) es el estado alcanzado desde (q_0) al leer (w), entonces\
+        \[ L(q_w) = L_w. \] Es decir, **todo residual** (L_w) de (L) es reconocido desde algún estado del DFA.
+
+-   
+
+    (b) Para cada estado (q) alcanzable desde (q_0), hay al menos una palabra (w) tal que (L(q) = L_w).
+:::
+
+**Conclusión:**\
+Los estados alcanzables de cualquier DFA que reconoce (L) corresponden a residuales del lenguaje.\
+Distintos estados pueden corresponder al mismo residual si el DFA no es minimal.
+
+------------------------------------------------------------------------
+
+### Autómata determinista canónico
+
+A partir de los residuales se construye el **autómata canónico** de (L).
+
+#### Definición (autómata canónico (C_L))
+
+Para un lenguaje (L \subseteq \Sigma\^{\*}), definimos:
+
+-   Conjunto de estados: \[ Q_L = { L_w : w \in \Sigma\^{\*} } \] (el conjunto de **todos los residuales** de (L)).
+-   Alfabeto: (\Sigma).
+-   Transición: \[ \delta\*L(L_w, a) = L\*{wa}. \]
+-   Estado inicial: (q_0\^L = L) (el residual de la palabra vacía (\varepsilon)).
+-   Estados de aceptación: \[ F_L = { L_w \in Q_L : \varepsilon \in L_w }. \]
+
+En este autómata, **cada estado “reconoce su propio lenguaje”**:\
+el lenguaje aceptado al empezar en el estado (L_w) es precisamente (L_w).
+
+------------------------------------------------------------------------
+
+#### Propiedades del autómata canónico
+
+1.  (C_L) reconoce exactamente el lenguaje (L).
+
+2.  Si (L) es regular, entonces:
+
+    -   El número de estados de (C_L) es igual al número de residuales distintos de (L).
+    -   Cualquier DFA que reconozca (L) tiene **al menos** tantos estados como (C_L).
+    -   Por tanto, (C_L) es un **DFA minimal**.
+
+3.  **Unicidad:**\
+    Si (A) es otro DFA minimal que reconoce (L), sus estados se pueden emparejar uno a uno con los de (C_L) preservando:
+
+    -   las transiciones,
+    -   el estado inicial,
+    -   y los estados de aceptación.
+
+    Es decir, (A) y (C_L) son **isomorfos**.
+
+------------------------------------------------------------------------
+
+#### Criterio práctico de minimalidad
+
+::: callout-tip
+**Corolario:**\
+Un DFA (considerando solo sus estados alcanzables) es minimal **ssi** todos sus estados reconocen lenguajes distintos.\
+Es decir, si (q \neq q'), entonces (L(q) \neq L(q')).
+:::
+
+Este criterio se usa después para justificar algoritmos de minimización.
+
+------------------------------------------------------------------------
+
+### 2.1.1 El Master Automaton
+
+#### Idea general
+
+-   El **master automaton** (autómata maestro) se define para un alfabeto fijo (\Sigma).
+-   Es un DFA:
+    -   con **infinitos estados**,
+    -   sin estado inicial preseleccionado,
+    -   donde **cada estado es un lenguaje regular** sobre (\Sigma).
+
+De forma intuitiva: contiene, como sub-autómatas, **todos** los DFAs minimales de todos los lenguajes regulares sobre (\Sigma).
+
+------------------------------------------------------------------------
+
+#### Definición formal
+
+Para un alfabeto (\Sigma), el **master automaton** es \[ M = (Q_M, \Sigma, \delta\_M, F_M), \] donde:
+
+-   (Q_M) es el conjunto de **todos los lenguajes regulares** sobre (\Sigma).
+-   La función de transición está dada por los residuales: \[ \delta\_M(L, a) = L_a \quad\text{para todo } L \in Q_M,; a \in \Sigma. \]
+-   El conjunto de estados de aceptación es: \[ F_M = {, L \in Q_M \mid \varepsilon \in L ,}. \]
+-   No se especifica un estado inicial único; en principio podemos “empezar” en cualquier lenguaje regular (L).
+
+------------------------------------------------------------------------
+
+### Sub-autómatas canónicos dentro del master automaton
+
+Sea (L) un lenguaje regular sobre (\Sigma).
+
+Consideremos el subgrafo de (M) formado por:
+
+-   el estado (L),
+-   todos los estados alcanzables desde (L) leyendo palabras de (\Sigma\^{\*}),
+-   y las transiciones entre esos estados.
+
+Por la definición de (\delta\_M) y las propiedades de los residuales:
+
+-   Ese subgrafo es **exactamente el DFA canónico (C_L)** del lenguaje (L).
+-   Así, el master automaton **“contiene” todos los DFAs minimales** como sub-autómatas alcanzables.
+
+------------------------------------------------------------------------
+
+### Ejemplo sobre (\Sigma = {a, b})
+
+Para el alfabeto ({a,b}), el master automaton incluye estados como:
+
+-   (\varnothing),
+-   (\Sigma\^{\*}),
+-   (\Sigma \Sigma\^{\*}) (todas las palabras de longitud al menos 1),
+-   (\varepsilon + \Sigma^{2}^\Sigma{\*}) (o bien la palabra vacía, o bien palabras de longitud al menos 2),
+-   muchos otros lenguajes definidos por expresiones regulares.
+
+Las aristas etiquetadas con (a) o (b) conectan estos estados según el residual correspondiente.\
+Cada DFA minimal que conozcas sobre ({a,b}) aparece dentro de este master automaton como el subgrafo alcanzable desde el estado que representa su lenguaje.
+
+## 2.2 Minimización DFAs
+
+Cuando diseñamos un **Autómata Finito Determinista (DFA)**, a menudo terminamos con una máquina que tiene más "piezas" (estados) de las necesarias. Funciona bien, pero es redundante.
+
+El proceso de **minimización** consiste en transformar ese autómata en su versión más eficiente posible. El objetivo es obtener un autómata único que haga exactamente el mismo trabajo (reconocer el mismo lenguaje) pero utilizando la menor cantidad de estados posibles.
+
+### La Estrategia General
+
+Para lograr esto, no eliminamos estados al azar. Seguimos un algoritmo lógico que consta de dos grandes fases:
+
+1.  **Agrupar (La Partición):** Identificamos qué estados son "equivalentes" entre sí. Si dos estados se comportan exactamente igual ante cualquier entrada, no necesitamos tenerlos por separado; pueden considerarse gemelos.
+2.  **Fusionar:** Una vez identificados los grupos de gemelos, los fusionamos en un solo estado representativo.
+
+A continuación, explicamos en detalle la primera fase, que es el corazón del procedimiento.
+
+------------------------------------------------------------------------
+
+### 2.2.1 Computing the Language Partition
+
+La clave para minimizar es descubrir qué estados son indistinguibles. Para ello, utilizamos el concepto de **partición**.
+
+Imagina una partición como una forma de clasificar todos los estados del autómata en diferentes "cajas" o bloques. \* Cada estado debe estar en una sola caja. \* No puede sobrar ningún estado.
+
+El objetivo del algoritmo es refinar estas cajas progresivamente: empezamos con cajas muy grandes y las vamos dividiendo (haciendo más específicas) hasta que todos los estados dentro de una misma caja sean verdaderamente equivalentes.
+
+#### Paso 1: La División Inicial (El Presente)
+
+La primera distinción es la más obvia y se basa en lo que los estados "son" en este momento. Dividimos todo el autómata en dos grupos fundamentales:
+
+-   **Grupo de Aceptación (Finales):** Aquí van todos los estados que dicen "Sí" (aceptan la cadena).
+-   **Grupo de No Aceptación (No Finales):** Aquí van todos los estados que no aceptan.
+
+**¿Por qué hacemos esto?** Porque un estado que acepta nunca puede ser equivalente a uno que no acepta. Es la diferencia fundamental.
+
+#### Paso 2: El Refinamiento (Mirando al Futuro)
+
+Una vez que tenemos la división inicial, debemos comprobar si los estados dentro de un mismo grupo realmente merecen seguir juntos. Para ello, miramos cómo reaccionan ante las entradas (las letras del alfabeto del autómata).
+
+**La Regla de la Separación:** Dos estados, llamémoslos **A** y **B**, pueden permanecer en el mismo grupo solo si, al recibir la misma letra, ambos viajan a destinos que también están en el mismo grupo.
+
+Si **A** viaja a un grupo "X" y **B** viaja a un grupo "Y" (y "X" e "Y" son grupos distintos), entonces **A** y **B** tienen destinos diferentes. Esto significa que **A** y **B** no se comportan igual y deben separarse.
+
+#### ¿Cómo funciona el proceso de división ("Splitting")?
+
+El algoritmo busca "inestabilidad" en los grupos. Un grupo es inestable si contiene estados que quieren ir a sitios distintos.
+
+1.  Tomamos un grupo actual y una letra del alfabeto (por ejemplo, la letra 'a').
+2.  Observamos hacia dónde van todos los estados de ese grupo con la letra 'a'.
+3.  Si todos van a destinos que pertenecen al mismo bloque, el grupo se queda como está.
+4.  **Pero**, si unos van al Bloque 1 y otros van al Bloque 2, entonces nuestro grupo original se rompe en dos:
+    -   Subgrupo de los que van al Bloque 1.
+    -   Subgrupo de los que van al Bloque 2.
+
+#### El Algoritmo de Refinamiento (Paso a Paso)
+
+Podemos resumir el algoritmo lógico ("LanPar") de la siguiente manera sencilla:
+
+1.  **Inicio:** Crea una partición inicial con solo dos grupos: {Finales} y {No Finales}.
+2.  **Ciclo de Búsqueda:** Mientras existan grupos "inestables" (grupos donde los estados reaccionan diferente ante una letra):
+    -   Elige un grupo y una letra que demuestren esa diferencia.
+    -   Divide ese grupo en subgrupos más pequeños basados en sus destinos.
+3.  **Terminación (Estabilidad):** El proceso se detiene cuando ya no es posible dividir más. Esto ocurre cuando, para cualquier grupo que elijas y cualquier letra que uses, todos los estados de ese grupo siempre saltan a estados que pertenecen a un mismo bloque destino.
+
+#### Resultado Final
+
+Al terminar, obtenemos la **Partición Estable**. Cada bloque de esta partición contiene estados que son matemáticamente equivalentes. \* Reconocen exactamente el mismo "futuro" del lenguaje. \* Si intercambiaras uno por otro, el autómata seguiría funcionando igual.
+
+Esta partición es la receta perfecta para construir el autómata minimizado: cada bloque se convertirá en un único estado en la nueva versión reducida de la máquina.
+
+### 2.2.2 Quotienting en Autómatas Finitos Deterministas (DFA)
+
+#### ¿Qué es Quotienting?
+
+**Quotienting** (o cociente) es una técnica fundamental en teoría de autómatas que nos permite **minimizar** un autómata finito determinista (DFA). El objetivo es crear el DFA más pequeño posible que reconozca exactamente el mismo lenguaje que el original.
+
+#### ¿Por qué es importante?
+
+Imagina que tienes un DFA con 100 estados, pero en realidad podrías tener uno equivalente con solo 20 estados. El DFA minimizado: - Usa menos memoria - Es más eficiente computacionalmente - Es más fácil de entender y analizar
+
+#### Conceptos Clave
+
+##### Estados Equivalentes
+
+Dos estados son **equivalentes** si, sin importar qué cadena de entrada reciban a partir de ese punto, ambos llevan al autómata a aceptar o rechazar de la misma manera.
+
+**Ejemplo intuitivo:** Imagina dos puertas en un laberinto. Si desde ambas puertas puedes llegar exactamente a los mismos lugares siguiendo los mismos caminos, entonces esas puertas son "equivalentes" y podrías reemplazarlas por una sola.
+
+##### Clases de Equivalencia
+
+Una **clase de equivalencia** es un conjunto de estados que son todos equivalentes entre sí. Cuando hacemos quotienting, cada clase de equivalencia se convierte en un único estado en el DFA minimizado.
+
+#### El Proceso de Quotienting
+
+##### Paso 1: Identificar Estados Distinguibles
+
+Dos estados son **distinguibles** si existe una cadena que, empezando desde uno, lleva a aceptar, pero empezando desde el otro, lleva a rechazar.
+
+##### Paso 2: Construir la Tabla de Distinguibilidad
+
+Creamos una tabla donde marcamos qué pares de estados son distinguibles: 1. **Inicialización:** Marcamos como distinguibles todos los pares (estado final, estado no final) 2. **Iteración:** Si desde dos estados, con el mismo símbolo, llegamos a estados ya distinguibles, entonces esos dos estados también son distinguibles 3. **Repetimos** hasta que no haya cambios
+
+##### Paso 3: Agrupar Estados Equivalentes
+
+Los estados que NO son distinguibles forman una clase de equivalencia.
+
+##### Paso 4: Construir el DFA Minimizado
+
+Cada clase de equivalencia se convierte en un estado del nuevo DFA.
+
+------------------------------------------------------------------------
+
+### Ejemplo Completo
+
+### DFA Original
+
+Consideremos un DFA que acepta cadenas sobre el alfabeto {0, 1} donde el número de 1's es par.
+
+**Estados:** {q0, q1, q2, q3, q4} - q0: estado inicial (número par de 1's visto) - q1: número impar de 1's visto - q2: estado "trampa" redundante (par de 1's) - q3: estado redundante (impar de 1's) - q4: otro estado redundante (par de 1's)
+
+**Estados finales:** {q0, q2, q4} (todos representan número par de 1's)
+
+**Transiciones:**
+
+| Estado | 0   | 1   |
+|--------|-----|-----|
+| q0     | q0  | q1  |
+| q1     | q1  | q0  |
+| q2     | q2  | q3  |
+| q3     | q3  | q2  |
+| q4     | q4  | q1  |
+
+##### Tabla de Distinguibilidad
+
+Construimos una tabla triangular para todos los pares de estados:
+
+**Iteración 0:** Marcamos pares (final, no-final)
+
+```         
+     q0   q1   q2   q3   q4
+q1   X
+q2   -
+q3   X    -
+q4   -    X    -
+```
+
+Leyenda: - `X` = distinguibles (uno es final, otro no) - `-` = posiblemente equivalentes (ambos finales o ambos no-finales)
+
+**Iteración 1:** Revisamos transiciones
+
+Para cada par no marcado (p, q): - Si δ(p, a) y δ(q, a) están marcados como distinguibles → marcamos (p, q)
+
+Comprobamos: - (q0, q2): δ(q0, 0)=q0, δ(q2, 0)=q2 → revisar (q0, q2) \[no marcado\] - δ(q0, 1)=q1, δ(q2, 1)=q3 → (q1, q3) \[no marcado aún\] - (q0, q4): δ(q0, 1)=q1, δ(q4, 1)=q1 → mismo destino ✓ - δ(q0, 0)=q0, δ(q4, 0)=q4 → revisar (q0, q4) - (q2, q4): δ(q2, 1)=q3, δ(q4, 1)=q1 → (q3, q1) está marcado X
+
+```         
+     q0   q1   q2   q3   q4
+q1   X
+q2   -
+q3   X    -
+q4   -    X    X
+```
+
+**Iteración 2:** Propagamos
+
+Revisando (q0, q2) nuevamente: - Sus transiciones con 1 van a (q1, q3), que no están marcados - Ninguna evidencia de distinguibilidad aún
+
+Continuamos hasta que no haya cambios. Después de completar:
+
+```         
+     q0   q1   q2   q3   q4
+q1   X
+q2   -         (equivalente a q0)
+q3   X    -    (equivalente a q1)
+q4   -    X    -    X   (equivalente a q0)
+```
+
+##### Clases de Equivalencia (Cocientes)
+
+De la tabla obtenemos: - **\[q0\] = {q0, q2, q4}** - estados con número par de 1's - **\[q1\] = {q1, q3}** - estados con número impar de 1's
+
+##### DFA Minimizado
+
+**Estados:** {\[q0\], \[q1\]} - \[q0\]: estado inicial y final - \[q1\]: estado no final
+
+**Transiciones:**
+
+| Estado | 0      | 1      |
+|--------|--------|--------|
+| \[q0\] | \[q0\] | \[q1\] |
+| \[q1\] | \[q1\] | \[q0\] |
+
+**Resultado:** Hemos reducido de 5 estados a solo 2 estados, manteniendo el mismo lenguaje.
+
+------------------------------------------------------------------------
+
+### 2.2.3 Algoritmo de Hopcroft para Minimización de DFA
+
+### Contexto
+
+El algoritmo de Hopcroft es una optimización del algoritmo LanPar que minimiza autómatas finitos deterministas (DFA). Mientras que LanPar funciona correctamente con cualquier orden de refinamientos, Hopcroft selecciona cuidadosamente qué refinamiento aplicar para lograr mejor eficiencia.
+
+### Complejidad
+
+Cuando se implementa correctamente, el algoritmo de Hopcroft ejecuta en tiempo **O(mn log n)**, donde:
+
+-   $n$ = número de estados
+-   $m$ = tamaño del alfabeto
+
+### Ideas Principales
+
+### 1. Algoritmo Intermedio
+
+Antes de Hopcroft, existe un algoritmo intermedio que:
+
+-   Mantiene un **workset** (conjunto de trabajo) de pares $(a, B')$ llamados **splitters** (divisores)
+-   Inicialmente contiene todos los pares $(a, B')$ donde:
+    -   $a$ es una letra del alfabeto
+    -   $B'$ es $F$ o $Q \setminus F$ (estados finales o no finales)
+-   En cada paso:
+    1.  Selecciona un splitter del workset
+    2.  Lo usa para dividir todos los bloques posibles de la partición actual
+    3.  Cuando un bloque $B$ se divide en $B_0$ y $B_1$, añade todos los pares $(b, B_0)$ y $(b, B_1)$ para cada letra $b$
+
+::: callout-important
+### Propiedad Clave
+
+Cada splitter solo necesita usarse **una vez**, porque si $(a, B')$ divide un bloque $B$ en $B_0$ y $B_1$, no puede dividir ningún subconjunto de $B_0$ o $B_1$.
+:::
+
+### 2. Optimización de Hopcroft
+
+Hopcroft mejora el algoritmo intermedio con una observación clave:
+
+::: callout-note
+### Proposición 2.24
+
+Cuando un bloque $B$ se refina en $B_0$ y $B_1$, refinar todos los bloques con respecto a **cualquiera de dos splitters** entre $(a, B)$, $(a, B_0)$ y $(a, B_1)$ da el mismo resultado que usar los tres.
+:::
+
+**Implicación práctica:** No siempre es necesario añadir ambos $(b, B_0)$ y $(b, B_1)$ al workset.
+
+### 3. Reglas de Hopcroft
+
+Cuando $(a, B')$ divide $B$ en $B_0$ y $B_1$, para cada letra $b$:
+
+1.  **Si** $(b, B)$ está en el workset:
+    -   Reemplazar $(b, B)$ por $(b, B_0)$ y $(b, B_1)$
+2.  **Si** $(b, B)$ NO está en el workset:
+    -   Solo añadir el **más pequeño**: $(b, \min\{B_0, B_1\})$
+    -   Esto funciona tanto si $(b, B)$ ya fue usado como si nunca se añadió
+
+#### El Algoritmo
+
+``` pseudocode
+Hopcroft(A)
+Entrada: DFA A = (Q, Σ, δ, q₀, F)
+Salida: Partición del lenguaje Pℓ
+
+1.  si F = ∅ o Q\F = ∅ entonces devolver {Q}
+2.  P ← {F, Q\F}
+3.  W ← {(a, min{F, Q\F}) : a ∈ Σ}
+4.  mientras W ≠ ∅ hacer
+5.      elegir (a, B') de W
+6.      para todo B ∈ P dividido por (a, B') hacer
+7.          reemplazar B por B₀ y B₁ en P
+8.          para todo b ∈ Σ hacer
+9.              si (b, B) ∈ W entonces
+                    reemplazar (b, B) por (b, B₀) y (b, B₁) en W
+10.             si no
+                    añadir (b, min{B₀, B₁}) a W
+11. devolver P
+```
+
+#### Análisis de Complejidad
+
+Para cada estado $q$ y letra $a$, el workset contiene **como máximo un splitter** $(a, B)$ donde $q \in B$.
+
+-   La ejecución alterna entre fases con uno o cero "a-q-splitters"
+-   El tamaño del splitter solo puede decrecer
+-   Cuando termina una fase, el siguiente splitter tiene tamaño $\leq k/2$
+-   Por tanto, se añaden $O(\log n)$ splitters por cada par (estado, letra)
+-   Total de splitters: $O(mn \log n)$
+
+::: callout-tip
+### Resultado
+
+El bucle while se ejecuta $O(mn \log n)$ veces, y con una implementación cuidadosa (no trivial), el algoritmo completo ejecuta en tiempo $O(mn \log n)$.
+:::
+
+## 2.3 Reducción de NFAs (Autómatas Finitos No Deterministas)
+
+### Conceptos Principales
+
+### El Problema de la Minimización
+
+A diferencia de los DFAs (autómatas deterministas), **no existe un NFA mínimo único** para un lenguaje regular dado. Es más, encontrar cualquier NFA mínimo es un problema computacionalmente difícil (PSPACE-completo), lo que significa que probablemente no existe un algoritmo eficiente que lo resuelva.
+
+### 2.3.1 La Solución: Algoritmo de Reducción
+
+Aunque no podemos minimizar perfectamente, sí podemos **reducir el tamaño** de un NFA de manera eficiente usando una estrategia intermedia.
+
+### Cómo Funciona
+
+### Particiones y Refinamiento
+
+El algoritmo divide los estados del NFA en grupos (particiones) basándose en su comportamiento:
+
+1.  **Inicialmente**: Separa estados finales de no finales
+2.  **Iterativamente**: Refina estos grupos cuando encuentra estados que se comportan diferente
+
+### Definición de "Split" (División)
+
+Un par `(a, B')` divide un bloque `B` cuando: - Algunos estados en `B` tienen transiciones con `a` hacia estados en `B'` - Otros estados en `B` NO tienen tales transiciones
+
+Esto indica que esos estados se comportan diferente y deben separarse.
+
+### El Algoritmo CSR (Coarsest Stable Refinement)
+
+```         
+1. Separar estados finales de no finales
+2. Mientras existan bloques que puedan dividirse:
+   - Buscar un bloque B que pueda dividirse
+   - Dividirlo en dos grupos:
+     * Estados que tienen la transición
+     * Estados que no la tienen
+3. Devolver la partición final
+```
+
+### Resultados Importantes
+
+-   **Corrección**: El NFA reducido reconoce el mismo lenguaje que el original
+-   **Limitación**: CSR no siempre encuentra el NFA más pequeño posible
+-   **Estados diferentes pueden reconocer el mismo lenguaje** pero pertenecer a bloques distintos en CSR
+
+### Ejemplo Práctico
+
+En el ejemplo del texto, los estados 3 y 5 reconocen el mismo lenguaje: `(a+b)*aa(a+b)*`, pero CSR los mantiene en bloques separados porque tienen diferentes estructuras de transiciones.
+
+### Diferencia con DFAs
+
+-   **DFAs**: CSR encuentra el autómata mínimo
+-   **NFAs**: CSR solo encuentra una reducción, no necesariamente la mínima
+
+### Propiedad Adicional de CSR
+
+Si dos estados `q1` y `q2` están en el mismo bloque de CSR, entonces para cada símbolo `a` y cada sucesor `q'1` de `q1` por `a`, existe un sucesor `q'2` de `q2` por `a` tal que ambos sucesores reconocen el mismo lenguaje.
+
+------------------------------------------------------------------------
+### 2.3.2 Minimalidad de NFA es PSPACE-Completa
+Consiste en determinar si un autómata finito no determinista (NFA) puede ser reducido al menor número posible de estados sin cambiar el lenguaje que reconoce.
+Formalmente, dado un NFA  y un número , el problema consiste en decidir si existe otro NFA equivalente a  que tenga a lo sumo  estados.
+Este problema es PSPACE-completo, lo que implica que:
+-	Requiere una cantidad de memoria que crece de forma polinomial con el tamaño de la entrada.
+-	Es tan difícil como los problemas más complejos que pueden resolverse en espacio polinomial.
+-	No se conoce ningún algoritmo eficiente (en tiempo polinomial) para resolverlo en general.
+-	Es extremadamente difícil desde el punto de vista computacional.
+Por ende, su dificultad radica en que al verificar la existencia de un NFA más pequeño equivalente requiere explorar una cantidad exponencial de posibles configuraciones de estados y transiciones, lo cual es intratable para entradas grandes.
+
+### Características
+-	Mucho más difícil que minimizar un DFA
+-	No es viable construir siempre el NFA mínimo.
+-	No hay un método práctico que garantice obtener el NFA mínimo.
+-	El problema pertenece a PSPACE ya que se puede resolver usando memoria polinomial. Es decir, no necesita memoria infinita pero sí muchísima para casos grandes.
+-	La verificación usa un algoritmo no determinista, donde se adivina un NFA más pequeño aplicando la siguiente formula n ≤ k estados. Luego se verifica si es equivalente al original. Por ende, esta verificación es la parte costosa.
+
+### Comparación
+
+Característica | Minimización de DFA | Minimización de NFA (PSPACE-Completa)
+---|---:|---:
+Dificultad | Fácil y eficiente | Extremadamente difícil
+Complejidad del algoritmo | O(n log n) (polinomial) | PSPACE-completa (no se conoce algoritmo eficiente)
+Determinismo | Determinista | No determinista, múltiples caminos posibles
+Idea general del proceso | Hay un método directo para encontrar el autómata mínimo | No existe un método directo para obtener el NFA mínimo
+Equivalencia entre autómatas | Comparar DFAs es sencillo | Comparar NFAs es complejo y costoso
+Espacio requerido | Polinomial y bajo | Polinomial pero elevado (PSPACE)
+Algoritmo típico | Minimización por particiones | Un algoritmo no determinista que adivina un NFA más pequeño y verifica equivalencia
+Clasificación de complejidad | P (eficiente) | PSPACE-completo (máxima dificultad dentro de problemas resolubles con memoria polinomial)
+Motivo de la dificultad | Estructura rígida y única | Muchas estructuras posibles para el mismo lenguaje
+Resultado práctico | Siempre se puede obtener el DFA mínimo | No es viable obtener siempre el NFA mínimo
+Implicación real | Los DFAs minimizados se usan comúnmente | Se prefiere convertir el NFA a DFA (aunque crezca exponencialmente)
+------------------------------------------------------------------------
+
+## 2.4 Caracterización de Lenguajes Regulares
+
+Un lenguaje L es regular si y solo si tiene un número finito de residuales. El residual de un lenguaje respecto a una palabra w es: Lw={u:wu∈L} Es decir, es el conjunto de formas de completar a w para seguir en L. Es por ello que cada residual describe qué opciones quedan abiertas después de haber leído un prefijo . Si el lenguaje es regular, el número de estos “escenarios posibles” es finito, lo que equivale a decir que puede representarse mediante un autómata finito determinista (AFD). En otras palabras, los residuales corresponden a los estados alcanzables del autómata.
+
+### Características
+
+- Un lenguaje es regular ⇔ tiene un número finito de residuales. - Condición única sin necesidad de autómatas: Es el único criterio que permite demostrar regularidad sin construir explícitamente un AFD o AFN. - Si un lenguaje posee infinitos residuales, entonces no es regular. - Cada estado de un DFA corresponde exactamente a un residual del lenguaje. - Muchos residuales distintos ⇒ muchos estados ⇒ si son infinitos ⇒ el lenguaje no puede ser regular. - Equivalencia con el Lema de Myhill-Nerode - Esta caracterización es una versión simplificada del teorema de Myhill-Nerode.
+
+### Ejemplo 1 — Lenguaje no regular
+
+Lenguaje: aⁿbⁿ (muchas a seguidas por la misma cantidad de b).
+
+Ejemplos válidos: "", "ab", "aabb", "aaabbb".
+
+Se va leyendo la palabra y se considera prefijos como: - "a" → para completar una palabra de L necesitas 1 b. - "aa" → para completar necesitas 2 b. - "aaa"→ para completar necesitas 3 b. Y así sucesivamente.
+
+Cada prefijo a\^k exige una "cantidad pendiente" distinta de b; por tanto existen infinitos residuales (uno por cada k). Como la caracterización por residuales dice que L es regular si y sólo si tiene un número finito de residuales, aquí el número es infinito ⇒ aⁿbⁿ NO es regular.
+
+### Ejemplo 2 — Lenguaje regular: palabras que terminan en "01"
+
+Lenguaje: todas las cadenas binarias que terminan exactamente en "01".
+
+En concreto, se puede tener cualquier mezcla de 0s y 1s al principio, pero la cadena debe acabar en los símbolos "0" seguido de "1".
+
+Al leer prefijos, solo hay unas pocas situaciones posibles respecto a qué falta para completar "01": 
+- No se ha visto nada relevante aún (estado inicial): aún puede aparecer "01" en el futuro. 
+- El último símbolo leído es "0": entonces basta ver un "1" inmediato para aceptar. 
+- El último símbolo leído es "1": todavía se necesita ver la secuencia "01" completa en el futuro.
+
+Solo hay un número pequeño y finito de residuales (estas pocas "situaciones pendientes"), por lo que el lenguaje tiene residuales finitos ⇒ es regular.
