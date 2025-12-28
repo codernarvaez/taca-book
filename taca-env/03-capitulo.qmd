@@ -1,4 +1,4 @@
----
+title: "Capitulo 3"
 title: "Equivalencia y Conversión de Modelos"
 format:
         html: default
