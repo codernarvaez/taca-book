@@ -1,5 +1,402 @@
 ---
-title: "03-capitulo"
-format: html
+
+title: "Fundamentos de Teoría de Autómatas y Lenguajes Formales"
+
+subtitle: "Estudio Profundo de Expresiones Regulares y su Equivalencia con Autómatas Finitos"
+
+author: "Manual de Referencia Técnica"
+
+date: "2025"
+
+format: 
+
+  html:
+
+    toc: true
+
+    toc-depth: 4
+
+    number-sections: true
+
+    theme: lumen
+
 ---
+
+
+
+## 1. El Alfabeto y la Jerarquía de Chomsky
+
+
+
+En la teoría de la computación, los **Lenguajes Regulares** ocupan el escalón más básico de la **Jerarquía de Chomsky** (Tipo 3). Estos lenguajes son reconocibles por máquinas con memoria finita (Autómatas Finitos).
+
+
+
+### Definiciones Base
+
+* **Alfabeto ($\Sigma$):** Un conjunto finito, no vacío, de símbolos (ej. $\Sigma = \{0, 1\}$).
+
+* **Cadena:** Una secuencia finita de símbolos de un alfabeto. La cadena vacía se denota como $\epsilon$.
+
+* **Lenguaje ($L$):** Un subconjunto de $\Sigma^*$, donde $\Sigma^*$ es el cierre de Kleene del alfabeto (todas las combinaciones posibles).
+
+
+
+---
+
+
+
+## 2. Expresiones Regulares (ER): Definición Inductiva
+
+
+
+Una expresión regular es una forma compacta de representar un lenguaje regular. Se definen formalmente de la siguiente manera:
+
+
+
+1.  **Constantes:** $\emptyset$ (lenguaje vacío), $\epsilon$ (lenguaje que contiene solo la cadena vacía) y $a$ para cada $a \in \Sigma$.
+
+2.  **Operaciones:**
+
+    * **Unión ($R + S$):** El lenguaje de cadenas que están en $L(R)$ o en $L(S)$.
+
+    * **Concatenación ($R \cdot S$):** Cadenas formadas por una cadena de $L(R)$ seguida de una de $L(S)$.
+
+    * **Cierre de Kleene ($R^*$):** Cero o más repeticiones de cadenas de $L(R)$.
+
+
+
+
+
+
+
+---
+
+
+
+## 3. Autómatas Finitos: Modelos de Reconocimiento
+
+
+
+Existen dos variantes principales que, aunque difieren en su funcionamiento interno, son equivalentes en poder computacional.
+
+
+
+### 3.1. Autómata Finito Determinista (AFD)
+
+Un AFD se define como una 5-tupla $M = (Q, \Sigma, \delta, q_0, F)$, donde:
+
+* $Q$ es un conjunto finito de **estados**.
+
+* $\delta: Q \times \Sigma \to Q$ es la **función de transición** (para cada estado y símbolo hay exactamente un destino).
+
+* $q_0 \in Q$ es el estado inicial.
+
+* $F \subseteq Q$ es el conjunto de estados de aceptación o finales.
+
+
+
+### 3.2. Autómata Finito No Determinista (AFN)
+
+En un AFN, la función de transición $\delta$ permite ir a **múltiples estados** o realizar transiciones con la cadena vacía ($\epsilon$-transiciones) sin consumir entrada.
+
+
+
+
+
+
+
+---
+
+
+
+## 4. El Teorema de Equivalencia de Kleene
+
+
+
+El núcleo de esta teoría es que las ER y los AF son dos caras de la misma moneda. Para demostrarlo, utilizamos dos algoritmos fundamentales:
+
+
+
+### 4.1. Construcción de Thompson (ER $\to$ AFN-$\epsilon$)
+
+Este método construye un autómata de forma recursiva siguiendo la estructura de la expresión regular.
+
+
+
+* **Para la Unión ($a|b$):** Se crean dos rutas paralelas.
+
+* **Para la Concatenación ($ab$):** Se conecta el final del primer símbolo con el inicio del segundo.
+
+* **Para el Cierre ($a^*$):** Se crea un bucle de retorno y una ruta de salto (bypass).
+
+
+
+
+
+
+
+### 4.2. Algoritmo de Construcción de Subconjuntos (AFN $\to$ AFD)
+
+Dado que el hardware real es determinista, convertimos los AFN mediante este algoritmo:
+
+1.  Se calcula la **$\epsilon$-clausura** del estado inicial.
+
+2.  Para cada nuevo conjunto de estados, se calculan las transiciones para cada símbolo del alfabeto.
+
+3.  El proceso termina cuando no aparecen nuevos conjuntos de estados.
+
+
+
+---
+
+
+
+## 5. Ejemplo de Aplicación: Validación de Números Reales
+
+
+
+Imaginemos que diseñamos un compilador que debe reconocer números decimales. 
+
+La ER sería: `[0-9]+(\.[0-9]+)?`
+
+
+
+### Tabla de Transiciones (Lógica del Autómata)
+
+
+
+| Estado | Entrada: [0-9] | Entrada: '.' | Tipo |
+
+|--------|----------------|--------------|------|
+
+| $q_0$  | $q_1$          | Error        | Inicio |
+
+| $q_1$  | $q_1$          | $q_2$        | Aceptación (Entero) |
+
+| $q_2$  | $q_3$          | Error        | Esperando decimal |
+
+| $q_3$  | $q_3$          | Error        | Aceptación (Decimal) |
+
+
+
+
+
+
+
+---
+
+
+
+## 6. Simulación en Python (Implementación de la Lógica)
+
+
+
+El siguiente bloque de código muestra cómo un programa procesa un lenguaje regular utilizando la lógica de estados de un autómata.
+
+
+
+```{python}
+
+import re
+
+
+
+def validador_lexico(cadena):
+
+    # L = Lenguaje de identificadores: Empieza con letra, sigue con letras o números
+
+    # Expresión Regular: ^[a-zA-Z][a-zA-Z0-9]*$
+
+    patron = r"^[a-zA-Z][a-zA-Z0-9]*$"
+
+    
+
+    if re.match(patron, cadena):
+
+        return "TOKEN_IDENTIFICADOR"
+
+    else:
+
+        return "ERROR_LEXICO"
+
+
+
+# Pruebas de libro
+
+ejemplos = ["variable1", "1variable", "_temp", "miVariable_23"]
+
+for ex in ejemplos:
+
+    print(f"Entrada: {ex:15} | Resultado: {validador_lexico(ex)}")
+
+
+
+# SECCIÓN: Casos de Estudio y Ejemplos Prácticos
+
+
+
+A continuación, se presentan tres ejemplos fundamentales que ilustran la equivalencia entre expresiones regulares y autómatas, avanzando en niveles de complejidad.
+
+
+
+## Ejemplo 1: El Lenguaje de la Paridad (AFD)
+
+**Lenguaje:** Cadenas sobre $\Sigma = \{0, 1\}$ que contienen un número par de ceros.
+
+**Expresión Regular:** `1*(01*01*)*`
+
+
+
+### Análisis del Autómata
+
+Para reconocer este lenguaje, el autómata solo necesita recordar un bit de información: ¿el número de ceros vistos hasta ahora es par o impar?
+
+
+
+1.  **Estado $q_P$ (Par):** Estado inicial y de aceptación. Si llega un `1`, se queda aquí. Si llega un `0`, pasa al estado impar.
+
+2.  **Estado $q_I$ (Impar):** Si llega un `1`, se queda aquí. Si llega un `0`, vuelve al estado par.
+
+
+
+| Transición | Entrada 0 | Entrada 1 |
+
+|------------|-----------|-----------|
+
+| **>$q_P$** (Final) | $q_I$ | $q_P$ |
+
+| **$q_I$** | $q_P$ | $q_I$ |
+
+
+
+---
+
+
+
+## Ejemplo 2: Construcción de Thompson Paso a Paso (ER $\to$ AFN)
+
+**Lenguaje:** Cadenas que son exactamente `a` o `ab`.
+
+**Expresión Regular:** `a(b|ε)` o simplemente `a|ab`.
+
+
+
+### Proceso de Construcción:
+
+1.  **Bloque para `a`:** Una transición simple entre dos estados.
+
+2.  **Bloque para `b`:** Otra transición simple.
+
+3.  **Operador Unión ($|$):** Introducimos un nuevo estado inicial que se bifurca hacia el camino de `a` y el camino de `ab` mediante transiciones vacías ($\epsilon$).
+
+4.  **Cierre:** Unimos los finales de ambos caminos en un único estado de aceptación.
+
+
+
+*Este ejemplo demuestra por qué los AFN pueden tener muchos estados redundantes que luego el programador debe optimizar.*
+
+
+
+---
+
+
+
+## Ejemplo 3: Conversión de AFN a AFD (Algoritmo de Subconjuntos)
+
+Este es el ejemplo más importante para un estudiante de ingeniería, pues muestra la "magia" detrás de los motores de búsqueda de texto.
+
+
+
+**Expresión Regular:** `(0|1)*1` (Cadenas que terminan en 1).
+
+
+
+### Paso 1: Definir el AFN
+
+* Estado $A$ (Inicial): Con `0` o `1` vuelve a $A$. Con `1` también puede ir a $B$.
+
+* Estado $B$ (Final): No tiene salidas.
+
+
+
+### Paso 2: Crear la Tabla de Subconjuntos
+
+Buscamos qué "conjuntos de estados" son alcanzables.
+
+
+
+1.  **Inicio:** El estado inicial del AFD es el conjunto `{A}`.
+
+2.  **Desde {A} con '0':** Vamos a `A`. (Nuevo estado: `{A}`).
+
+3.  **Desde {A} con '1':** Podemos ir a `A` o a `B`. (Nuevo estado: `{A, B}`).
+
+4.  **Desde {A, B} con '0':** Desde A vamos a A, desde B no vamos a nada. Resultado: `{A}`.
+
+5.  **Desde {A, B} con '1':** Desde A vamos a A o B, desde B nada. Resultado: `{A, B}`.
+
+
+
+### Resultado del AFD Resultante:
+
+* **Estado $S_0$ ({A}):** Con `0` va a $S_0$, con `1` va a $S_1$.
+
+* **Estado $S_1$ ({A, B}):** Con `0` va a $S_0$, con `1` va a $S_1$. (Este es el estado de aceptación porque contiene a $B$).
+
+
+
+---
+
+
+
+## Implementación de Validación en Python
+
+
+
+Para verificar estos ejemplos, podemos usar un simulador de transiciones:
+
+
+
+```{python}
+
+def simulador_termina_en_uno(cadena):
+
+    # Simulación del AFD obtenido en el Ejemplo 3
+
+    estado = "S0"
+
+    
+
+    tabla_transiciones = {
+
+        "S0": {"0": "S0", "1": "S1"},
+
+        "S1": {"0": "S0", "1": "S1"}
+
+    }
+
+    
+
+    for simbolo in cadena:
+
+        if simbolo in tabla_transiciones[estado]:
+
+            estado = tabla_transiciones[estado][simbolo]
+
+        else:
+
+            return False # Símbolo no pertenece al alfabeto
+
+            
+
+    return estado == "S1"
+
+
+
+# Pruebas
+
+print(f"10101: {simulador_termina_en_uno('10101')}") # True
+
+print(f"10100: {simulador_termina_en_uno('10100')}") # False
 
