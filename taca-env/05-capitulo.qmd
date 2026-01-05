@@ -1,5 +1,9 @@
 ---
-title: "05-capitulo"
-format: html
+title: "Capitulo 5"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
-

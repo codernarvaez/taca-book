@@ -1,5 +1,202 @@
 ---
-title: "02-capitulo"
-format: html
+title: "Capítulo 2: Lenguajes Independientes del Contexto"
+format:
+        html: default
+        pdf: default
+toc: true
+bibliography: references.bib
+nocite: "@*"
 ---
 
+## 2.1 Introducción
+
+Los **lenguajes independientes del contexto** (LIC), también conocidos como lenguajes de contexto libre o **lenguajes de Tipo 2** en la jerarquía de Chomsky, son aquellos que pueden ser generados por una gramática independiente del contexto (GIC). Estos lenguajes ocupan una posición de complejidad intermedia, siendo más potentes que los lenguajes regulares (Tipo 3) pero menos que los sensibles al contexto (Tipo 1).
+
+------------------------------------------------------------------------
+
+## 2.2 Definición y Funcionamiento
+
+### Reglas de producción
+
+Se definen mediante gramáticas donde cada regla tiene la forma $A \to \omega$, donde:
+
+-   $A$ es un único símbolo no terminal
+-   $\omega$ es una cadena de terminales y/o no terminales
+
+El término "libre de contexto" indica que el símbolo $A$ siempre puede ser sustituido por $\omega$ sin importar los símbolos que lo rodeen.
+
+### Reconocimiento
+
+Estos lenguajes son reconocidos por **autómatas a pila** (pushdown automata). A diferencia de los autómatas finitos que reconocen lenguajes regulares, los autómatas a pila disponen de una memoria auxiliar en forma de pila que les permite "recordar" información previa para procesar estructuras anidadas.
+
+### Importancia en computación
+
+La sintaxis de la mayoría de los **lenguajes de programación** (como C o Pascal) y las **expresiones aritméticas** se definen mediante este tipo de gramáticas.
+
+------------------------------------------------------------------------
+
+## 2.3 Ejemplos de Lenguajes Independientes del Contexto
+
+### 2.3.1 Igual número de símbolos
+
+El lenguaje $L = \{a^n b^n : n \geq 0\}$, que contiene cadenas con el mismo número de 'a' seguidas de 'b' (por ejemplo: $aaabbb$), es el ejemplo canónico de un lenguaje que es independiente del contexto pero no es regular.
+
+**Ejemplo de palabras del lenguaje:**
+
+-   $\varepsilon$ (palabra vacía, $n=0$)
+-   $ab$ ($n=1$)
+-   $aabb$ ($n=2$)
+-   $aaabbb$ ($n=3$)
+
+### 2.3.2 Paréntesis anidados
+
+El lenguaje de Dyck, que consiste en todas las cadenas de paréntesis correctamente equilibrados y anidados, es generado por una GIC.
+
+**Ejemplos válidos:**
+
+-   `()`
+-   `(())`
+-   `()()`
+-   `((()))`
+-   `(())()`
+
+### 2.3.3 Palíndromos (Capicúas)
+
+Los lenguajes que forman cadenas que se leen igual al derecho y al revés, como $L = \{wcw^R : w \in \{a, b\}^*\}$, donde $w^R$ es la cadena invertida.
+
+**Ejemplos:**
+
+-   $c$ ($w = \varepsilon$)
+-   $aca$
+-   $bcb$
+-   $aacaa$
+-   $abcba$
+
+### 2.3.4 Expresiones aritméticas
+
+Las estructuras matemáticas que utilizan operadores binarios y paréntesis son lenguajes de este tipo.
+
+**Ejemplos:**
+
+-   `x + y`
+-   `(x + y) * z`
+-   `((a + b) * c) - d`
+-   `x * (y + z) / w`
+
+### 2.3.5 Estructuras de programación
+
+Las sentencias condicionales como `if-then-else` o bloques de asignación de variables en lenguajes como C, Java o Pascal.
+
+**Ejemplos:**
+
+```c
+if (condicion) {
+    sentencia1;
+} else {
+    sentencia2;
+}
+```
+
+```c
+while (x > 0) {
+    x = x - 1;
+}
+```
+
+### 2.3.6 Lenguajes matemáticos complejos
+
+Por ejemplo, el lenguaje $L = \{a^n b^m c^{m+n} : n, m \geq 0\}$, donde la cantidad de 'c' es la suma de las 'a' y las 'b'.
+
+**Ejemplos:**
+
+-   $c$ ($n=0, m=0$)
+-   $ac$ ($n=1, m=0$)
+-   $bc$ ($n=0, m=1$)
+-   $abc$ ($n=1, m=1$)
+-   $aabcc$ ($n=2, m=1$, entonces $2+1=3$ c's)
+-   $abbccc$ ($n=1, m=2$, entonces $1+2=3$ c's)
+
+------------------------------------------------------------------------
+
+## 2.4 Propiedades de los Lenguajes Independientes del Contexto
+
+### 2.4.1 Inclusión
+
+::: {.callout-note}
+## Teorema de inclusión
+
+Todos los lenguajes regulares son también independientes del contexto, pero existen muchos lenguajes independientes del contexto (como $a^n b^n$) que no son regulares.
+:::
+
+**Jerarquía:**
+
+$$\text{Lenguajes Regulares} \subset \text{Lenguajes Independientes del Contexto} \subset \text{Lenguajes Sensibles al Contexto}$$
+
+### 2.4.2 Operaciones de cierre
+
+Los lenguajes independientes del contexto son **cerrados** bajo:
+
+-   **Unión:** Si $L_1$ y $L_2$ son LIC, entonces $L_1 \cup L_2$ es LIC
+-   **Concatenación:** Si $L_1$ y $L_2$ son LIC, entonces $L_1 \cdot L_2$ es LIC
+-   **Estrella de Kleene:** Si $L$ es LIC, entonces $L^*$ es LIC
+
+::: {.callout-warning}
+## Operaciones NO cerradas
+
+Los lenguajes independientes del contexto **NO son cerrados** bajo:
+
+-   **Intersección:** $L_1 \cap L_2$ puede no ser LIC
+-   **Complemento:** $\overline{L}$ puede no ser LIC
+:::
+
+### 2.4.3 Ambigüedad
+
+::: {.callout-important}
+## Definición
+
+Un lenguaje es **inherentemente ambiguo** si todas las gramáticas que lo generan permiten construir más de un árbol de derivación distinto para la misma cadena.
+:::
+
+**Ejemplo de derivación ambigua:**
+
+Para la expresión `x + y * z`, pueden existir dos árboles de derivación diferentes según la precedencia de operadores si la gramática no está bien diseñada.
+
+------------------------------------------------------------------------
+
+## 2.5 Analogía para Entender la Diferencia
+
+Para comprender mejor la potencia de los lenguajes independientes del contexto en comparación con los lenguajes regulares, consideremos la siguiente analogía:
+
+::: {.callout-tip}
+## Analogía de memoria
+
+-   **Lenguaje Regular:** Para reconocer un lenguaje regular, basta con un **interruptor** que cambie de estado (memoria finita). Es como tener un número limitado de "estados mentales" y cambiar entre ellos al leer símbolos.
+
+-   **Lenguaje Independiente del Contexto:** Para reconocer un lenguaje independiente del contexto, necesitas además una **"pila de platos"**:
+    -   Puedes **añadir platos** (guardar información) cuando encuentras un símbolo de apertura
+    -   Puedes **quitar platos** en orden inverso (recuperar información) cuando encuentras un símbolo de cierre
+    -   Esto te permite gestionar estructuras que deben abrirse y cerrarse en orden, como los paréntesis o las etiquetas de código
+:::
+
+### Ejemplo práctico de la analogía
+
+**Reconociendo paréntesis balanceados:**
+
+1.  Cada vez que lees `(`, **apilas** un marcador
+2.  Cada vez que lees `)`, **desapilas** un marcador
+3.  Al final, si la pila está vacía, los paréntesis están balanceados
+
+Esta capacidad de "recordar" mediante una pila es lo que hace que los LIC sean más poderosos que los lenguajes regulares, pero la pila solo puede accederse por el tope (LIFO - Last In, First Out), lo que limita su potencia comparado con lenguajes más complejos.
+
+------------------------------------------------------------------------
+
+## 2.6 Resumen
+
+Los lenguajes independientes del contexto son fundamentales en:
+
+1.  **Teoría de la Computación:** Como clase intermedia en la jerarquía de Chomsky
+2.  **Compiladores:** Para el análisis sintáctico de lenguajes de programación
+3.  **Procesamiento de Lenguaje Natural:** Para modelar estructuras gramaticales
+4.  **Teoría de Lenguajes Formales:** Como objeto de estudio matemático
+
+Su característica principal es la capacidad de modelar **estructuras anidadas** mediante el uso de una memoria auxiliar tipo pila, lo que los hace ideales para describir la sintaxis de lenguajes de programación y otras estructuras recursivas.
