@@ -1481,3 +1481,109 @@ La expresión regular que describe este lenguaje es:
 ```
 
 Esta expresión indica que puede haber cualquier combinación de `0` y `1`, pero la cadena debe finalizar obligatoriamente en `1`.
+------------------------------------------------------------------------
+---
+title: "Capítulo 1"
+subtitle: "Lenguajes y Expresiones Regulares"
+author: "Cristian David Ajila Asanza"
+date: "2025"
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    number-sections: true
+    theme: lumen
+---
+
+## 1. Lenguajes y Expresiones Regulares
+
+En la teoría de la computación, los **lenguajes regulares** constituyen la base de los lenguajes formales. Estos lenguajes permiten describir patrones simples y son reconocidos por modelos de cómputo con memoria finita, como los autómatas finitos.
+
+El estudio de los lenguajes regulares es fundamental para comprender el funcionamiento de compiladores, validadores de datos y sistemas de procesamiento de texto.
+
+---
+
+## 2. El Alfabeto y las Cadenas
+
+### 2.1 Definiciones Base
+
+- **Alfabeto ($\Sigma$):** Conjunto finito y no vacío de símbolos.  
+  Ejemplo: $\Sigma = \{a, b\}$
+
+- **Cadena:** Secuencia finita de símbolos pertenecientes a un alfabeto.
+
+- **Cadena vacía ($\epsilon$):** Cadena sin símbolos, de longitud cero.
+
+---
+
+### 2.2 Lenguaje Formal
+
+Un **lenguaje** $L$ es un subconjunto de $\Sigma^*$, donde $\Sigma^*$ representa el conjunto de todas las cadenas posibles que pueden formarse con los símbolos del alfabeto.
+
+## 3. Expresiones Regulares
+
+Las **expresiones regulares (ER)** son una notación formal utilizada para describir lenguajes regulares de manera compacta y precisa. Permiten representar patrones de cadenas mediante símbolos y operadores bien definidos.
+
+Son ampliamente utilizadas en programación, búsqueda de texto y análisis léxico.
+
+---
+
+## 4. Expresiones Regulares: Sintaxis
+
+La **sintaxis** de las expresiones regulares define las reglas para su correcta construcción.
+
+### 4.1 Elementos Básicos
+
+- $\emptyset$: lenguaje vacío  
+- $\epsilon$: cadena vacía  
+- $a \in \Sigma$: símbolo del alfabeto  
+
+---
+
+### 4.2 Operadores Fundamentales
+
+- **Unión ($|$):** representa alternativas  
+- **Concatenación:** representa secuencia de símbolos  
+- **Cierre de Kleene ($*$):** repetición cero o más veces  
+
+Ejemplo:
+
+\[
+(a|b)^*
+\]
+
+---
+
+## 5. Expresiones Regulares: Semántica
+
+La **semántica** de una expresión regular describe el conjunto de cadenas que representa. Mientras la sintaxis define cómo se escribe la expresión, la semántica define qué cadenas son aceptadas.
+
+Ejemplo:
+
+\[
+a^* = \{\epsilon, a, aa, aaa, \dots\}
+\]
+
+---
+
+## 6. Importancia de las Expresiones Regulares
+
+Las expresiones regulares son fundamentales porque:
+
+- Permiten describir lenguajes de forma formal
+- Sirven como base para los autómatas finitos
+- Se utilizan en compiladores y validadores
+- Facilitan el reconocimiento eficiente de patrones
+
+---
+
+## 7. Relación con los Autómatas Finitos
+
+Todo lenguaje descrito por una expresión regular puede ser reconocido por un **autómata finito**, y todo autómata finito tiene una expresión regular equivalente. Esta equivalencia es uno de los pilares de la teoría de lenguajes formales.
+
+---
+
+## Conclusión
+
+El estudio de los lenguajes y las expresiones regulares permite comprender cómo las computadoras reconocen patrones y procesan información, siendo un componente esencial de la teoría de autómatas y los lenguajes formales.
+
