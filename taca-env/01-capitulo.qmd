@@ -1381,3 +1381,103 @@ Todas estas representaciones son **equivalentes**: $$\text{DFA} \equiv \text{NFA
 ------------------------------------------------------------------------
 
 **Palabras clave:** DFA, NFA, NFA-ε, expresión regular, conversión, autómatas, lenguajes regulares, construcción por subconjuntos, minimización
+------------------------------2 UNIDAD------------------------------------------
+
+## 1. Lenguajes y expresiones regulares
+
+En teoría de la computación, un **lenguaje** es un conjunto de cadenas (o palabras) formadas a partir de símbolos.  
+Estos símbolos se combinan siguiendo ciertas reglas, y dichas reglas determinan qué cadenas pertenecen al lenguaje y cuáles no.
+
+Las **expresiones regulares** son una herramienta formal que nos permite describir **lenguajes regulares**, es decir, lenguajes que pueden ser reconocidos por **autómatas finitos**.
+
+
+## 1.1 Definición formal de lenguajes regulares y alfabeto
+
+### Alfabeto
+
+Un **alfabeto**, normalmente representado por la letra Σ (sigma), es un conjunto **finito y no vacío** de símbolos.
+
+**Ejemplos de alfabetos:**
+
+- Σ = {0, 1} → alfabeto binario  
+- Σ = {a, b, c} → alfabeto de letras  
+- Σ = {x, y}
+
+
+### Cadenas (o palabras)
+
+Una **cadena** es una secuencia finita de símbolos tomados de un alfabeto.
+
+**Ejemplos con Σ = {a, b}:**
+
+- `a`  
+- `ab`  
+- `bba`  
+- `ε` → cadena vacía (no contiene símbolos)
+
+
+### Lenguaje
+
+Un **lenguaje** es un conjunto de cadenas formadas a partir de un alfabeto.
+
+Donde:
+
+- **Σ\*** representa el conjunto de todas las cadenas posibles (incluida `ε`) que se pueden formar con Σ.
+
+**Ejemplo:**
+
+Si Σ = {a, b}, entonces:
+
+- Σ\* = {ε, a, b, aa, ab, ba, bb, aaa, …}
+
+Un lenguaje posible sería:
+
+- **L = {a, ab, abb}**
+
+
+### Lenguajes regulares
+
+Un **lenguaje regular** es un lenguaje que puede ser:
+
+- Descrito mediante una **expresión regular**, o  
+- Reconocido por un **autómata finito**
+
+Estos lenguajes son importantes porque:
+
+- Son simples  
+- Se pueden analizar fácilmente  
+- Se utilizan en compiladores, validación de textos, búsquedas y procesamiento de datos
+
+
+## Ejemplo práctico
+
+### Paso 1: Definir el alfabeto
+
+Σ = {0, 1}
+
+### Paso 2: Definir el lenguaje
+
+Sea **L** el conjunto de todas las cadenas que **terminan en 1**.
+
+**Cadenas que pertenecen a L:**
+
+- `1`  
+- `01`  
+- `101`  
+- `0001`
+
+**Cadenas que NO pertenecen a L:**
+
+- `0`  
+- `10`  
+- `1100`
+
+### Paso 3: Expresión regular del lenguaje
+
+La expresión regular que describe este lenguaje es:
+
+```
+(0|1)*1
+```
+
+Esta expresión indica que puede haber cualquier combinación de `0` y `1`, pero la cadena debe finalizar obligatoriamente en `1`.
